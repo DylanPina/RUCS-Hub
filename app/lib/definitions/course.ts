@@ -22,7 +22,7 @@ export type Course = {
     groupProjects: boolean; // Course has group projects
     labs: boolean; // Course has labs
   };
-  semesters: string[]; // Semesters the course is offered
+  terms: Term[]; // terms the course is offered
   credits: number; // # of credits
 };
 
@@ -44,3 +44,10 @@ export type MeetingTimes = {
   endTime: string; // End time
   pmCode: "P" | "A"; // 'P' if time is in PM, 'A' if time is in AM
 };
+
+export enum Term {
+  Winter = 0,
+  Spring = 1,
+  Summer = 7,
+  Fall = 9,
+}
