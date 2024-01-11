@@ -51,3 +51,23 @@ export enum Term {
   Summer = 7,
   Fall = 9,
 }
+
+export type CourseSynopsesListing = {
+  courseCode: number;
+  courseName: string;
+  synopsisUrl: string;
+};
+
+export type CourseWebRegListing = {
+  courseCode: number;
+  openSections: number;
+  sections: CourseSection[];
+  prereqs: number[];
+  credits: number;
+};
+
+export type CourseTableEntry = {
+  courseCode: number;
+  courseName: str;
+  credits: number;
+};
