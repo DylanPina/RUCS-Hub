@@ -12,11 +12,13 @@
   "dependencies": {
     "@heroicons/react": "^2.0.18",
     "@tailwindcss/forms": "^0.5.7",
+    "@types/jsdom": "^21.1.6",
     "@types/node": "20.5.7",
     "@vercel/postgres": "^0.5.1",
     "autoprefixer": "10.4.15",
     "bcrypt": "^5.1.1",
     "clsx": "^2.0.0",
+    "jsdom": "^23.2.0",
     "next": "^14.0.2",
     "next-auth": "^5.0.0-beta.4",
     "postcss": "8.4.31",

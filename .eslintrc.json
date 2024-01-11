@@ -10,7 +10,8 @@
   "plugins": ["@typescript-eslint"],
   "rules": {
     "no-unused-vars": "warn",
-    "@typescript-eslint/no-unused-vars": "warn"
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-explicit-any": ["off"]
   },
   "ignorePatterns": ["src/**/*.test.ts", "src/frontend/generated/*"]
 }
