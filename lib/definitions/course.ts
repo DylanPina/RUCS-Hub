@@ -2,8 +2,6 @@ export type Course = {
   courseId: string; // Unique indetifier for the course
   courseName: string; // Name of the course
   courseNumber: string; // Course ID
-  bookUsefulnessAvg: number; // How useful is the book
-  bookUsefulnessCount: number; // # of reviews for book usefulness
   textbookNames: string[] | null; // Names of texbooks
   prereqs: string[] | null; // Prerequisites for the course
   synopsisUrl: string | null; // URL for course synopsis
@@ -68,6 +66,10 @@ export type CourseWebRegListing = {
 
 export type CourseTableEntry = {
   courseCode: number;
-  courseName: str;
+  courseName: string;
   credits: number;
+  difficulty?: number;
+  workload?: number;
+  overall?: number;
+  totalReviews?: number;
 };

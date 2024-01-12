@@ -3,13 +3,13 @@ import {
   Term,
   CourseWebRegListing,
   CourseTableEntry,
-} from "@/app/lib/definitions/course";
-import { validateCourseTermYear } from "@/app/lib/utils";
+} from "@/lib/definitions/course";
+import { validateCourseTermYear } from "@/lib/utils";
 import {
   COURSE_SYNOPSES_URL,
   RUTGERS_CS_URL,
   WEBREG_BASE_URL,
-} from "@/app/lib/constants";
+} from "@/lib/constants";
 import { JSDOM } from "jsdom";
 import { writeFileSync } from "fs";
 

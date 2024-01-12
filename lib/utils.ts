@@ -1,5 +1,5 @@
-import { Term } from "@/app/lib/definitions/course";
-import { MAX_YEAR, MIN_YEAR } from "@/app/lib/constants";
+import { Term } from "@/lib/definitions/course";
+import { MAX_YEAR, MIN_YEAR } from "@/lib/constants";
 
 /**
  * Validates the supported term and year range for a course.
