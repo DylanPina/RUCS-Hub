@@ -10,10 +10,7 @@ export default function NavNotification() {
       size="icon"
       className="hover:bg-transparent"
     >
-      <IoIosNotificationsOutline
-        className="fill-primary-white cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in hover:scale-105"
-        size={32}
-      />
+      <IoIosNotificationsOutline className="w-10 h-10 max-sm:w-7 max-sm:h-7 fill-primary-white !text-sm cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in hover:scale-105" />
     </Button>
   );
 }

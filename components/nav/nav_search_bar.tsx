@@ -10,8 +10,8 @@ export default function NavSearchBar() {
         className="absolute left-2 top-1/2 transform -translate-y-1/2"
       />
       <Input
-        className="w-fit focus:w-full focus:max-w-md pl-10 focus:border-primary-red"
-        placeholder="Search for a course..."
+        className="max-w-md focus:w-full focus:max-w-lg pl-10 focus:border-2 focus:border-primary-red"
+        placeholder="Search for a course or a professor..."
       />
     </div>
   );
