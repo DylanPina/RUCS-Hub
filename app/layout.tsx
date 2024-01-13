@@ -20,7 +20,7 @@ export default function RootLayout({
       <body className={font.className}>
         <div className="flex flex-col place-items-center min-h-screen w-full bg-zinc-900">
           <Nav />
-          <div className="w-full max-w-screen-2xl pt-10">{children}</div>
+          <div className="w-full max-w-screen-2xl p-8">{children}</div>
         </div>
       </body>
     </html>
