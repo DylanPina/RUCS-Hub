@@ -4,13 +4,13 @@ import { IoSearchSharp } from "react-icons/io5";
 
 export default function NavSearchBar() {
   return (
-    <div className="relative w-full">
+    <div className="sm:relative flex place-items-center w-full">
       <IoSearchSharp
         size={24}
-        className="absolute left-2 top-1/2 transform -translate-y-1/2"
+        className="sm:absolute sm:left-2 sm:top-1/2 sm:transform sm:-translate-y-1/2"
       />
       <Input
-        className="max-w-md focus:w-full focus:max-w-lg pl-10 focus:border-2 focus:border-primary-red"
+        className="max-w-md max-sm:hidden focus:w-full focus:max-w-lg pl-10 focus:border-2 focus:border-primary-red"
         placeholder="Search for a course or a professor..."
       />
     </div>
