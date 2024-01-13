@@ -18,10 +18,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={font.className}>
-        <div className="flex flex-col h-screen bg-zinc-900">
-          <div className="w-full flex-none">
-            <Nav />
-          </div>
+        <div className="min-h-screen w-full bg-zinc-900">
+          <Nav />
           <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8 pt-10">
             {children}
           </div>
