@@ -10,7 +10,7 @@ import Link from "next/link";
 
 export default function Nav() {
   return (
-    <div className="sticky top-0 z-40 backdrop-blur flex justify-center transition-colors duration-500 lg:z-50 border-b border-primary-white bg-primary-black supports-backdrop-blur:bg-white/60 dark:bg-transparent">
+    <div className="sticky top-0 z-40 backdrop-blur flex justify-center w-full transition-colors duration-500 lg:z-50 border-b border-primary-white bg-primary-black supports-backdrop-blur:bg-white/60 dark:bg-transparent">
       <div className="w-full max-w-screen-2xl">
         <div className="flex place-content-between space-x-4 py-4">
           <h2 className="font-bold text-3xl text-primary-white whitespace-nowrap">
