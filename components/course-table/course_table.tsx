@@ -41,7 +41,7 @@ export default function CourseTable({ data }: CourseTableProps) {
   });
 
   return (
-    <div>
+    <div className="max-lg:w-screen max-lg:p-4">
       <div className="rounded-md border">
         <Table>
           <TableHeader>
