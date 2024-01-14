@@ -4,7 +4,7 @@ import { courseTableMockData } from "@/lib/mock-data/coure-mock-data";
 
 export default async function Page() {
   return (
-    <div className="flex flex-col place-items-center justify-center space-y-10 w-full">
+    <div className="flex flex-col place-items-center justify-center space-y-4">
       <CourseListingHeader />
       <CourseTable data={courseTableMockData} />
     </div>
