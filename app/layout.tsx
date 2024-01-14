@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={font.className}>
         <div className="flex flex-col place-items-center min-h-screen bg-zinc-900">
           <Nav />
-          <main className="flex-grow w-full max-w-screen-2xl p-8">
+          <main className="flex-grow w-full max-w-screen-2xl p-4">
             {children}
           </main>
           <Footer />

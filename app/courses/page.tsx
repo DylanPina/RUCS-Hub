@@ -1,3 +1,9 @@
+import CourseListingHeader from "@/components/course-listing/course_listing_header";
+
 export default async function Page() {
-  return <h1>Course Page</h1>;
+  return (
+    <div className="flex place-items-center justify-center w-full">
+      <CourseListingHeader />
+    </div>
+  );
 }
