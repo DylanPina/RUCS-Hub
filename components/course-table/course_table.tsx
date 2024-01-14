@@ -46,7 +46,10 @@ export default function CourseTable({ data }: CourseTableProps) {
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow
+                key={headerGroup.id}
+                className="transition-colors bg-primary-white/[0.05] hover:bg-primary-white/[0.05] hover:font-bold"
+              >
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
@@ -68,6 +71,7 @@ export default function CourseTable({ data }: CourseTableProps) {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className="cursor-pointer hover:bg-primary-red/20 hover:font-bold"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -81,11 +85,8 @@ export default function CourseTable({ data }: CourseTableProps) {
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
+                <TableCell colSpan={columns.length} className="text-center">
+                  No results...
                 </TableCell>
               </TableRow>
             )}
@@ -97,7 +98,8 @@ export default function CourseTable({ data }: CourseTableProps) {
           variant="outline"
           size="sm"
           onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
+          disabled={false}
+          className="bg-primary-white text-primary-black hover:bg-primary-red border-0 disabled:bg-transparent transition duration-150 ease-out hover:ease-in hover:scale-105"
         >
           Previous
         </Button>
@@ -105,7 +107,8 @@ export default function CourseTable({ data }: CourseTableProps) {
           variant="outline"
           size="sm"
           onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
+          disabled={false}
+          className="bg-primary-white text-primary-black hover:bg-primary-red border-0 disabled:bg-transparent transition duration-150 ease-out hover:ease-in hover:scale-105"
         >
           Next
         </Button>
