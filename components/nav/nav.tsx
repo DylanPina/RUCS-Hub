@@ -12,7 +12,7 @@ import NavProfile from "./nav_profile";
 export default function NavLarge() {
   return (
     <div className="flex place-items-center backdrop-blur justify-center w-full transition-colors duration-500 border-b border-primary-white bg-primary-black supports-backdrop-blur:bg-white/60 dark:bg-transparent">
-      <div className="flex place-content-between align-items-center space-x-4 w-full max-w-screen-2xl py-4 px-8 max-sm:py-2 max-sm:px-4">
+      <div className="flex place-content-between align-items-center space-x-4 w-full max-w-screen-2xl py-4 px-8 max-sm:py-1 max-sm:px-4">
         <NavLogo />
         <NavIcon link="/courses" tooltip="Courses page">
           <FaBook className="w-6 h-6 fill-primary-white max-sm:w-5 max-sm:h-5 cursor-pointer hover:fill-primary-red focus:border-0 transition duration-150 ease-out hover:ease-in hover:scale-105" />

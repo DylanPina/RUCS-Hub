@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Source_Code_Pro } from "next/font/google";
 import Nav from "@/components/nav/nav";
 import "@/app/globals.css";
+import Footer from "@/components/footer/footer";
 
 const font = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -18,9 +19,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={font.className}>
-        <div className="flex flex-col place-items-center min-h-screen w-full bg-zinc-900">
+        <div className="flex flex-col place-items-center min-h-screen bg-zinc-900">
           <Nav />
-          <div className="w-full max-w-screen-2xl p-8">{children}</div>
+          <main className="flex-grow w-full max-w-screen-2xl p-8">
+            {children}
+          </main>
+          <Footer />
         </div>
       </body>
     </html>
