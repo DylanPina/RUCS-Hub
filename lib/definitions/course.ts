@@ -64,7 +64,7 @@ export type CourseWebRegListing = {
   credits: number;
 };
 
-export type CourseTableEntry = {
+export type CourseTableColumn = {
   courseCode: number;
   courseName: string;
   credits: number;

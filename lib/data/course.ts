@@ -2,7 +2,7 @@ import {
   CourseSynopsesListing,
   Term,
   CourseWebRegListing,
-  CourseTableEntry,
+  CourseTableColumn,
 } from "@/lib/definitions/course";
 import { validateCourseTermYear } from "@/lib/utils";
 import {
@@ -162,7 +162,7 @@ function parseCourseCodeNameString(courseCodeName: string): [number, string] {
 function combineCourseListings(
   courseSynposesListing: CourseSynopsesListing[],
   courseWebRegListing: CourseWebRegListing[],
-): CourseTableEntry[] {
+): CourseTableColumn[] {
   return courseSynposesListing.map((synopsis: CourseSynopsesListing) => {
     const webReg = courseWebRegListing.find(
       (x: CourseWebRegListing) => x.courseCode == synopsis.courseCode,
