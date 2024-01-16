@@ -12,7 +12,7 @@ export default function SignIn() {
       <Button
         variant="outline"
         className={
-          "bg-transparent text-primary-white hover:bg-primary-red/50 hover:text-primary-white transition duration-150 ease-out hover:ease-in hover:scale-105"
+          "bg-transparent text-primary-white hover:bg-primary-red/50 max-sm:text-xs max-sm:px-2 max-sm:py-1 hover:text-primary-white transition duration-150 ease-out hover:ease-in hover:scale-105"
         }
         onClick={() => signIn()}
       >
