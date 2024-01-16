@@ -8,6 +8,7 @@ import NavIcon from "./nav_icon";
 import { FaBook } from "react-icons/fa6";
 import { HiMiniAcademicCap } from "react-icons/hi2";
 import NavProfile from "./nav_profile";
+import SignIn from "../auth/sign_in";
 
 export default function NavLarge() {
   return (
@@ -26,6 +27,7 @@ export default function NavLarge() {
           <NavNotification />
           <Separator orientation="vertical" className="h-8 max-sm:hidden" />
           <NavProfile />
+          <SignIn />
         </div>
       </div>
     </div>
