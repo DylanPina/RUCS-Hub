@@ -25,7 +25,6 @@ export default function NavLarge() {
         <div className="flex items-center space-x-4">
           <NavStar />
           <NavNotification />
-          <Separator orientation="vertical" className="h-8 max-sm:hidden" />
           <NavProfile />
           <SignIn />
         </div>
