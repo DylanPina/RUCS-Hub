@@ -14,13 +14,26 @@ import { JSDOM } from "jsdom";
 import { writeFileSync } from "fs";
 
 /**
- * Fetches all courses from Rutgers CS webreg listing for a given semester.
+ * Fetches all courses from Rutgers CS webreg listing for all documented years and semesters.
+ *
+ * @return - A list of all the documented courses from documented years and semesters.
+ */
+export async function fetchAllCourseTableListings() {
+  // TODO
+  return [];
+}
+
+/**
+ * Fetches all courses from Rutgers CS webreg listing for a given year and semester.
  *
  * @param year - Year the course is/was offered (2022 - 2024)
  * @param term - Term it is/was offered
  * @return - List of courses offered for that specific year and term
  */
-export async function fetchCourseTableListings(year: number, term: Term) {
+export async function fetchCourseTableListingsByYearTerm(
+  year: number,
+  term: Term,
+): Promise<CourseTableColumn[]> {
   const courseSynposesListing = await parseSynposesListing();
   const courseWebRegListing = await parseWebRegListing(year, term);
   const combinedCourseListings = combineCourseListings(
