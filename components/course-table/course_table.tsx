@@ -26,6 +26,7 @@ import { columns } from "./course_column";
 import { Input } from "@/components/shadcn/ui/input";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import { IoFilter } from "react-icons/io5";
+import CourseFilterTerm from "./course_filter_term";
 
 interface CourseTableProps {
   data: CourseTableColumn[];
@@ -71,17 +72,20 @@ export default function CourseTable({ data }: CourseTableProps) {
   return (
     <div className="max-lg:w-screen max-lg:p-4">
       <div className="flex items-center py-4">
-        <div className="relative w-full">
-          <IoFilter
-            size={18}
-            className="absolute left-2 top-1/2 transform -translate-y-1/2"
-          />
-          <Input
-            placeholder="Filter courses..."
-            value={globalFilter || ""}
-            onChange={(event) => setGlobalFilter(event.target.value)}
-            className="max-w-sm pl-8 focus:border-2 focus:border-primary-red transition-all duration-150 ease-out hover:ease-in"
-          />
+        <div className="flex flex-col space-y-4">
+          <CourseFilterTerm />
+          <div className="relative w-full">
+            <IoFilter
+              size={18}
+              className="absolute left-2 top-1/2 transform -translate-y-1/2"
+            />
+            <Input
+              placeholder="Filter courses..."
+              value={globalFilter || ""}
+              onChange={(event) => setGlobalFilter(event.target.value)}
+              className="max-w-sm pl-8 focus:border-2 focus:border-primary-red transition-all duration-150 ease-out hover:ease-in"
+            />
+          </div>
         </div>
       </div>
       <div className="rounded-md border">
