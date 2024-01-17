@@ -15,7 +15,7 @@ export default function NavButton({ link, text }: NavButtonProps) {
   const isActive = pathname.includes(link);
   const buttonClass = isActive
     ? "bg-primary-white text-primary-black"
-    : "bg-transparent text-primary-white hover:bg-primary-red/50 hover:text-primary-white transition duration-150 ease-out hover:ease-in hover:scale-105";
+    : "bg-transparent text-primary-white hover:bg-primary-red/50 hover:text-primary-white transition duration-150 ease-out hover:ease-in";
 
   return (
     <Button asChild variant="outline" className={buttonClass}>

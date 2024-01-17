@@ -26,7 +26,7 @@ export default function NavStar() {
         <TooltipProvider delayDuration={100}>
           <Tooltip>
             <TooltipTrigger className="focus:outline-none">
-              <IoIosStarOutline className="w-10 h-10 fill-primary-white max-sm:w-7 max-sm:h-7 cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in hover:scale-105" />
+              <IoIosStarOutline className="w-10 h-10 fill-primary-white max-sm:w-7 max-sm:h-7 cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in" />
             </TooltipTrigger>
             <TooltipContent className="bg-primary-red">Saved</TooltipContent>
           </Tooltip>
