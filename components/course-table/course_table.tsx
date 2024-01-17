@@ -140,7 +140,7 @@ export default function CourseTable({ data }: CourseTableProps) {
           variant="outline"
           size="sm"
           onClick={() => table.previousPage()}
-          disabled={false}
+          disabled={!table.getCanPreviousPage()}
           className="bg-primary-white text-primary-black hover:bg-primary-red border-0 disabled:bg-transparent transition duration-150 ease-out hover:ease-in"
         >
           Previous
@@ -149,7 +149,7 @@ export default function CourseTable({ data }: CourseTableProps) {
           variant="outline"
           size="sm"
           onClick={() => table.nextPage()}
-          disabled={false}
+          disabled={!table.getCanNextPage()}
           className="bg-primary-white text-primary-black hover:bg-primary-red border-0 disabled:bg-transparent transition duration-150 ease-out hover:ease-in"
         >
           Next
