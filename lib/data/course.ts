@@ -23,6 +23,10 @@ import { writeFileSync } from "fs";
 export async function fetchCourseTableListings(year: number, term: Term) {
   const courseSynposesListing = await parseSynposesListing();
   const courseWebRegListing = await parseWebRegListing(year, term);
+  const combinedCourseListings = combineCourseListings(
+    courseSynposesListing,
+    courseWebRegListing,
+  );
 
   writeFileSync(
     "logs/course_synposes_listing.log",
@@ -32,8 +36,12 @@ export async function fetchCourseTableListings(year: number, term: Term) {
     "logs/course_webreg_listing.log",
     JSON.stringify(courseWebRegListing, null, 2),
   );
+  writeFileSync(
+    "logs/combinedCourseListings.log",
+    JSON.stringify(combinedCourseListings, null, 2),
+  );
 
-  return combineCourseListings(courseSynposesListing, courseWebRegListing);
+  return combinedCourseListings;
 }
 
 /**
@@ -163,15 +171,15 @@ function combineCourseListings(
   courseSynposesListing: CourseSynopsesListing[],
   courseWebRegListing: CourseWebRegListing[],
 ): CourseTableColumn[] {
-  return courseSynposesListing.map((synopsis: CourseSynopsesListing) => {
-    const webReg = courseWebRegListing.find(
-      (x: CourseWebRegListing) => x.courseCode == synopsis.courseCode,
+  return courseWebRegListing.map((webReg: CourseWebRegListing) => {
+    const synposes = courseSynposesListing.find(
+      (x: CourseSynopsesListing) => x.courseCode == webReg.courseCode,
     );
 
     return {
-      courseCode: synopsis.courseCode,
-      courseName: synopsis.courseName,
-      credits: webReg ? webReg.credits : -1, // Default to -1 if no matching webReg listing is found
+      courseCode: webReg.courseCode,
+      courseName: synposes?.courseName || "Course name not found",
+      credits: webReg.credits,
     };
   });
 }
