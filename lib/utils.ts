@@ -8,16 +8,19 @@ import { MAX_YEAR, MIN_YEAR } from "@/lib/constants";
  * @param term - Term it is/was offered
  * @return - Will return an error if range check is violated.
  */
-export function validateCourseTermYear(year: number, term: Term): void {
-  if (year > MAX_YEAR || year < MIN_YEAR) {
-    throw new Error(
-      `Year ${year} is out of supported range (${MIN_YEAR} - ${MAX_YEAR}).`,
-    );
+export function validateCourseTermYear(
+  year: number,
+  term: Term | null,
+): boolean {
+  if (
+    year > MAX_YEAR ||
+    year < MIN_YEAR ||
+    (year === MAX_YEAR && term !== Term.Spring)
+  ) {
+    return false;
   }
 
-  if (year === MAX_YEAR && term !== Term.Spring) {
-    throw new Error(`${year} ${term} term is not supported.`);
-  }
+  return true;
 }
 
 /**

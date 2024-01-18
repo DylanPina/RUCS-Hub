@@ -1,5 +1,4 @@
 "use client";
-
 import {
   flexRender,
   getCoreRowModel,
@@ -27,6 +26,7 @@ import { Input } from "@/components/shadcn/ui/input";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import { IoFilter } from "react-icons/io5";
 import CourseFilterTerm from "./course_filter_term";
+import CourseFilterYear from "./course_filter_year";
 
 interface CourseTableProps {
   data: CourseTableColumn[];
@@ -74,6 +74,7 @@ export default function CourseTable({ data }: CourseTableProps) {
       <div className="flex items-center py-4">
         <div className="flex flex-col space-y-4">
           <CourseFilterTerm />
+          <CourseFilterYear />
           <div className="relative w-full">
             <IoFilter
               size={18}
@@ -145,7 +146,7 @@ export default function CourseTable({ data }: CourseTableProps) {
           size="sm"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
-          className="bg-primary-white text-primary-black hover:bg-primary-red border-0 disabled:bg-transparent transition duration-150 ease-out hover:ease-in"
+          className="bg-primary-white text-primary-black hover:bg-primary-red border-0 disabled:bg-primary-white/90 transition duration-150 ease-out hover:ease-in"
         >
           Previous
         </Button>
@@ -154,7 +155,7 @@ export default function CourseTable({ data }: CourseTableProps) {
           size="sm"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
-          className="bg-primary-white text-primary-black hover:bg-primary-red border-0 disabled:bg-transparent transition duration-150 ease-out hover:ease-in"
+          className="bg-primary-white text-primary-black hover:bg-primary-red border-0 disabled:bg-primary-white/90 transition duration-150 ease-out hover:ease-in"
         >
           Next
         </Button>
