@@ -64,3 +64,46 @@ export function getTermByName(name: string): Term | null {
       return null;
   }
 }
+
+/**
+ * Returns a list of valid years for a given term
+ *
+ * @param term - The term which we want to find valid years for, or null for any term
+ * @returns - List of valid years for a given term
+ */
+export function getValidYears(term: Term | null): number[] {
+  const years: number[] = [];
+  for (let year = MIN_YEAR; year <= MAX_YEAR; year++) {
+    if (
+      (term !== null && validateCourseTermYear(year, term)) ||
+      term === null
+    ) {
+      console.log(`Year: ${year}, Term: ${term}`);
+      years.push(year);
+    }
+  }
+  return years;
+}
+
+/**
+ * Returns a list of valid terms for a given year
+ *
+ * @param year - The year which we want to find valid years for, or null for any year
+ * @returns - List of valid terms for a given year
+ */
+export function getValidTerms(year: number | null): string[] {
+  const terms: any[] = Object.values(Term).filter((value) =>
+    isNaN(Number(value)),
+  );
+
+  const validTerms: string[] = [];
+  terms.forEach((term: string) => {
+    if (
+      (year !== null && validateCourseTermYear(year, getTermByName(term))) ||
+      year === null
+    ) {
+      validTerms.push(term);
+    }
+  });
+  return validTerms;
+}

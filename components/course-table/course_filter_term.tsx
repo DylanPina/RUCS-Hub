@@ -9,13 +9,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn/ui/select";
-import { Term } from "@/lib/definitions/course";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
-import { getTermByName, validateCourseTermYear } from "@/lib/utils";
+import { getValidTerms } from "@/lib/utils";
 
 export default function CourseFilterTerm() {
   const [term, setTerm] = useState<string>("");
   const [year, setYear] = useState<string>("");
+  const [validTerms, setValidTerms] = useState<string[]>([]);
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -24,7 +24,8 @@ export default function CourseFilterTerm() {
   useEffect(() => {
     setTerm(searchParams.get("term") || "any");
     setYear(searchParams.get("year") || "any");
-  }, [searchParams]);
+    setValidTerms(getValidTerms(year == "any" ? null : Number(year)));
+  }, [searchParams, year]);
 
   function setTermParam(term: string | null | undefined) {
     const params = new URLSearchParams(searchParams);
@@ -34,23 +35,6 @@ export default function CourseFilterTerm() {
       params.delete("term");
     }
     replace(`${pathname}?${params.toString()}`);
-  }
-
-  function getValidTerms(): string[] {
-    const terms: any[] = Object.values(Term).filter((value) =>
-      isNaN(Number(value)),
-    );
-    const validTerms: string[] = [];
-    console.log(`Terms: ${terms}`);
-    terms.forEach((term: string) => {
-      if (
-        year == "any" ||
-        validateCourseTermYear(Number(year), getTermByName(term))
-      ) {
-        validTerms.push(term);
-      }
-    });
-    return validTerms;
   }
 
   return (
@@ -64,7 +48,7 @@ export default function CourseFilterTerm() {
           <SelectItem value="any" key="any">
             Any
           </SelectItem>
-          {getValidTerms().map((term) => (
+          {validTerms.map((term) => (
             <SelectItem value={term.toString()} key={term.toString()}>
               {term}
             </SelectItem>

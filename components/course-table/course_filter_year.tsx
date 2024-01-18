@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 
 import {
@@ -8,12 +10,17 @@ import {
   SelectValue,
 } from "@/components/shadcn/ui/select";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
-import { getTermByName, validateCourseTermYear } from "@/lib/utils";
-import { MIN_YEAR, MAX_YEAR } from "@/lib/constants";
+import {
+  getTermByName,
+  getValidYears,
+  validateCourseTermYear,
+} from "@/lib/utils";
+import { Term } from "@/lib/definitions/course";
 
 export default function CourseFilterYear() {
   const [year, setYear] = useState<string>("");
   const [term, setTerm] = useState<string>("");
+  const [validYears, setValidYears] = useState<number[]>([]);
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -22,7 +29,14 @@ export default function CourseFilterYear() {
   useEffect(() => {
     setYear(searchParams.get("year") || "any");
     setTerm(searchParams.get("term") || "any");
-  }, [searchParams]);
+    setValidYears(getValidYears(term == "any" ? null : getTermByName(term)));
+
+    console.log(`Term: ${term}`);
+    console.log(`Term by name: ${typeof getTermByName(term)}`);
+    // console.log(
+    //   `Winter term year 2024: ${validateCourseTermYear(2024, Term.Winter)}`,
+    // );
+  }, [searchParams, term, year]);
 
   function setYearParam(year: string | null | undefined): void {
     const params = new URLSearchParams(searchParams);
@@ -32,19 +46,6 @@ export default function CourseFilterYear() {
       params.delete("year");
     }
     replace(`${pathname}?${params.toString()}`);
-  }
-
-  function getValidYears(): number[] {
-    const years: number[] = [];
-    for (let year = MIN_YEAR; year <= MAX_YEAR; year++) {
-      if (
-        (term != "any" && validateCourseTermYear(year, getTermByName(term))) ||
-        term == "any"
-      ) {
-        years.push(year);
-      }
-    }
-    return years;
   }
 
   return (
@@ -58,7 +59,7 @@ export default function CourseFilterYear() {
           <SelectItem value="any" key="any">
             Any
           </SelectItem>
-          {getValidYears().map((year: number) => (
+          {validYears.map((year: number) => (
             <SelectItem value={year.toString()} key={year.toString()}>
               {year}
             </SelectItem>
