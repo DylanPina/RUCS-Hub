@@ -1,5 +1,4 @@
 import React from "react";
-import { Separator } from "../shadcn/ui/separator";
 import NavSearchBar from "./nav_search_bar";
 import NavStar from "./nav_star";
 import NavNotification from "./nav_notifications";

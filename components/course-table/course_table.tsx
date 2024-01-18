@@ -22,11 +22,10 @@ import { CourseTableColumn } from "@/lib/definitions/course";
 import { Button } from "@/components/shadcn/ui/button";
 import { useState } from "react";
 import { columns } from "./course_column";
-import { Input } from "@/components/shadcn/ui/input";
 import { rankItem } from "@tanstack/match-sorter-utils";
-import { IoFilter } from "react-icons/io5";
 import CourseFilterTerm from "./course_filter_term";
 import CourseFilterYear from "./course_filter_year";
+import CourseFilterSearch from "./course_filter_search";
 
 interface CourseTableProps {
   data: CourseTableColumn[];
@@ -70,22 +69,18 @@ export default function CourseTable({ data }: CourseTableProps) {
   });
 
   return (
-    <div className="max-lg:w-screen max-lg:p-4">
-      <div className="flex items-center py-4">
-        <div className="flex flex-col space-y-4">
-          <CourseFilterTerm />
-          <CourseFilterYear />
-          <div className="relative w-full">
-            <IoFilter
-              size={18}
-              className="absolute left-2 top-1/2 transform -translate-y-1/2"
+    <div className="max-lg:w-screen max-lg:px-4">
+      <div className="flex place-items-center py-4">
+        <div className="flex content-center md:space-x-4 max-md:flex-col-reverse">
+          <div className="max-md:pt-4">
+            <CourseFilterSearch
+              globalFilter={globalFilter}
+              setGlobalFilter={setGlobalFilter}
             />
-            <Input
-              placeholder="Filter courses..."
-              value={globalFilter || ""}
-              onChange={(event) => setGlobalFilter(event.target.value)}
-              className="max-w-sm pl-8 focus:border-2 focus:border-primary-red transition-all duration-150 ease-out hover:ease-in"
-            />
+          </div>
+          <div className="flex content-center items-center space-x-4 h-fit">
+            <CourseFilterTerm />
+            <CourseFilterYear />
           </div>
         </div>
       </div>

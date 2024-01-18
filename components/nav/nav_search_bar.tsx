@@ -18,7 +18,7 @@ export default function NavSearchBar() {
           className="sm:absolute sm:left-2 sm:top-1/2 sm:transform sm:-translate-y-1/2"
         />
         <Input
-          className="max-w-md max-sm:hidden focus:w-full focus:max-w-lg pl-10 focus:border-2 focus:border-primary-red transition-all duration-150 ease-out hover:ease-in"
+          className="max-w-md max-sm:hidden pl-10 focus:border-2 focus:border-primary-red transition-all duration-150 ease-out hover:ease-in"
           placeholder="Search for a course or a professor..."
         />
       </div>
