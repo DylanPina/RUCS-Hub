@@ -69,6 +69,26 @@ export async function fetchCourseTableListingsByTerm(
 }
 
 /**
+ * Fetches courses from Rutgers CS webreg listing for a given year
+ *
+ * @param year - The year we are interested in
+ * @return - A list of all the documented courses from that year
+ */
+export async function fetchCourseTableListingByYear(
+  year: number,
+): Promise<CourseTableColumn[]> {
+  const terms: Term[] = getTerms();
+  const courseTableListings: Promise<CourseTableColumn[]>[] = [];
+
+  terms.forEach((term: Term) => {
+    const courseTableListing = fetchCourseTableListingsByYearTerm(year, term);
+    courseTableListings.push(courseTableListing);
+  });
+
+  return mergeCourseListings(await Promise.all(courseTableListings));
+}
+
+/**
  * Fetches all courses from Rutgers CS webreg listing for a given year and semester.
  *
  * @param year - Year the course is/was offered (2022 - 2024)
