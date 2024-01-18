@@ -41,7 +41,7 @@ export default function CourseFilterTerm() {
           <SelectValue placeholder="Select a term..." />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="any" key={0}>
+          <SelectItem value="any" key="any">
             Any
           </SelectItem>
           {Object.values(Term)
