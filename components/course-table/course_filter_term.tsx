@@ -43,12 +43,6 @@ export default function CourseFilterTerm() {
     const validTerms: string[] = [];
     console.log(`Terms: ${terms}`);
     terms.forEach((term: string) => {
-      console.log(typeof term);
-      console.log(
-        `Year: ${Number(year)}, Term: ${getTermByName(
-          term,
-        )} is ${validateCourseTermYear(Number(year), getTermByName(term))}`,
-      );
       if (
         year == "any" ||
         validateCourseTermYear(Number(year), getTermByName(term))
@@ -63,7 +57,7 @@ export default function CourseFilterTerm() {
     <div className="flex flex-col space-y-1">
       <label className="text-primary-white text-xs">Term</label>
       <Select value={term} onValueChange={setTermParam}>
-        <SelectTrigger className="w-fit">
+        <SelectTrigger className="selection:border selection:border-red-400">
           <SelectValue placeholder="Select a term..." />
         </SelectTrigger>
         <SelectContent>
