@@ -14,6 +14,28 @@ import { JSDOM } from "jsdom";
 import { writeFileSync } from "fs";
 
 /**
+ * Fetches course table data based on the given year and term
+ *
+ * @param year - Year the courses were offered (or null or all)
+ * @param term - Term the courses were offered (or null or all)
+ * @return - Course table data for the courses based on year and term
+ */
+export async function fetchCourseTableData(
+  year: number | null,
+  term: Term | null,
+): Promise<CourseTableColumn[]> {
+  if (year !== null && term !== null) {
+    return await fetchCourseTableListingsByYearTerm(year, term);
+  } else if (term !== null && year === null) {
+    return await fetchCourseTableListingsByTerm(term);
+  } else if (term === null && year !== null) {
+    return await fetchCourseTableListingByYear(year);
+  } else {
+    return await fetchAllCourseTableListings();
+  }
+}
+
+/**
  * Fetches all courses from Rutgers CS webreg listing for all documented years and semesters.
  *
  * @return - A list of all the documented courses from documented years and semesters.
