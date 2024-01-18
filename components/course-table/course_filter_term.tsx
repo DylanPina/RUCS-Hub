@@ -11,9 +11,11 @@ import {
 } from "@/components/shadcn/ui/select";
 import { Term } from "@/lib/definitions/course";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { getTermByName, validateCourseTermYear } from "@/lib/utils";
 
 export default function CourseFilterTerm() {
   const [term, setTerm] = useState<string>("");
+  const [year, setYear] = useState<string>("");
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -21,6 +23,7 @@ export default function CourseFilterTerm() {
 
   useEffect(() => {
     setTerm(searchParams.get("term") || "any");
+    setYear(searchParams.get("year") || "any");
   }, [searchParams]);
 
   function setTermParam(term: string | null | undefined) {
@@ -31,6 +34,29 @@ export default function CourseFilterTerm() {
       params.delete("term");
     }
     replace(`${pathname}?${params.toString()}`);
+  }
+
+  function getValidTerms(): string[] {
+    const terms: any[] = Object.values(Term).filter((value) =>
+      isNaN(Number(value)),
+    );
+    const validTerms: string[] = [];
+    console.log(`Terms: ${terms}`);
+    terms.forEach((term: string) => {
+      console.log(typeof term);
+      console.log(
+        `Year: ${Number(year)}, Term: ${getTermByName(
+          term,
+        )} is ${validateCourseTermYear(Number(year), getTermByName(term))}`,
+      );
+      if (
+        year == "any" ||
+        validateCourseTermYear(Number(year), getTermByName(term))
+      ) {
+        validTerms.push(term);
+      }
+    });
+    return validTerms;
   }
 
   return (
@@ -44,13 +70,11 @@ export default function CourseFilterTerm() {
           <SelectItem value="any" key="any">
             Any
           </SelectItem>
-          {Object.values(Term)
-            .filter((value) => isNaN(Number(value)))
-            .map((term) => (
-              <SelectItem value={term.toString()} key={term.toString()}>
-                {term}
-              </SelectItem>
-            ))}
+          {getValidTerms().map((term) => (
+            <SelectItem value={term.toString()} key={term.toString()}>
+              {term}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
     </div>
