@@ -58,6 +58,7 @@ export type CourseSynopsesListing = {
 
 export type CourseWebRegListing = {
   courseCode: number;
+  title: string;
   openSections: number;
   sections: CourseSection[];
   prereqs: number[];

@@ -10,12 +10,7 @@ import {
   SelectValue,
 } from "@/components/shadcn/ui/select";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
-import {
-  getTermByName,
-  getValidYears,
-  validateCourseTermYear,
-} from "@/lib/utils";
-import { Term } from "@/lib/definitions/course";
+import { getTermByName, getValidYears } from "@/lib/utils";
 
 export default function CourseFilterYear() {
   const [year, setYear] = useState<string>("");
@@ -30,12 +25,6 @@ export default function CourseFilterYear() {
     setYear(searchParams.get("year") || "any");
     setTerm(searchParams.get("term") || "any");
     setValidYears(getValidYears(term == "any" ? null : getTermByName(term)));
-
-    console.log(`Term: ${term}`);
-    console.log(`Term by name: ${typeof getTermByName(term)}`);
-    // console.log(
-    //   `Winter term year 2024: ${validateCourseTermYear(2024, Term.Winter)}`,
-    // );
   }, [searchParams, term, year]);
 
   function setYearParam(year: string | null | undefined): void {

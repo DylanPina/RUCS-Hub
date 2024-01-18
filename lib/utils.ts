@@ -24,10 +24,28 @@ export function validateCourseTermYear(
 }
 
 /**
- * Retrieves Tern enum with the given value.
+ * @return - List of all available terms
+ */
+export function getTerms(): Term[] {
+  return [Term.Winter, Term.Spring, Term.Summer, Term.Fall];
+}
+
+/**
+ * @return - List of all available years
+ */
+export function getYears(): number[] {
+  const years: number[] = [];
+  for (let year = MIN_YEAR; year <= MAX_YEAR; year++) {
+    years.push(year);
+  }
+  return years;
+}
+
+/**
+ * Retrieves Term enum with the given value.
  *
  * @param value - The numeric value of the Term enum to find the enum for.
- * @returns - The Term enum that matches the given value, or null if no match is found.
+ * @return - The Term enum that matches the given value, or null if no match is found.
  */
 export function getTermByValue(value: number): Term | null {
   switch (value) {
@@ -48,7 +66,7 @@ export function getTermByValue(value: number): Term | null {
  * Retrieves Term enum with the given key name.
  *
  * @param term - The string value of the Term enum to find the enum for.
- * @returns - The Term enum that matches the given name, or null if no match is found.
+ * @return - The Term enum that matches the given name, or null if no match is found.
  */
 export function getTermByName(name: string): Term | null {
   switch (name.toLowerCase()) {
@@ -69,7 +87,7 @@ export function getTermByName(name: string): Term | null {
  * Returns a list of valid years for a given term
  *
  * @param term - The term which we want to find valid years for, or null for any term
- * @returns - List of valid years for a given term
+ * @return - List of valid years for a given term
  */
 export function getValidYears(term: Term | null): number[] {
   const years: number[] = [];
@@ -89,7 +107,7 @@ export function getValidYears(term: Term | null): number[] {
  * Returns a list of valid terms for a given year
  *
  * @param year - The year which we want to find valid years for, or null for any year
- * @returns - List of valid terms for a given year
+ * @return - List of valid terms for a given year
  */
 export function getValidTerms(year: number | null): string[] {
   const terms: any[] = Object.values(Term).filter((value) =>

@@ -4,7 +4,7 @@ import {
   CourseWebRegListing,
   CourseTableColumn,
 } from "@/lib/definitions/course";
-import { validateCourseTermYear } from "@/lib/utils";
+import { getTerms, getYears, validateCourseTermYear } from "@/lib/utils";
 import {
   COURSE_SYNOPSES_URL,
   RUTGERS_CS_URL,
@@ -19,8 +19,34 @@ import { writeFileSync } from "fs";
  * @return - A list of all the documented courses from documented years and semesters.
  */
 export async function fetchAllCourseTableListings() {
-  // TODO
-  return [];
+  const years: number[] = getYears();
+  const terms: Term[] = getTerms();
+  const validYearTermMap: Map<number, Term[]> = new Map<number, Term[]>();
+
+  years.forEach((year: number) => {
+    const validTerms: Term[] = [];
+
+    terms.forEach((term: Term) => {
+      if (validateCourseTermYear(year, term)) {
+        validTerms.push(term);
+      }
+    });
+
+    validYearTermMap.set(year, validTerms);
+  });
+
+  const courseTableListings: Promise<CourseTableColumn[]>[] = [];
+  validYearTermMap.forEach((terms: Term[], year: number) => {
+    terms.forEach((term: Term) => {
+      const courseTableListing = fetchCourseTableListingsByYearTerm(year, term);
+      courseTableListings.push(courseTableListing);
+    });
+  });
+
+  const res = mergeCourseListings(await Promise.all(courseTableListings));
+  console.log(res);
+
+  return res;
 }
 
 /**
@@ -85,6 +111,7 @@ export async function parseWebRegListing(
     return courseListingJson.map((courseListing: any) => {
       return {
         courseCode: Number(courseListing.courseNumber),
+        title: courseListing.title,
         openSections: courseListing.openSections,
         sections: courseListing.sections.map((section: any) => ({
           sectionNumber: section.number,
@@ -191,8 +218,32 @@ function combineCourseListings(
 
     return {
       courseCode: webReg.courseCode,
-      courseName: synposes?.courseName || "Course name not found",
+      courseName: synposes?.courseName || webReg.title,
       credits: webReg.credits,
     };
   });
+}
+
+/**
+ * Merges coures listings from different years and terms into one course listing
+ *
+ * @param courseListings - A list of course listings to merge together
+ * @return - One combined course listing with no duplicates
+ */
+function mergeCourseListings(
+  courseListings: CourseTableColumn[][],
+): CourseTableColumn[] {
+  const mergedCourseListing: CourseTableColumn[] = [];
+  const courseCodes = new Set<number>();
+  console.log(courseListings);
+  for (const columns of courseListings) {
+    for (const column of columns) {
+      if (!courseCodes.has(column.courseCode)) {
+        courseCodes.add(column.courseCode);
+        mergedCourseListing.push(column);
+      }
+    }
+  }
+
+  return mergedCourseListing;
 }
