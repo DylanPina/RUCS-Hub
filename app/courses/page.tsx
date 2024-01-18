@@ -2,6 +2,7 @@ import CourseTable from "@/components/course-table/course_table";
 import CourseListingHeader from "@/components/course-table/course_table_header";
 import {
   fetchAllCourseTableListings,
+  fetchCourseTableListingsByTerm,
   fetchCourseTableListingsByYearTerm,
 } from "@/lib/data/course";
 import { CourseTableColumn } from "@/lib/definitions/course";
@@ -13,8 +14,11 @@ export default async function Page({ searchParams }: { searchParams: string }) {
   const term = getTermByName(params.get("term") || "");
 
   let courseTableData: CourseTableColumn[] = [];
-  if (year && term) {
+  if (year !== null && term !== null) {
     courseTableData = await fetchCourseTableListingsByYearTerm(year, term);
+  } else if (term !== null && isNaN(year)) {
+    courseTableData = await fetchCourseTableListingsByTerm(term);
+  } else if (term === null && !isNaN(year)) {
   } else {
     courseTableData = await fetchAllCourseTableListings();
   }

@@ -18,7 +18,9 @@ import { writeFileSync } from "fs";
  *
  * @return - A list of all the documented courses from documented years and semesters.
  */
-export async function fetchAllCourseTableListings() {
+export async function fetchAllCourseTableListings(): Promise<
+  CourseTableColumn[]
+> {
   const years: number[] = getYears();
   const terms: Term[] = getTerms();
   const validYearTermMap: Map<number, Term[]> = new Map<number, Term[]>();
@@ -43,10 +45,27 @@ export async function fetchAllCourseTableListings() {
     });
   });
 
-  const res = mergeCourseListings(await Promise.all(courseTableListings));
-  console.log(res);
+  return mergeCourseListings(await Promise.all(courseTableListings));
+}
 
-  return res;
+/**
+ * Fetches courses from Rutgers CS webreg listing for a given term
+ *
+ * @param term - The term we are interested in
+ * @return - A list of all the documented courses from that term
+ */
+export async function fetchCourseTableListingsByTerm(
+  term: Term,
+): Promise<CourseTableColumn[]> {
+  const years: number[] = getYears();
+  const courseTableListings: Promise<CourseTableColumn[]>[] = [];
+
+  years.forEach((year: number) => {
+    const courseTableListing = fetchCourseTableListingsByYearTerm(year, term);
+    courseTableListings.push(courseTableListing);
+  });
+
+  return mergeCourseListings(await Promise.all(courseTableListings));
 }
 
 /**
