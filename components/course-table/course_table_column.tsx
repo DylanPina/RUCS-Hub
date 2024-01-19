@@ -11,7 +11,7 @@ export const columns: ColumnDef<CourseTableColumn>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="text-primary-white hover:bg-transparent hover:font-black hover:text-primary-white"
+          className="text-primary-white p-0 hover:bg-transparent hover:font-black hover:text-primary-white"
         >
           Code
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -26,7 +26,7 @@ export const columns: ColumnDef<CourseTableColumn>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="text-primary-white hover:bg-transparent hover:font-black hover:text-primary-white"
+          className="text-primary-white p-0 hover:bg-transparent hover:font-black hover:text-primary-white"
         >
           Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -41,7 +41,7 @@ export const columns: ColumnDef<CourseTableColumn>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="text-primary-white hover:bg-transparent hover:font-black hover:text-primary-white"
+          className="text-primary-white p-0 hover:bg-transparent hover:font-black hover:text-primary-white"
         >
           Credits
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -56,7 +56,7 @@ export const columns: ColumnDef<CourseTableColumn>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="text-primary-white hover:bg-transparent hover:font-black hover:text-primary-white"
+          className="text-primary-white p-0 hover:bg-transparent hover:font-black hover:text-primary-white"
         >
           Difficulty
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -71,7 +71,7 @@ export const columns: ColumnDef<CourseTableColumn>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="text-primary-white hover:bg-transparent hover:font-black hover:text-primary-white"
+          className="text-primary-white p-0 hover:bg-transparent hover:font-black hover:text-primary-white"
         >
           Workload
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -86,7 +86,7 @@ export const columns: ColumnDef<CourseTableColumn>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="text-primary-white hover:bg-transparent hover:font-black hover:text-primary-white"
+          className="text-primary-white p-0 hover:bg-transparent hover:font-black hover:text-primary-white"
         >
           Overall
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -101,7 +101,7 @@ export const columns: ColumnDef<CourseTableColumn>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="text-primary-white hover:bg-transparent hover:font-black hover:text-primary-white"
+          className="text-primary-white p-0 hover:bg-transparent hover:font-black hover:text-primary-white"
         >
           Reviews
           <ArrowUpDown className="ml-2 h-4 w-4" />

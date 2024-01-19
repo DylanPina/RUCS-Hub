@@ -1,4 +1,5 @@
 "use client";
+
 import {
   flexRender,
   getCoreRowModel,
@@ -21,11 +22,13 @@ import {
 import { CourseTableColumn } from "@/lib/definitions/course";
 import { Button } from "@/components/shadcn/ui/button";
 import { useState } from "react";
-import { columns } from "./course_column";
+import { columns } from "./course_table_column";
 import { rankItem } from "@tanstack/match-sorter-utils";
-import CourseFilterTerm from "./course_filter_term";
-import CourseFilterYear from "./course_filter_year";
-import CourseFilterSearch from "./course_filter_search";
+import CourseFilterTerm from "./course_table_filter_term";
+import CourseFilterYear from "./course_table_filter_year";
+import CourseFilterSearch from "./course_table_filter_search";
+import CourseTablePageSize from "./course_table_page_size";
+import CourseTableSelectPageSize from "./course_table_select_page_size";
 
 interface CourseTableProps {
   data: CourseTableColumn[];
@@ -85,7 +88,7 @@ export default function CourseTable({ data }: CourseTableProps) {
         </div>
       </div>
       <div className="rounded-md border">
-        <Table>
+        <Table className="p-10">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
@@ -135,25 +138,31 @@ export default function CourseTable({ data }: CourseTableProps) {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-          className="bg-primary-white text-primary-black hover:bg-primary-red border-0 disabled:bg-primary-white/90 transition duration-150 ease-out hover:ease-in"
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-          className="bg-primary-white text-primary-black hover:bg-primary-red border-0 disabled:bg-primary-white/90 transition duration-150 ease-out hover:ease-in"
-        >
-          Next
-        </Button>
+      <div className="flex max-sm:flex-col max-sm:place-content-start sm:place-content-between sm:space-x-2 max-sm:space-y-4 w-full py-4">
+        <div className="flex space-x-4">
+          <CourseTablePageSize table={table} />
+          <CourseTableSelectPageSize table={table} />
+        </div>
+        <div className="flex space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+            className="bg-primary-white text-primary-black hover:bg-primary-red border-0 disabled:bg-primary-white/90 transition duration-150 ease-out hover:ease-in"
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+            className="bg-primary-white text-primary-black hover:bg-primary-red border-0 disabled:bg-primary-white/90 transition duration-150 ease-out hover:ease-in"
+          >
+            Next
+          </Button>
+        </div>
       </div>
     </div>
   );

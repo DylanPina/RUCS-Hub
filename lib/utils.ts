@@ -96,7 +96,6 @@ export function getValidYears(term: Term | null): number[] {
       (term !== null && validateCourseTermYear(year, term)) ||
       term === null
     ) {
-      console.log(`Year: ${year}, Term: ${term}`);
       years.push(year);
     }
   }

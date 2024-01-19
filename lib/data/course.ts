@@ -296,7 +296,7 @@ function mergeCourseListings(
 ): CourseTableColumn[] {
   const mergedCourseListing: CourseTableColumn[] = [];
   const courseCodes = new Set<number>();
-  console.log(courseListings);
+
   for (const columns of courseListings) {
     for (const column of columns) {
       if (!courseCodes.has(column.courseCode)) {
