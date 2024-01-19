@@ -19,10 +19,7 @@ export default function CourseTableSelectPageSize({
   return (
     <Select
       value={table.getState().pagination.pageSize.toString()}
-      onValueChange={(pageSize: string) => {
-        console.log(pageSize);
-        return table.setPageSize(Number(pageSize));
-      }}
+      onValueChange={(pageSize: string) => table.setPageSize(Number(pageSize))}
     >
       <SelectTrigger className="w-fit">
         <SelectValue placeholder="Select a year..." />
