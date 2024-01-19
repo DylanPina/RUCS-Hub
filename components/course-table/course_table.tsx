@@ -29,6 +29,7 @@ import CourseFilterYear from "./course_table_filter_year";
 import CourseFilterSearch from "./course_table_filter_search";
 import CourseTablePageSize from "./course_table_page_size";
 import CourseTableSelectPageSize from "./course_table_select_page_size";
+import { useRouter } from "next/navigation";
 
 interface CourseTableProps {
   data: CourseTableColumn[];
@@ -38,6 +39,7 @@ export default function CourseTable({ data }: CourseTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState<any>([]);
+  const router = useRouter();
 
   const fuzzyFilter: FilterFn<any> = (
     row: any,
@@ -117,6 +119,9 @@ export default function CourseTable({ data }: CourseTableProps) {
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className="cursor-pointer hover:bg-primary-red/20 hover:font-bold"
+                  onClick={() =>
+                    router.push(`/course/${row.original.courseCode}`)
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

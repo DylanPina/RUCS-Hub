@@ -15,7 +15,7 @@ export default async function Page({ searchParams }: { searchParams: string }) {
   );
 
   return (
-    <div className="flex flex-col place-items-center justify-center space-y-4">
+    <div className="flex flex-col place-items-center justify-center space-y-2">
       <CourseListingHeader />
       <CourseTable data={courseTableData} />
     </div>
