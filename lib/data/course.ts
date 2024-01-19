@@ -3,6 +3,7 @@ import {
   Term,
   CourseWebRegListing,
   CourseTableColumn,
+  Course,
 } from "@/lib/definitions/course";
 import { getTerms, getYears, validateCourseTermYear } from "@/lib/utils";
 import {
@@ -12,6 +13,39 @@ import {
 } from "@/lib/constants";
 import { JSDOM } from "jsdom";
 import { writeFileSync } from "fs";
+
+/**
+ * Fetches a course by courseId
+ *
+ * @param courseId - Course ID of the course we are trying to fetch
+ * @return - Course
+ */
+export async function fetchCourseById(courseId: number): Promise<Course> {
+  // return {
+  //   courseId: 0,
+  //   courseName: ,
+  //   courseNumber: ,
+  //   textbookNames: ,
+  //   prereqs: ,
+  //   synopsisUrl: ,
+  //   majors: ,
+  //   prerequisites: ,
+  //   professors: ,
+  //   core: ,
+  //   elective: ,
+  //   programmingLanguages: ,
+  //   meta: {
+  //     exams: ,
+  //     quizes: ,
+  //     homework: ,
+  //     projects: ,
+  //     groupProjects: ,
+  //     labs: ,
+  //   },
+  //   terms: ,
+  //   credits: ,
+  // }
+}
 
 /**
  * Fetches course table data based on the given year and term

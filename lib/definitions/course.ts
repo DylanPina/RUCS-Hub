@@ -1,46 +1,45 @@
 export type Course = {
-  courseId: string; // Unique indetifier for the course
-  courseName: string; // Name of the course
-  courseNumber: string; // Course ID
-  textbookNames: string[] | null; // Names of texbooks
-  prereqs: string[] | null; // Prerequisites for the course
-  synopsisUrl: string | null; // URL for course synopsis
-  majors: string[] | null; // Required major(s)
-  prerequisites: string[]; // Course prereqa
-  professors: string[]; // Professors who have taught the course (foreign keys)
-  core: boolean; // Is course required for CS degree
-  elective: boolean; // Is course a CS elective
-  programmingLanguages: string[] | null; // Programming langauges used in course
-  // Meta data for the class
+  courseId: string;
+  courseName: string;
+  courseNumber: string;
+  textbookNames: string[] | null;
+  prereqs: string[] | null;
+  synopsisUrl: string | null;
+  majors: string[] | null;
+  prerequisites: string[];
+  professors: string[];
+  core: boolean;
+  elective: boolean;
+  programmingLanguages: string[] | null;
   meta: {
-    exams: boolean; // Course has exams
-    quizes: boolean; // Course has quizes
-    homework: boolean; // Course has homework assignments
-    projects: boolean; // Course has projects
-    groupProjects: boolean; // Course has group projects
-    labs: boolean; // Course has labs
+    exams: boolean;
+    quizes: boolean;
+    homework: boolean;
+    projects: boolean;
+    groupProjects: boolean;
+    labs: boolean;
   };
-  terms: Term[]; // terms the course is offered
-  credits: number; // # of credits
+  terms: Term[];
+  credits: number;
 };
 
 export type CourseSection = {
-  courseId: string; // Course ID this section belongs to (foreign key)
-  professorId: string; // Professor of the course (foreign key)
-  sectionNumber: string; // Section number
-  index: string; // Section index number
-  open: boolean; // Is this section open
-  meetingTimes: MeetingTimes[]; // Meeting times for course section
+  courseId: string;
+  professorId: string;
+  sectionNumber: string;
+  index: string;
+  open: boolean;
+  meetingTimes: MeetingTimes[];
 };
 
 export type MeetingTimes = {
-  campusLocation: string; // Name of the campus
-  roomNumber: number; // Room number
-  meetingType: "LEC" | "REC"; // "LEC" for lecture, "REC" for recitation
-  meetingDay: "M" | "T" | "W" | "TH" | "F"; // Meeting day
-  startTime: string; // Start time
-  endTime: string; // End time
-  pmCode: "P" | "A"; // 'P' if time is in PM, 'A' if time is in AM
+  campusLocation: string;
+  roomNumber: number;
+  meetingType: "LEC" | "REC";
+  meetingDay: "M" | "T" | "W" | "TH" | "F";
+  startTime: string;
+  endTime: string;
+  pmCode: "P" | "A";
 };
 
 export enum Term {
