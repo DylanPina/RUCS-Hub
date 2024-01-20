@@ -2,15 +2,14 @@ export type Course = {
   courseId: string;
   courseName: string;
   courseNumber: string;
-  textbookNames: string[] | null;
   prereqs: string[] | null;
   synopsisUrl: string | null;
   majors: string[] | null;
   prerequisites: string[];
   professors: string[];
-  core: boolean;
-  elective: boolean;
-  programmingLanguages: string[] | null;
+  programmingLanguages?: string[] | null;
+  terms: Term[];
+  credits: number;
   meta: {
     exams: boolean;
     quizes: boolean;
@@ -19,8 +18,6 @@ export type Course = {
     groupProjects: boolean;
     labs: boolean;
   };
-  terms: Term[];
-  credits: number;
 };
 
 export type CourseSection = {
@@ -42,13 +39,6 @@ export type MeetingTimes = {
   pmCode: "P" | "A";
 };
 
-export enum Term {
-  Winter = 0,
-  Spring = 1,
-  Summer = 7,
-  Fall = 9,
-}
-
 export type CourseSynopsesListing = {
   courseCode: number;
   courseName: string;
@@ -58,6 +48,8 @@ export type CourseSynopsesListing = {
 export type CourseWebRegListing = {
   courseCode: number;
   title: string;
+  year: number;
+  term: Term;
   openSections: number;
   sections: CourseSection[];
   prereqs: number[];
@@ -73,3 +65,10 @@ export type CourseTableColumn = {
   overall?: number;
   totalReviews?: number;
 };
+
+export enum Term {
+  Winter = 0,
+  Spring = 1,
+  Summer = 7,
+  Fall = 9,
+}
