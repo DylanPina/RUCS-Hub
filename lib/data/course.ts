@@ -288,6 +288,26 @@ async function parseSynposesListing(): Promise<CourseSynopsesListing[]> {
 }
 
 /**
+ * Fetches the synposes listing for a particular course given the courses ID
+ *
+ * @param courseId - Course ID for the course we are interested in
+ * @return - Synposes listing for that course
+ */
+export async function fetchSynposesListingById(
+  courseId: number,
+): Promise<CourseSynopsesListing> {
+  const courseSynposesListings: CourseSynopsesListing[] =
+    await parseSynposesListing();
+
+  const courseSynposesListing: CourseSynopsesListing =
+    courseSynposesListings.filter(
+      (listing: CourseSynopsesListing) => listing.courseCode == courseId,
+    )[0];
+
+  return courseSynposesListing;
+}
+
+/**
  * Parses a string containing the full course code and course name
  * (ex: "01:198:103 - Introduction to Computer Skills")
  *
