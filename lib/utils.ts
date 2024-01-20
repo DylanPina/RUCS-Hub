@@ -42,6 +42,29 @@ export function getYears(): number[] {
 }
 
 /**
+ * @return - Map containing all valid year and term matchings
+ */
+export function getValidYearTermMap(): Map<number, Term[]> {
+  const years: number[] = getYears();
+  const terms: Term[] = getTerms();
+  const validYearTermMap: Map<number, Term[]> = new Map<number, Term[]>();
+
+  years.forEach((year: number) => {
+    const validTerms: Term[] = [];
+
+    terms.forEach((term: Term) => {
+      if (validateCourseTermYear(year, term)) {
+        validTerms.push(term);
+      }
+    });
+
+    validYearTermMap.set(year, validTerms);
+  });
+
+  return validYearTermMap;
+}
+
+/**
  * Retrieves Term enum with the given value.
  *
  * @param value - The numeric value of the Term enum to find the enum for.

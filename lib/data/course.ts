@@ -5,7 +5,12 @@ import {
   CourseTableColumn,
   Course,
 } from "@/lib/definitions/course";
-import { getTerms, getYears, validateCourseTermYear } from "@/lib/utils";
+import {
+  getTerms,
+  getValidYearTermMap,
+  getYears,
+  validateCourseTermYear,
+} from "@/lib/utils";
 import {
   COURSE_SYNOPSES_URL,
   RUTGERS_CS_URL,
@@ -74,24 +79,8 @@ export async function fetchCourseTableData(
  *
  * @return - A list of all the documented courses from documented years and semesters.
  */
-export async function fetchAllCourseTableListings(): Promise<
-  CourseTableColumn[]
-> {
-  const years: number[] = getYears();
-  const terms: Term[] = getTerms();
-  const validYearTermMap: Map<number, Term[]> = new Map<number, Term[]>();
-
-  years.forEach((year: number) => {
-    const validTerms: Term[] = [];
-
-    terms.forEach((term: Term) => {
-      if (validateCourseTermYear(year, term)) {
-        validTerms.push(term);
-      }
-    });
-
-    validYearTermMap.set(year, validTerms);
-  });
+async function fetchAllCourseTableListings(): Promise<CourseTableColumn[]> {
+  const validYearTermMap: Map<number, Term[]> = getValidYearTermMap();
 
   const courseTableListings: Promise<CourseTableColumn[]>[] = [];
   validYearTermMap.forEach((terms: Term[], year: number) => {
@@ -110,7 +99,7 @@ export async function fetchAllCourseTableListings(): Promise<
  * @param term - The term we are interested in
  * @return - A list of all the documented courses from that term
  */
-export async function fetchCourseTableListingsByTerm(
+async function fetchCourseTableListingsByTerm(
   term: Term,
 ): Promise<CourseTableColumn[]> {
   const years: number[] = getYears();
@@ -130,7 +119,7 @@ export async function fetchCourseTableListingsByTerm(
  * @param year - The year we are interested in
  * @return - A list of all the documented courses from that year
  */
-export async function fetchCourseTableListingByYear(
+async function fetchCourseTableListingByYear(
   year: number,
 ): Promise<CourseTableColumn[]> {
   const terms: Term[] = getTerms();
@@ -151,12 +140,12 @@ export async function fetchCourseTableListingByYear(
  * @param term - Term it is/was offered
  * @return - List of courses offered for that specific year and term
  */
-export async function fetchCourseTableListingsByYearTerm(
+async function fetchCourseTableListingsByYearTerm(
   year: number,
   term: Term,
 ): Promise<CourseTableColumn[]> {
   const courseSynposesListing = await parseSynposesListing();
-  const courseWebRegListing = await parseWebRegListing(year, term);
+  const courseWebRegListing = await parseWebRegListingByYearTerm(year, term);
   const combinedCourseListings = combineCourseListings(
     courseSynposesListing,
     courseWebRegListing,
@@ -184,14 +173,12 @@ export async function fetchCourseTableListingsByYearTerm(
  * @param url - API endpoint for term webreg with specified year and term as query params
  * @return - List of course names and open sections
  */
-export async function parseWebRegListing(
+async function parseWebRegListingByYearTerm(
   year: number,
   term: Term,
 ): Promise<CourseWebRegListing[]> {
-  try {
-    validateCourseTermYear(year, term);
-  } catch (error) {
-    throw new Error(`Failed to parse WebReg courses - ${error}`);
+  if (!validateCourseTermYear(year, term)) {
+    throw new Error(`Failed to parse WebReg courses for ${year} ${term}`);
   }
 
   const endpoint = `${WEBREG_BASE_URL}&semester=${term.valueOf()}${year}&campus=NB&level=UG`;
@@ -207,6 +194,8 @@ export async function parseWebRegListing(
       return {
         courseCode: Number(courseListing.courseNumber),
         title: courseListing.title,
+        year: year,
+        term: term,
         openSections: courseListing.openSections,
         sections: courseListing.sections.map((section: any) => ({
           sectionNumber: section.number,
@@ -228,12 +217,39 @@ export async function parseWebRegListing(
 }
 
 /**
+ * Fetches WebReg listings for a particular course given the courses ID for all years and terms
+ *
+ * @param courseId - Course ID for the course we are interested in
+ * @return - WebReg listings for that course
+ */
+export async function fetchWebRegListingById(
+  courseId: number,
+): Promise<CourseWebRegListing[]> {
+  const validYearTermMap: Map<number, Term[]> = getValidYearTermMap();
+
+  const courseWebRegListings: Promise<CourseWebRegListing[]>[] = Array.from(
+    validYearTermMap,
+  ).flatMap(([year, terms]: [number, Term[]]) => {
+    return terms.map((term: Term) =>
+      parseWebRegListingByYearTerm(year, term).then((listings) =>
+        listings.filter(
+          (listing: CourseWebRegListing) => listing.courseCode == courseId,
+        ),
+      ),
+    );
+  });
+
+  const listings = await Promise.all(courseWebRegListings);
+  return listings.flat();
+}
+
+/**
  * Parses the HTML for the course synposes listing to return a list of course names and their IDs
  *
  * @param courseSynposesHtml - HTML for the course synposes website
  * @return - An array of course synposes listings
  */
-export async function parseSynposesListing(): Promise<CourseSynopsesListing[]> {
+async function parseSynposesListing(): Promise<CourseSynopsesListing[]> {
   try {
     const res = await fetch(COURSE_SYNOPSES_URL);
 
@@ -342,3 +358,15 @@ function mergeCourseListings(
 
   return mergedCourseListing;
 }
+
+/**
+ * Parses the webreq preq notes
+ *
+ * @param preqreqNotes - Prereq notes string returned from webreg api
+ * @return - List of prereq course codes
+ *
+ * @example - preqreqNotes = "(01:198:111 )<em> OR </em>(14:332:252 )" -> [["01:198:111"], ["14:332:252"]]
+ * @example - preqreqNotes = "((01:640:136  or 01:640:152 ) and (01:198:206 ))" ->
+ *                              [["01:640:136", "01:198:206"], ["01:640:152", "01:198:206"]]
+ */
+// export function parsePrereqNotes(prereqNotes: string): string[][] {}
