@@ -5,6 +5,7 @@ import {
   CourseTableColumn,
   Course,
   CourseSection,
+  Term,
 } from "@/lib/definitions/course";
 import {
   getTerms,
@@ -28,21 +29,20 @@ import { writeFileSync } from "fs";
  */
 export async function fetchCourseById(courseId: number): Promise<any> {
   const webReg: CourseWebRegListing[] = await fetchWebRegListingById(courseId);
-  const synopsis: CourseSynopsesListing =
+  const { credits, prereqs }: CourseWebRegListing = webReg[0];
+  const { courseCode, courseName, synopsisUrl }: CourseSynopsesListing =
     await fetchSynposesListingById(courseId);
-
-  console.log(synopsis);
-
+  const offered = await fetchCourseOfferedById(courseId);
   const sections = await fetchCourseSectionsById(courseId);
 
   return {
-    courseCode: synopsis.courseCode,
-    courseName: synopsis.courseName,
-    synopsisUrl: synopsis.synopsisUrl,
-    terms: [],
-    prereqs: ["prereqs"],
-    credits: -1,
-    sections: sections,
+    courseCode,
+    courseName,
+    synopsisUrl,
+    offered,
+    prereqs,
+    credits,
+    sections,
   };
 }
 
@@ -391,15 +391,44 @@ function mergeCourseListings(
  * @param courseId - Course ID of the course we are interested in
  * @return - All sections for that course
  */
-async function fetchCourseSectionsById(
-  courseId: number,
-): Promise<CourseSection[][]> {
+async function fetchCourseSectionsById(courseId: number): Promise<any> {
   const webReg: CourseWebRegListing[] = await fetchWebRegListingById(courseId);
-  const sections: CourseSection[][] = [];
+  const courseSections: any[] = [];
 
-  webReg.forEach((listing: CourseWebRegListing) => {
-    sections.push(listing.sections);
+  webReg.forEach(
+    ({
+      year,
+      term,
+      sections,
+    }: {
+      year: number;
+      term: Term;
+      sections: CourseSection[];
+    }) => {
+      sections.forEach((section: CourseSection) => {
+        courseSections.push({ year, term, section });
+      });
+    },
+  );
+
+  return courseSections;
+}
+
+/**
+ * Fetches all year and terms the course was offered given its course id
+ *
+ * @param courseId - Course ID of the course we are interested in
+ * @return - All offerings for that course
+ */
+async function fetchCourseOfferedById(
+  courseId: number,
+): Promise<[number, Term][]> {
+  const webReg: CourseWebRegListing[] = await fetchWebRegListingById(courseId);
+  const offered: [number, Term][] = [];
+
+  webReg.forEach(({ year, term }: { year: number; term: Term }) => {
+    offered.push([year, term]);
   });
 
-  return sections;
+  return offered;
 }

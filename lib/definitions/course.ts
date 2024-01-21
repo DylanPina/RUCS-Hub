@@ -2,19 +2,57 @@ export type Course = {
   courseCode: number;
   courseName: string;
   synopsisUrl: string | null;
-  terms: Term[];
+  offered: [number, Term][];
   prereqs: string[] | null;
   credits: number;
   sections: CourseSection[];
 };
 
 export type CourseSection = {
-  courseId: string;
-  professorId: string;
-  sectionNumber: string;
+  courseCode: number;
+  year: number;
+  term: number;
+  webRegCourseSection: WebRegCourseSection;
+};
+
+// @TODO - Add more concise CourseSection type
+// export type CourseSection = {
+//   courseCode: string;
+//   year: number;
+//   term: Term;
+//   professorName: string;
+//   sectionNumber: string;
+//   index: string;
+//   open: boolean;
+//   meetingTimes: MeetingTimes[];
+// };
+
+export type WebRegCourseSection = {
+  sectionEligibility?: boolean;
+  sessionDatePrintIndicator: string;
+  examCode: string;
+  specialPermissionAddCode?: string;
+  crossListedSections?: string[];
+  sectionNotes?: string;
+  specialPermissionDropCode?: string;
+  instructors: string[];
+  number: string;
+  majors?: string[];
+  sessionDates?: string[];
+  specialPermissionDropCodeDescription?: string;
+  subtopic?: string;
+  openStatus: boolean;
+  comments?: any[];
+  minors?: string[];
+  campusCode: string;
   index: string;
-  open: boolean;
+  unitMajors?: string[];
+  printed: string;
+  specialPermissionAddCodeDescription?: string;
+  subtitle?: string;
   meetingTimes: MeetingTimes[];
+  legendKey?: string;
+  honorPrograms?: string[];
 };
 
 export type MeetingTimes = {
