@@ -4,6 +4,7 @@ import {
   CourseWebRegListing,
   CourseTableColumn,
   Course,
+  CourseSection,
 } from "@/lib/definitions/course";
 import {
   getTerms,
@@ -25,31 +26,24 @@ import { writeFileSync } from "fs";
  * @param courseId - Course ID of the course we are trying to fetch
  * @return - Course
  */
-export async function fetchCourseById(courseId: number): Promise<Course> {
-  // return {
-  //   courseId: 0,
-  //   courseName: ,
-  //   courseNumber: ,
-  //   textbookNames: ,
-  //   prereqs: ,
-  //   synopsisUrl: ,
-  //   majors: ,
-  //   prerequisites: ,
-  //   professors: ,
-  //   core: ,
-  //   elective: ,
-  //   programmingLanguages: ,
-  //   meta: {
-  //     exams: ,
-  //     quizes: ,
-  //     homework: ,
-  //     projects: ,
-  //     groupProjects: ,
-  //     labs: ,
-  //   },
-  //   terms: ,
-  //   credits: ,
-  // }
+export async function fetchCourseById(courseId: number): Promise<any> {
+  const webReg: CourseWebRegListing[] = await fetchWebRegListingById(courseId);
+  const synopsis: CourseSynopsesListing =
+    await fetchSynposesListingById(courseId);
+
+  console.log(synopsis);
+
+  const sections = await fetchCourseSectionsById(courseId);
+
+  return {
+    courseCode: synopsis.courseCode,
+    courseName: synopsis.courseName,
+    synopsisUrl: synopsis.synopsisUrl,
+    terms: [],
+    prereqs: ["prereqs"],
+    credits: -1,
+    sections: sections,
+  };
 }
 
 /**
@@ -270,12 +264,12 @@ async function parseSynposesListing(): Promise<CourseSynopsesListing[]> {
     const courses: any[] = [];
     courseElements.forEach((element: Element) => {
       const courseString = element.textContent?.trim() || "";
-      const synopsisLink = `${RUTGERS_CS_URL}${
+      const synopsisUrl = `${RUTGERS_CS_URL}${
         element.getAttribute("href") || ""
       }`;
 
       const [courseCode, courseName] = parseCourseCodeNameString(courseString);
-      courses.push({ courseCode, courseName, synopsisLink });
+      courses.push({ courseCode, courseName, synopsisUrl });
     });
 
     return courses;
@@ -390,3 +384,22 @@ function mergeCourseListings(
  *                              [["01:640:136", "01:198:206"], ["01:640:152", "01:198:206"]]
  */
 // export function parsePrereqNotes(prereqNotes: string): string[][] {}
+
+/**
+ * Fetches all sections for a course given course id
+ *
+ * @param courseId - Course ID of the course we are interested in
+ * @return - All sections for that course
+ */
+async function fetchCourseSectionsById(
+  courseId: number,
+): Promise<CourseSection[][]> {
+  const webReg: CourseWebRegListing[] = await fetchWebRegListingById(courseId);
+  const sections: CourseSection[][] = [];
+
+  webReg.forEach((listing: CourseWebRegListing) => {
+    sections.push(listing.sections);
+  });
+
+  return sections;
+}

@@ -1,6 +1,6 @@
 import CourseTable from "@/components/course-table/course_table";
 import CourseListingHeader from "@/components/course-table/course_table_header";
-import { fetchCourseTableData } from "@/lib/data/course";
+import { fetchCourseById, fetchCourseTableData } from "@/lib/data/course";
 import { CourseTableColumn } from "@/lib/definitions/course";
 import { getTermByName } from "@/lib/utils";
 
@@ -13,6 +13,8 @@ export default async function Page({ searchParams }: { searchParams: string }) {
     year,
     term,
   );
+
+  console.log(await fetchCourseById(214));
 
   return (
     <div className="flex flex-col place-items-center justify-center space-y-2">
