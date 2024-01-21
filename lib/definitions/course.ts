@@ -1,23 +1,11 @@
 export type Course = {
-  courseId: string;
+  courseCode: number;
   courseName: string;
-  courseNumber: string;
-  prereqs: string[] | null;
   synopsisUrl: string | null;
-  majors: string[] | null;
-  prerequisites: string[];
-  professors: string[];
-  programmingLanguages?: string[] | null;
   terms: Term[];
+  prereqs: string[] | null;
   credits: number;
-  meta: {
-    exams: boolean;
-    quizes: boolean;
-    homework: boolean;
-    projects: boolean;
-    groupProjects: boolean;
-    labs: boolean;
-  };
+  sections: CourseSection[];
 };
 
 export type CourseSection = {
