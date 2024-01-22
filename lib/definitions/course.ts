@@ -78,7 +78,7 @@ export type CourseWebRegListing = {
   term: Term;
   openSections: number;
   sections: CourseSection[];
-  prereqs: number[];
+  prereqs: string[];
   credits: number;
 };
 
