@@ -48,6 +48,9 @@ export const columns: ColumnDef<CourseTableColumn>[] = [
         </Button>
       );
     },
+    meta: {
+      align: "right",
+    },
   },
   {
     accessorKey: "difficulty",
