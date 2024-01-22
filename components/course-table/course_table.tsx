@@ -124,7 +124,10 @@ export default function CourseTable({ data }: CourseTableProps) {
                   }
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      align={(cell.column.columnDef.meta as any)?.align}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
