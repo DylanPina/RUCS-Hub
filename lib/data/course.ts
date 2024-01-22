@@ -1,9 +1,7 @@
 import {
   CourseSynopsesListing,
-  Term,
   CourseWebRegListing,
   CourseTableColumn,
-  Course,
   CourseSection,
   Term,
 } from "@/lib/definitions/course";
@@ -198,7 +196,9 @@ async function parseWebRegListingByYearTerm(
           open: section.openStatus,
           meetingTimes: section.meetingTimes,
         })),
-        prereqs: courseListing.preReqNotes,
+        prereqs: courseListing.preReqNotes
+          ? parsePrereqNotes(courseListing.preReqNotes)
+          : [],
         credits: courseListing.credits,
       };
     });
@@ -374,18 +374,6 @@ function mergeCourseListings(
 }
 
 /**
- * Parses the webreq preq notes
- *
- * @param preqreqNotes - Prereq notes string returned from webreg api
- * @return - List of prereq course codes
- *
- * @example - preqreqNotes = "(01:198:111 )<em> OR </em>(14:332:252 )" -> [["01:198:111"], ["14:332:252"]]
- * @example - preqreqNotes = "((01:640:136  or 01:640:152 ) and (01:198:206 ))" ->
- *                              [["01:640:136", "01:198:206"], ["01:640:152", "01:198:206"]]
- */
-// export function parsePrereqNotes(prereqNotes: string): string[][] {}
-
-/**
  * Fetches all sections for a course given course id
  *
  * @param courseId - Course ID of the course we are interested in
@@ -431,4 +419,33 @@ async function fetchCourseOfferedById(
   });
 
   return offered;
+}
+
+/**
+ * Parses the webreq preq notes
+ *
+ * @param preqreqNotes - Prereq notes string returned from webreg api
+ * @return - List of prereq course code strings
+ */
+export function parsePrereqNotes(prereqNotes: string): string[] {
+  const normalizedString = prereqNotes
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .replace(/[()]/g, "")
+    .replace(/\s/g, "")
+    .trim();
+
+  const prereqs: string[] = normalizedString.split("OR");
+
+  const prereqsSplit: string[][] = [];
+  prereqs.forEach((s: string) => {
+    prereqsSplit.push(s.split("and"));
+  });
+
+  const prereqsJoined: string[] = [];
+  prereqsSplit.forEach((s: string[]) => {
+    prereqsJoined.push(s.join(" and ").replace("or", " or "));
+  });
+
+  return prereqsJoined;
 }
