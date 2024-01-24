@@ -17,7 +17,6 @@ import {
   WEBREG_BASE_URL,
 } from "@/lib/constants";
 import { JSDOM } from "jsdom";
-import { writeFileSync } from "fs";
 
 /**
  * Fetches a course by courseId
@@ -141,19 +140,6 @@ async function fetchCourseTableListingsByYearTerm(
   const combinedCourseListings = combineCourseListings(
     courseSynposesListing,
     courseWebRegListing,
-  );
-
-  writeFileSync(
-    "logs/course_synposes_listing.log",
-    JSON.stringify(courseSynposesListing, null, 2),
-  );
-  writeFileSync(
-    "logs/course_webreg_listing.log",
-    JSON.stringify(courseWebRegListing, null, 2),
-  );
-  writeFileSync(
-    "logs/combinedCourseListings.log",
-    JSON.stringify(combinedCourseListings, null, 2),
   );
 
   return combinedCourseListings;
