@@ -1,7 +1,7 @@
 import NextAuth, { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
-export const authOptions: AuthOptions = {
+const authOptions: AuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID ?? "",
@@ -9,15 +9,15 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ account, profile }) {
+    async signIn({ account, profile }): Promise<boolean> {
       if (account?.provider === "google") {
-        return profile?.email?.endsWith("rutgers.edu");
+        return profile?.email?.endsWith("rutgers.edu") || false;
       }
       return true;
     },
   },
 };
 
-export const handler = NextAuth(authOptions);
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
