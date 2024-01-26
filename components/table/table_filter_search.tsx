@@ -5,10 +5,12 @@ import { Input } from "../shadcn/ui/input";
 interface Props {
   globalFilter: any;
   setGlobalFilter: any;
+  placeHolder: string;
 }
-export default function CourseFilterSearch({
+export default function TableFilterSearch({
   globalFilter,
   setGlobalFilter,
+  placeHolder,
 }: Props) {
   return (
     <div className="flex flex-col space-y-1">
@@ -19,7 +21,7 @@ export default function CourseFilterSearch({
           className="absolute left-2 top-1/2 transform -translate-y-1/2"
         />
         <Input
-          placeholder="Filter courses..."
+          placeholder={placeHolder}
           value={globalFilter || ""}
           onChange={(event) => setGlobalFilter(event.target.value)}
           className="max-w-sm pl-8 focus:border-2 focus:border-primary-red transition-all duration-150 ease-out hover:ease-in"

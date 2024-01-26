@@ -11,6 +11,7 @@ import {
   getFilteredRowModel,
   FilterFn,
 } from "@tanstack/react-table";
+import { rankItem } from "@tanstack/match-sorter-utils";
 import {
   Table,
   TableBody,
@@ -19,23 +20,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/shadcn/ui/table";
-import { CourseTableColumn } from "@/lib/definitions/course";
-import { Button } from "@/components/shadcn/ui/button";
-import { useState } from "react";
-import { columns } from "./course_table_column";
-import { rankItem } from "@tanstack/match-sorter-utils";
-import CourseFilterTerm from "./course_table_filter_term";
-import CourseFilterYear from "./course_table_filter_year";
-import TableFilterSearch from "../table/table_filter_search";
-import TableSelectPageSize from "../table/table_select_page_size";
 import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { ProfessorTableColumn } from "@/lib/definitions/professor";
+import TableFilterSearch from "../table/table_filter_search";
 import TablePageSize from "../table/table_page_size";
+import TableSelectPageSize from "../table/table_select_page_size";
+import { Button } from "../shadcn/ui/button";
+import { columns } from "./professor_table_column";
 
-interface CourseTableProps {
-  data: CourseTableColumn[];
+interface ProfessorTableProps {
+  data: ProfessorTableColumn[];
 }
 
-export default function CourseTable({ data }: CourseTableProps) {
+export default function ProfessorTable({ data }: ProfessorTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState<any>([]);
@@ -81,12 +79,8 @@ export default function CourseTable({ data }: CourseTableProps) {
             <TableFilterSearch
               globalFilter={globalFilter}
               setGlobalFilter={setGlobalFilter}
-              placeHolder="Filter courses..."
+              placeHolder="Filter professors..."
             />
-          </div>
-          <div className="flex content-center items-center space-x-4 h-fit">
-            <CourseFilterTerm />
-            <CourseFilterYear />
           </div>
         </div>
       </div>
