@@ -1,12 +1,10 @@
 import { Table } from "@tanstack/react-table";
 
-interface CourseTablePageSizeProps {
+interface TablePageSizeProps {
   table: Table<any>;
 }
 
-export default function CourseTablePageSize({
-  table,
-}: CourseTablePageSizeProps) {
+export default function TablePageSize({ table }: TablePageSizeProps) {
   return (
     <span className="flex items-center text-sm font-semibold">
       {` Page ${

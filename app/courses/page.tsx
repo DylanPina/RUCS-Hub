@@ -21,4 +21,3 @@ export default async function Page({ searchParams }: { searchParams: string }) {
     </div>
   );
 }
-10;

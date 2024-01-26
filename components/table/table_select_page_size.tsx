@@ -9,13 +9,13 @@ import {
 } from "@/components/shadcn/ui/select";
 import { Table } from "@tanstack/react-table";
 
-interface CourseTableSelectPageSizeProps {
+interface TableSelectPageSizeProps {
   table: Table<any>;
 }
 
-export default function CourseTableSelectPageSize({
+export default function TableSelectPageSize({
   table,
-}: CourseTableSelectPageSizeProps) {
+}: TableSelectPageSizeProps) {
   return (
     <Select
       value={table.getState().pagination.pageSize.toString()}

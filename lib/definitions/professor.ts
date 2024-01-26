@@ -6,3 +6,11 @@ export interface Professor {
   previouslyTaught: string[] | null; // Courses the professor has previously taught
   difficultyRating: number; // Difficulty difficulty
 }
+
+export type ProfessorTableColumn = {
+  firstName: string;
+  lastName: string;
+  overall?: number;
+  difficulty?: number;
+  totalReviews?: number;
+};
