@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  email     String   @unique
+  reviews   Review[]
+}
+
+model Professor {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  reviews Review[]
+}
+
+model Course {
+  code    Int      @id
+  name    String   @unique
+  reviews Review[]
+}
+
+model Review {
+  id                        Int        @id @default(autoincrement())
+  user                      User       @relation(fields: [userId], references: [id])
+  userId                    Int
+  semester                  Int
+  year                      Int
+  course                    Course     @relation(fields: [courseCode], references: [code])
+  courseCode                Int
+  title                     String
+  content                   String
+  createdAt                 DateTime   @default(now())
+  lastModified              DateTime   @default(now())
+  upvotes                   Int?
+  downvotes                 Int?
+  difficultyRating          Int?
+  professor                 Professor? @relation(fields: [professorId], references: [id])
+  professorId               Int?
+  professorQualityRating    Int?
+  professorDifficultyRating Int?
+  lectureRating             Int?
+  bookRating                Int?
+  piazzaRating              Int?
+  workload                  Int?
+}
