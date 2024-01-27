@@ -1,6 +1,29 @@
 import { Term } from "../definitions/course";
+import { ProfessorTableColumn } from "../definitions/professor";
 import { getValidYearTermMap } from "../utils";
 import { parseWebRegListingByYearTerm } from "./course";
+import { titleCase } from "../utils";
+
+/**
+ * Fetches professor table data
+ *
+ * @return - Professor table data
+ */
+export async function fetchProfessorTableData(): Promise<
+  ProfessorTableColumn[]
+> {
+  const professorNames: [string, string][] = await fetchProfessorNames();
+
+  return professorNames.map(([lastName, firstName]: [string, string]) => {
+    return {
+      firstName: titleCase(firstName),
+      lastName: titleCase(lastName),
+      overall: 0,
+      difficulty: 0,
+      totalReviews: 0,
+    };
+  });
+}
 
 /**
  * Fetches all the names of professors for the CS department

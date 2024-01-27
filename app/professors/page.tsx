@@ -1,14 +1,15 @@
 import ProfessorListingHeader from "@/components/professor-table/professor_listing_header";
 import ProfessorTable from "@/components/professor-table/professor_table";
-import { fetchProfessorNames } from "@/lib/data/professor";
+import { fetchProfessorTableData } from "@/lib/data/professor";
+import { ProfessorTableColumn } from "@/lib/definitions/professor";
 
 export default async function Page() {
-  console.log(JSON.stringify(await fetchProfessorNames(), null, 2));
+  const professorData: ProfessorTableColumn[] = await fetchProfessorTableData();
 
   return (
     <div className="flex flex-col place-items-center justify-center space-y-2">
       <ProfessorListingHeader />
-      <ProfessorTable data={[]} />
+      <ProfessorTable data={professorData} />
     </div>
   );
 }
