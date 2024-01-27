@@ -28,6 +28,7 @@ import TablePageSize from "../table/table_page_size";
 import TableSelectPageSize from "../table/table_select_page_size";
 import { Button } from "../shadcn/ui/button";
 import { columns } from "./professor_table_column";
+import { getProfessorRoute } from "@/lib/utils";
 
 interface ProfessorTableProps {
   data: ProfessorTableColumn[];
@@ -115,7 +116,12 @@ export default function ProfessorTable({ data }: ProfessorTableProps) {
                   data-state={row.getIsSelected() && "selected"}
                   className="cursor-pointer hover:bg-primary-red/20 hover:font-bold"
                   onClick={() =>
-                    router.push(`/course/${row.original.courseCode}`)
+                    router.push(
+                      getProfessorRoute(
+                        row.original.lastName,
+                        row.original.firstName,
+                      ),
+                    )
                   }
                 >
                   {row.getVisibleCells().map((cell) => (
