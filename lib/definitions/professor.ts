@@ -1,10 +1,10 @@
 export interface Professor {
-  professorId: string; // Unique identifier for a professor
-  name: string; // Professor's full name
-  rating: number; // Quality rating
-  currentlyTeaching: string[] | null; // Courses the professor is currently teaching
-  previouslyTaught: string[] | null; // Courses the professor has previously taught
-  difficultyRating: number; // Difficulty difficulty
+  professorId: string;
+  name: string;
+  rating: number;
+  currentlyTeaching: string[] | null;
+  previouslyTaught: string[] | null;
+  difficultyRating: number;
 }
 
 export type ProfessorTableColumn = {

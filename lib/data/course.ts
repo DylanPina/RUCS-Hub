@@ -151,7 +151,7 @@ async function fetchCourseTableListingsByYearTerm(
  * @param url - API endpoint for term webreg with specified year and term as query params
  * @return - List of course names and open sections
  */
-async function parseWebRegListingByYearTerm(
+export async function parseWebRegListingByYearTerm(
   year: number,
   term: Term,
 ): Promise<CourseWebRegListing[]> {
