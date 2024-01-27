@@ -5,21 +5,6 @@ import { ArrowUpDown } from "lucide-react";
 
 export const columns: ColumnDef<ProfessorTableColumn>[] = [
   {
-    accessorKey: "firstName",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="text-primary-white p-0 hover:bg-transparent hover:font-black hover:text-primary-white"
-        >
-          First Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
     accessorKey: "lastName",
     header: ({ column }) => {
       return (
@@ -29,6 +14,21 @@ export const columns: ColumnDef<ProfessorTableColumn>[] = [
           className="text-primary-white p-0 hover:bg-transparent hover:font-black hover:text-primary-white"
         >
           Last Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: "firstName",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="text-primary-white p-0 hover:bg-transparent hover:font-black hover:text-primary-white"
+        >
+          First Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -48,9 +48,9 @@ export const columns: ColumnDef<ProfessorTableColumn>[] = [
         </Button>
       );
     },
-    meta: {
-      align: "right",
-    },
+    // meta: {
+    //   align: "right",
+    // },
   },
   {
     accessorKey: "difficulty",

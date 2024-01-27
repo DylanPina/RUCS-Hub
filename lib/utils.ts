@@ -147,3 +147,17 @@ export function getValidTerms(year: number | null): string[] {
   });
   return validTerms;
 }
+
+/**
+ * Converts a string to title case.
+ *
+ * @param input - The string to be converted to title case.
+ * @returns - The input string transformed into title case.
+ */
+export function titleCase(input: string): string {
+  return input
+    .toLowerCase()
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}

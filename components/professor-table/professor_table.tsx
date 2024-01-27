@@ -72,7 +72,7 @@ export default function ProfessorTable({ data }: ProfessorTableProps) {
   });
 
   return (
-    <div className="max-lg:w-screen max-lg:px-4">
+    <div className="min-w-[75%] max-lg:w-screen max-lg:px-4">
       <div className="flex place-items-center py-4">
         <div className="flex content-center md:space-x-4 max-md:flex-col-reverse">
           <div className="max-md:pt-4">
