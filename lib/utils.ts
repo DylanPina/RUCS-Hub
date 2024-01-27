@@ -161,3 +161,20 @@ export function titleCase(input: string): string {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 }
+
+/**
+ * Generates the route to the professor's page
+ *
+ * @param lastName - Last name of the professor
+ * @param firstName - First name of the professor (or null if it isn't listed)
+ *
+ * @return - Route to the professor's page
+ */
+export function getProfessorRoute(
+  lastName: string,
+  firstName: string | null,
+): string {
+  return firstName
+    ? `/professor/${firstName.toLowerCase()}-${lastName.toLowerCase()}`
+    : `/professor/${lastName.toLowerCase()}`;
+}
