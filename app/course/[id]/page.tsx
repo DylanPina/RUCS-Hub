@@ -1,4 +1,5 @@
 import { fetchCourseById } from "@/lib/data/course";
+import { notFound } from "next/navigation";
 import { Course } from "@/lib/definitions/course";
 import type { Metadata } from "next";
 
@@ -15,6 +16,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;
   const course: Course = await fetchCourseById(Number(id));
+
+  if (!course) {
+    notFound();
+  }
 
   return (
     <ul className="flex flex-col space-y-5">
