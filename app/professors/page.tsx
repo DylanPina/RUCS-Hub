@@ -2,6 +2,11 @@ import ProfessorListingHeader from "@/components/professor-table/professor_listi
 import ProfessorTable from "@/components/professor-table/professor_table";
 import { fetchProfessorTableData } from "@/lib/data/professor";
 import { ProfessorTableColumn } from "@/lib/definitions/professor";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Professors",
+};
 
 export default async function Page() {
   const professorData: ProfessorTableColumn[] = await fetchProfessorTableData();

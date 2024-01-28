@@ -163,6 +163,24 @@ export function titleCase(input: string): string {
 }
 
 /**
+ * Converts a kebab cased string to title case
+ *
+ * @param input - Kebab cased string
+ * @returns - Title cased string
+ */
+export function kebabCaseToTitleCase(input: string): string {
+  if (input.includes("-")) {
+    return input
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+  } else {
+    // Input is a single lowercase word
+    return input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
+  }
+}
+
+/**
  * Generates the route to the professor's page
  *
  * @param lastName - Last name of the professor

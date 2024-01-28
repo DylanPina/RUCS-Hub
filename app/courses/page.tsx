@@ -1,8 +1,13 @@
+import type { Metadata } from "next";
 import CourseTable from "@/components/course-table/course_table";
 import CourseListingHeader from "@/components/course-table/course_table_header";
 import { fetchCourseTableData } from "@/lib/data/course";
 import { CourseTableColumn } from "@/lib/definitions/course";
 import { getTermByName } from "@/lib/utils";
+
+export const metadata: Metadata = {
+  title: "Courses",
+};
 
 export default async function Page({ searchParams }: { searchParams: string }) {
   const params = new URLSearchParams(searchParams);
