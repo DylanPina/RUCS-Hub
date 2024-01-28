@@ -26,6 +26,10 @@ import { JSDOM } from "jsdom";
  */
 export async function fetchCourseById(courseId: number): Promise<any> {
   const webReg: CourseWebRegListing[] = await fetchWebRegListingById(courseId);
+  if (webReg.length === 0) {
+    return null;
+  }
+
   const { credits, prereqs }: CourseWebRegListing = webReg[0];
   const { courseCode, courseName, synopsisUrl }: CourseSynopsesListing =
     await fetchSynposesListingById(courseId);
