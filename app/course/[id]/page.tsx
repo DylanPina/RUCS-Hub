@@ -1,5 +1,16 @@
 import { fetchCourseById } from "@/lib/data/course";
 import { Course } from "@/lib/definitions/course";
+import type { Metadata } from "next";
+
+type Props = {
+  params: { id: string };
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  return {
+    title: params.id,
+  };
+}
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;

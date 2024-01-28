@@ -1,6 +1,17 @@
-import { titleCase } from "@/lib/utils";
+import { titleCase, kebabCaseToTitleCase } from "@/lib/utils";
+import type { Metadata } from "next";
 
-export default async function Page({ params }: { params: { name: string } }) {
+type Props = {
+  params: { name: string };
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  return {
+    title: kebabCaseToTitleCase(params.name),
+  };
+}
+
+export default async function Page({ params }: Props) {
   const { name } = params;
   const [firstName, lastName] =
     name.split("-").length == 2 ? name.split("-") : [name, ""];
