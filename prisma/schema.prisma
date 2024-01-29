@@ -16,9 +16,10 @@ model User {
 }
 
 model Professor {
-  id      Int      @id @default(autoincrement())
-  name    String   @unique
-  reviews Review[]
+  id        Int      @id @default(autoincrement())
+  firstName String
+  lastName  String
+  reviews   Review[]
 }
 
 model Course {
