@@ -1,10 +1,7 @@
 export interface Professor {
-  professorId: string;
-  name: string;
-  rating: number;
-  currentlyTeaching: string[] | null;
-  previouslyTaught: string[] | null;
-  difficultyRating: number;
+  id: number;
+  firstName: string;
+  lastName: string;
 }
 
 export type ProfessorTableColumn = {
