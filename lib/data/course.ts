@@ -30,9 +30,20 @@ export async function fetchCourseById(courseId: number): Promise<any> {
     return null;
   }
 
-  const { credits, prereqs }: CourseWebRegListing = webReg[0];
-  const { courseCode, courseName, synopsisUrl }: CourseSynopsesListing =
+  const { credits, prereqs, courseCode }: CourseWebRegListing = webReg[0];
+
+  let courseName: string, synopsisUrl: string;
+  const synopses: CourseSynopsesListing =
     await fetchSynposesListingById(courseId);
+
+  if (synopses == null) {
+    courseName = webReg[0].title;
+    synopsisUrl = "";
+  } else {
+    courseName = synopses.courseName;
+    synopsisUrl = synopses.synopsisUrl;
+  }
+
   const offered = await fetchCourseOfferedById(courseId);
   const sections = await fetchCourseSectionsById(courseId);
 
