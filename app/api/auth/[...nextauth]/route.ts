@@ -1,5 +1,6 @@
 import NextAuth, { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import { PrismaClient, User } from "@prisma/client";
 
 const authOptions: AuthOptions = {
   providers: [
@@ -10,10 +11,29 @@ const authOptions: AuthOptions = {
   ],
   callbacks: {
     async signIn({ account, profile }): Promise<boolean> {
-      if (account?.provider === "google") {
-        return profile?.email?.endsWith("rutgers.edu") || false;
+      if (
+        account?.provider === "google" &&
+        profile?.email?.endsWith("rutgers.edu")
+      ) {
+        const prisma = new PrismaClient();
+
+        const getUser: User | null = await prisma.user.findUnique({
+          where: {
+            email: profile.email,
+          },
+        });
+
+        if (!getUser) {
+          await prisma.user.create({
+            data: {
+              email: profile.email,
+            },
+          });
+        }
+
+        return true;
       }
-      return true;
+      return false;
     },
   },
 };
