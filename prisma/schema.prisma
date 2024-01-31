@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
@@ -40,6 +40,7 @@ model Review {
   content                   String
   createdAt                 DateTime   @default(now())
   lastModified              DateTime   @default(now())
+  rating                    Int?
   upvotes                   Int?
   downvotes                 Int?
   difficultyRating          Int?
