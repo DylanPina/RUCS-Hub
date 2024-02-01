@@ -32,7 +32,41 @@ export default function Review({ title, semester, dateTime, ratings, description
         <p>Piazza Support: {ratings.piazzaSupport.toFixed(1)}</p>
         <p>Workload: {ratings.workload} hours per a week</p>
       </div>
+      <div className="border my-2"></div>
       <p>{description}</p>
+      <div className="flex items-center space-x-4 mt-4">
+        <button className="p-2 border rounded-full hover:bg-gray-100">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#000000"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 19V6M5 12l7-7 7 7" />
+          </svg>
+        </button>
+        <span className="text-2xl font-semibold">0</span>
+        <button className="p-2 border rounded-full hover:bg-gray-100">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#000000"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 5v13M5 12l7 7 7-7" />
+          </svg>
+        </button>
+      </div>
     </div>
   );
 }
