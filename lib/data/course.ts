@@ -17,45 +17,28 @@ import {
   WEBREG_BASE_URL,
 } from "@/lib/constants";
 import { JSDOM } from "jsdom";
+import { Course, PrismaClient } from "@prisma/client";
 
 /**
- * Fetches a course by courseId
+ * Queries a course by courseId
  *
- * @param courseId - Course ID of the course we are trying to fetch
+ * @param courseCode - Course code of the course we are trying to fetch
  * @return - Course
  */
-export async function fetchCourseById(courseId: number): Promise<any> {
-  const webReg: CourseWebRegListing[] = await fetchWebRegListingById(courseId);
-  if (webReg.length === 0) {
-    return null;
-  }
+export async function queryCourseByCode(
+  courseCode: number,
+): Promise<Course | null> {
+  const prisma = new PrismaClient();
+  const course: Course | null = await prisma.course.findUnique({
+    where: {
+      code: courseCode,
+    },
+    include: {
+      reviews: true,
+    },
+  });
 
-  const { credits, prereqs, courseCode }: CourseWebRegListing = webReg[0];
-
-  let courseName: string, synopsisUrl: string;
-  const synopses: CourseSynopsesListing =
-    await fetchSynposesListingById(courseId);
-
-  if (synopses == null) {
-    courseName = webReg[0].title;
-    synopsisUrl = "";
-  } else {
-    courseName = synopses.courseName;
-    synopsisUrl = synopses.synopsisUrl;
-  }
-
-  const offered = await fetchCourseOfferedById(courseId);
-  const sections = await fetchCourseSectionsById(courseId);
-
-  return {
-    courseCode,
-    courseName,
-    synopsisUrl,
-    offered,
-    prereqs,
-    credits,
-    sections,
-  };
+  return course;
 }
 
 /**

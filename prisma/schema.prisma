@@ -25,6 +25,8 @@ model Professor {
 model Course {
   code    Int      @id
   name    String   
+  synopsis String?
+  credits Int?
   reviews Review[]
 }
 
