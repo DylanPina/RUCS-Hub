@@ -38,7 +38,31 @@ export async function queryCourseByCode(
     },
   });
 
+  if (!course) {
+    console.error(`Failed to find course with code ${courseCode}`);
+  }
+
   return course;
+}
+
+/**
+ *  Queries all courses
+ *
+ *  @return - List of all courses
+ */
+export async function queryAllCourses(): Promise<Course[]> {
+  const prisma = new PrismaClient();
+  const courses: Course[] = await prisma.course.findMany({
+    include: {
+      reviews: true,
+    },
+  });
+
+  if (!courses) {
+    console.error("Failed to find any courses");
+  }
+
+  return courses;
 }
 
 /**
