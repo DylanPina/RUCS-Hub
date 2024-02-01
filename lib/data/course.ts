@@ -85,7 +85,9 @@ export async function fetchCourseTableData(
  *
  * @return - A list of all the documented courses from documented years and semesters.
  */
-async function fetchAllCourseTableListings(): Promise<CourseTableColumn[]> {
+export async function fetchAllCourseTableListings(): Promise<
+  CourseTableColumn[]
+> {
   const validYearTermMap: Map<number, Term[]> = getValidYearTermMap();
 
   const courseTableListings: Promise<CourseTableColumn[]>[] = [];
