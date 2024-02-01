@@ -4,13 +4,13 @@ import StatBox from "./stat_box";
 export default function StatGrid() {
   const gridData = [
     { title: "Reviews", subtitle: "Total Count", value: 0 },
-    { title: "Rating", subtitle: "On a Scale of 1-5", value: 0 },
-    { title: "Difficulty", subtitle: "On a Scale of 1-5", value: 0 },
+    { title: "Rating", subtitle: "On a Scale of 1-10", value: 0 },
+    { title: "Difficulty", subtitle: "On a Scale of 1-10", value: 0 },
     { title: "Workload", subtitle: "Hours Per Week", value: 69 },
-    { title: "Textbook", subtitle: "On a Scale of 1-5", value: 0 },
-    { title: "Lectures", subtitle: "On a Scale of 1-5", value: 0 },
-    { title: "Professor", subtitle: "On a Scale of 1-5", value: 0 },
-    { title: "Piazza Support", subtitle: "On a Scale of 1-5", value: 0 },
+    { title: "Textbook", subtitle: "On a Scale of 1-10", value: 0 },
+    { title: "Lectures", subtitle: "On a Scale of 1-10", value: 0 },
+    { title: "Professor", subtitle: "On a Scale of 1-10", value: 0 },
+    { title: "Piazza Support", subtitle: "On a Scale of 1-10", value: 0 },
   ];
 
   return (
