@@ -20,28 +20,8 @@ interface ReviewProps {
 export default function Review({ title, semester, dateTime, ratings, description }: ReviewProps) {
   const [voteStatus, setVoteStatus] = useState<"upvoted" | "downvoted" | "none">("none");
 
-  const toggleUpvote = () => {
-    setVoteStatus((prevStatus) => {
-      if (prevStatus === "upvoted") {
-        return "none";
-      } else {
-        return "upvoted";
-      }
-    });
-  };
-
-  const toggleDownvote = () => {
-    setVoteStatus((prevStatus) => {
-      // Toggle logic
-      if (prevStatus === "downvoted") {
-        return "none";
-      } else {
-        return "downvoted";
-      }
-    });
-  };
-
   const voteDisplay = voteStatus === "upvoted" ? 1 : voteStatus === "downvoted" ? -1 : 0;
+
   return (
     <div className="p-4 border rounded-lg shadow w-9/12">
       <div className="flex justify-between items-center">
