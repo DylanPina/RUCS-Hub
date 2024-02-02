@@ -29,10 +29,10 @@ model Section {
   courseCode    Int
   professor     Professor @relation(fields: [professorId], references: [id])
   professorId   Int
-  semester      Int
+  term          Int
   year          Int
 
-  @@id([sectionNumber, courseCode, semester, year])
+  @@id([sectionNumber, courseCode, term, year])
 }
 
 model Course {

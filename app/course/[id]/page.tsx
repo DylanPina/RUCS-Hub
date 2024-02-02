@@ -16,7 +16,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;
   const course: Course | null = await queryCourseByCode(Number(id));
-  console.log(course);
 
   if (!course) {
     notFound();
