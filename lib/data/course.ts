@@ -9,6 +9,7 @@ import {
   getTerms,
   getValidYearTermMap,
   getYears,
+  parseProfessorName,
   validateCourseTermYear,
 } from "@/lib/utils";
 import {
@@ -18,6 +19,7 @@ import {
 } from "@/lib/constants";
 import { JSDOM } from "jsdom";
 import { Course, PrismaClient } from "@prisma/client";
+import { createProfessorNameIdMap, queryProfessorByName } from "./professor";
 
 /**
  * Queries a course by courseId
@@ -172,8 +174,9 @@ async function fetchCourseTableListingsByYearTerm(
 /**
  * Parses the API request from webreg listing all of the CS courses for a given year and term
  *
- * @param url - API endpoint for term webreg with specified year and term as query params
- * @return - List of course names and open sections
+ * @param year - Year the course is/was offered (2022 - 2024)
+ * @param term - Term it is/was offered
+ * @return - List of course webreg listings
  */
 export async function parseWebRegListingByYearTerm(
   year: number,
@@ -218,6 +221,24 @@ export async function parseWebRegListingByYearTerm(
     );
     return [];
   }
+}
+
+/**
+ * Fetches WebReg listings for a particular course for all years and terms
+ *
+ * @return - List of course names and open sections
+ */
+export async function fetchAllWebRegListings(): Promise<CourseWebRegListing[]> {
+  const validYearTermMap: Map<number, Term[]> = getValidYearTermMap();
+
+  const courseWebRegListings: Promise<CourseWebRegListing[]>[] = Array.from(
+    validYearTermMap,
+  ).flatMap(([year, terms]: [number, Term[]]) => {
+    return terms.map((term: Term) => parseWebRegListingByYearTerm(year, term));
+  });
+
+  const listings = await Promise.all(courseWebRegListings);
+  return listings.flat();
 }
 
 /**
@@ -381,6 +402,63 @@ function mergeCourseListings(
   }
 
   return mergedCourseListing;
+}
+
+/**
+ * Fetches all course sections
+ *
+ * @return - All course sections
+ */
+export async function fetchCourseSections(): Promise<any[]> {
+  const webReg: any[] = await fetchAllWebRegListings();
+  const courseSections: any[] = [];
+  const professorNameIdMap: Map<string, number> =
+    await createProfessorNameIdMap();
+
+  webReg.forEach(
+    ({
+      courseCode,
+      year,
+      term,
+      sections,
+    }: {
+      courseCode: string;
+      year: number;
+      term: Term;
+      sections: CourseSection[];
+    }) => {
+      sections.forEach(async (section: any) => {
+        const [professorLastName, professorFirstName] = section.professorName[0]
+          ?.name
+          ? parseProfessorName(section.professorName[0].name)
+          : [null, null];
+
+        if (professorLastName) {
+          const professorId = professorNameIdMap.get(
+            `${professorLastName}, ${professorFirstName}`,
+          );
+
+          if (!professorId) {
+            console.error(
+              `Failed to find professor ${professorFirstName} ${professorLastName}`,
+            );
+          } else {
+            const sectionNumber = section.sectionNumber;
+
+            courseSections.push({
+              sectionNumber,
+              courseCode,
+              professorId,
+              term,
+              year,
+            });
+          }
+        }
+      });
+    },
+  );
+
+  return courseSections;
 }
 
 /**
