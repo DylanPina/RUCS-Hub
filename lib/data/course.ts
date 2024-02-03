@@ -18,7 +18,7 @@ import {
   WEBREG_BASE_URL,
 } from "@/lib/constants";
 import { JSDOM } from "jsdom";
-import { Course, PrismaClient } from "@prisma/client";
+import { Course, PrismaClient, Review } from "@prisma/client";
 import { createProfessorNameIdMap } from "./professor";
 
 /**
@@ -65,6 +65,71 @@ export async function queryAllCourses(): Promise<Course[]> {
   }
 
   return courses;
+}
+
+/**
+ * Queries all course table listings
+ *
+ * @return - List of all course table listings
+ */
+export async function queryAllCourseTableListings(): Promise<
+  CourseTableColumn[]
+> {
+  const prisma = new PrismaClient();
+  const courses: Course[] = await prisma.course.findMany({
+    include: {
+      reviews: true,
+    },
+  });
+
+  if (!courses) {
+    console.error("Failed to find any courses");
+  }
+
+  return courses.map((course: any) => {
+    const reviews: Review[] = course.reviews;
+    const reviewsWithDifficultyRating: Review[] = reviews.filter(
+      (review: Review) => review.difficultyRating !== null,
+    );
+    const reviewsWithWorkload: Review[] = reviews.filter(
+      (review: Review) => review.workload !== null,
+    );
+
+    const overallRatingSum = reviews.reduce(
+      (acc, review) => acc + (review.rating ?? 0),
+      0,
+    );
+    const averageRating =
+      reviews.length > 0 ? overallRatingSum / reviews.length : 0;
+
+    const difficultyRatingSum = reviewsWithDifficultyRating.reduce(
+      (acc, review) => acc + (review.difficultyRating ?? 0),
+      0,
+    );
+    const averageDifficultyRating =
+      reviewsWithDifficultyRating.length > 0
+        ? difficultyRatingSum / reviewsWithDifficultyRating.length
+        : 0;
+
+    const workloadSum = reviewsWithWorkload.reduce(
+      (acc, review) => acc + (review.workload ?? 0),
+      0,
+    );
+    const averageWorkload =
+      reviewsWithWorkload.length > 0
+        ? workloadSum / reviewsWithWorkload.length
+        : 0;
+
+    return {
+      courseCode: course.code,
+      courseName: course.name,
+      credits: course.credits,
+      rating: averageRating,
+      difficulty: averageDifficultyRating,
+      workload: averageWorkload,
+      reviews: reviews.length,
+    };
+  });
 }
 
 /**

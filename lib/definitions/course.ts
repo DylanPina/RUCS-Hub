@@ -73,7 +73,7 @@ export type CourseWebRegListing = {
 export type CourseTableColumn = {
   courseCode: number;
   courseName: string;
-  credits: number;
+  credits?: number;
   difficulty?: number;
   workload?: number;
   overall?: number;

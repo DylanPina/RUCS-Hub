@@ -3,7 +3,6 @@ import {
   fetchCourseSections,
 } from "@/lib/data/course";
 import { fetchProfessorNames } from "@/lib/data/professor";
-import { CourseTableColumn } from "@/lib/definitions/course";
 import { mockReviews } from "@/lib/mock-data/review-mock-data";
 import { mockUsers } from "@/lib/mock-data/user-mock-data";
 import { PrismaClient, Professor, Review } from "@prisma/client";
@@ -56,13 +55,13 @@ async function seedMockUsers(prisma: any): Promise<Response> {
  * @param prisma - The Prisma client
  */
 async function seedCourses(prisma: any): Promise<Response> {
-  const courseTableListings: CourseTableColumn[] =
-    await fetchAllCourseTableListings();
+  const courseTableListings: any[] = await fetchAllCourseTableListings();
   const courses = courseTableListings.map(
-    ({ courseCode, courseName, credits }) => ({
+    ({ courseCode, courseName, credits, synopsisUrl }) => ({
       code: courseCode,
       name: courseName,
       credits,
+      synopsis: synopsisUrl,
     }),
   );
 
