@@ -19,7 +19,7 @@ import {
 } from "@/lib/constants";
 import { JSDOM } from "jsdom";
 import { Course, PrismaClient } from "@prisma/client";
-import { createProfessorNameIdMap, queryProfessorByName } from "./professor";
+import { createProfessorNameIdMap } from "./professor";
 
 /**
  * Queries a course by courseId
@@ -376,6 +376,7 @@ function combineCourseListings(
       courseCode: webReg.courseCode,
       courseName: synposes?.courseName || webReg.title,
       credits: webReg.credits,
+      synopsisUrl: synposes?.synopsisUrl || "",
     };
   });
 }

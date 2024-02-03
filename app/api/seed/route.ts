@@ -5,35 +5,49 @@ import {
 import { fetchProfessorNames } from "@/lib/data/professor";
 import { CourseTableColumn } from "@/lib/definitions/course";
 import { mockReviews } from "@/lib/mock-data/review-mock-data";
+import { mockUsers } from "@/lib/mock-data/user-mock-data";
 import { PrismaClient, Professor, Review } from "@prisma/client";
 
 export async function GET() {
   const prisma = new PrismaClient();
 
   // Uncomment the following line to seed the database when this URL is visited
-  // const seedResponse: Response = await seedDatabase(prisma);
+  const seedResponse: Response = await seedDatabase(prisma);
 
   prisma.$disconnect();
   return Response.json({ message: `Seeding complete!` });
 }
 
 /**
- * Seed the database with courses, professors, sections, and mock reviews
+ * Seed the database with users, courses, professors, sections, and mock reviews
  *
  * @param prisma - The Prisma client
  */
 async function seedDatabase(prisma: any): Promise<Response> {
+  const seedUsersResponse: Response = await seedMockUsers(prisma);
   const seedCoursesResponse: Response = await seedCourses(prisma);
   const seedProfessorsResponse: Response = await seedProfessors(prisma);
   const seedSectionsResponse: Response = await seedSections(prisma);
   const seedReviewsResponse: Response = await seedMockReviews(prisma);
 
   return Response.json({
+    users: seedUsersResponse,
     courses: seedCoursesResponse,
     professors: seedProfessorsResponse,
     sections: seedSectionsResponse,
     reviews: seedReviewsResponse,
   });
+}
+
+/**
+ * Seed the database with mock users
+ *
+ * @param prisma - The Prisma client
+ */
+async function seedMockUsers(prisma: any): Promise<Response> {
+  const createUsers: any = await prisma.user.createMany({ data: mockUsers });
+
+  return Response.json(createUsers);
 }
 
 /**
@@ -44,12 +58,16 @@ async function seedDatabase(prisma: any): Promise<Response> {
 async function seedCourses(prisma: any): Promise<Response> {
   const courseTableListings: CourseTableColumn[] =
     await fetchAllCourseTableListings();
-  const courseCodesNames = courseTableListings.map(
-    ({ courseCode, courseName }) => ({ code: courseCode, name: courseName }),
+  const courses = courseTableListings.map(
+    ({ courseCode, courseName, credits }) => ({
+      code: courseCode,
+      name: courseName,
+      credits,
+    }),
   );
 
   const createCourses: any = await prisma.course.createMany({
-    data: courseCodesNames,
+    data: courses,
   });
 
   return Response.json(createCourses);
