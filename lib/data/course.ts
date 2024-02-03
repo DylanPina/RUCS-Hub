@@ -366,33 +366,6 @@ export async function fetchAllWebRegListings(): Promise<CourseWebRegListing[]> {
 }
 
 /**
- * Fetches WebReg listings for a particular course given the courses ID for all years and terms
- *
- * @param courseId - Course ID for the course we are interested in
- * @return - WebReg listings for that course
- */
-export async function fetchWebRegListingById(
-  courseId: number,
-): Promise<CourseWebRegListing[]> {
-  const validYearTermMap: Map<number, Term[]> = getValidYearTermMap();
-
-  const courseWebRegListings: Promise<CourseWebRegListing[]>[] = Array.from(
-    validYearTermMap,
-  ).flatMap(([year, terms]: [number, Term[]]) => {
-    return terms.map((term: Term) =>
-      parseWebRegListingByYearTerm(year, term).then((listings) =>
-        listings.filter(
-          (listing: CourseWebRegListing) => listing.courseCode == courseId,
-        ),
-      ),
-    );
-  });
-
-  const listings = await Promise.all(courseWebRegListings);
-  return listings.flat();
-}
-
-/**
  * Parses the HTML for the course synposes listing to return a list of course names and their IDs
  *
  * @param courseSynposesHtml - HTML for the course synposes website
@@ -434,26 +407,6 @@ async function parseSynposesListing(): Promise<CourseSynopsesListing[]> {
     );
     return [];
   }
-}
-
-/**
- * Fetches the synposes listing for a particular course given the courses ID
- *
- * @param courseId - Course ID for the course we are interested in
- * @return - Synposes listing for that course
- */
-export async function fetchSynposesListingById(
-  courseId: number,
-): Promise<CourseSynopsesListing> {
-  const courseSynposesListings: CourseSynopsesListing[] =
-    await parseSynposesListing();
-
-  const courseSynposesListing: CourseSynopsesListing =
-    courseSynposesListings.filter(
-      (listing: CourseSynopsesListing) => listing.courseCode == courseId,
-    )[0];
-
-  return courseSynposesListing;
 }
 
 /**
@@ -584,54 +537,6 @@ export async function fetchCourseSections(): Promise<any[]> {
   );
 
   return courseSections;
-}
-
-/**
- * Fetches all sections for a course given course id
- *
- * @param courseId - Course ID of the course we are interested in
- * @return - All sections for that course
- */
-async function fetchCourseSectionsById(courseId: number): Promise<any> {
-  const webReg: CourseWebRegListing[] = await fetchWebRegListingById(courseId);
-  const courseSections: any[] = [];
-
-  webReg.forEach(
-    ({
-      year,
-      term,
-      sections,
-    }: {
-      year: number;
-      term: Term;
-      sections: CourseSection[];
-    }) => {
-      sections.forEach((section: CourseSection) => {
-        courseSections.push({ year, term, section });
-      });
-    },
-  );
-
-  return courseSections;
-}
-
-/**
- * Fetches all year and terms the course was offered given its course id
- *
- * @param courseId - Course ID of the course we are interested in
- * @return - All offerings for that course
- */
-async function fetchCourseOfferedById(
-  courseId: number,
-): Promise<[number, Term][]> {
-  const webReg: CourseWebRegListing[] = await fetchWebRegListingById(courseId);
-  const offered: [number, Term][] = [];
-
-  webReg.forEach(({ year, term }: { year: number; term: Term }) => {
-    offered.push([year, term]);
-  });
-
-  return offered;
 }
 
 /**
