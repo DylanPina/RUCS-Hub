@@ -84,52 +84,111 @@ export async function queryAllCourseTableListings(): Promise<
 
   if (!courses) {
     console.error("Failed to find any courses");
+    return [];
   }
 
-  return courses.map((course: any) => {
-    const reviews: Review[] = course.reviews;
-    const reviewsWithDifficultyRating: Review[] = reviews.filter(
-      (review: Review) => review.difficultyRating !== null,
-    );
-    const reviewsWithWorkload: Review[] = reviews.filter(
-      (review: Review) => review.workload !== null,
-    );
+  return courses.map((course: Course) => getCourseTableRatings(course));
+}
 
-    const overallRatingSum = reviews.reduce(
-      (acc, review) => acc + (review.rating ?? 0),
-      0,
-    );
-    const averageRating =
-      reviews.length > 0 ? overallRatingSum / reviews.length : 0;
-
-    const difficultyRatingSum = reviewsWithDifficultyRating.reduce(
-      (acc, review) => acc + (review.difficultyRating ?? 0),
-      0,
-    );
-    const averageDifficultyRating =
-      reviewsWithDifficultyRating.length > 0
-        ? difficultyRatingSum / reviewsWithDifficultyRating.length
-        : 0;
-
-    const workloadSum = reviewsWithWorkload.reduce(
-      (acc, review) => acc + (review.workload ?? 0),
-      0,
-    );
-    const averageWorkload =
-      reviewsWithWorkload.length > 0
-        ? workloadSum / reviewsWithWorkload.length
-        : 0;
-
-    return {
-      courseCode: course.code,
-      courseName: course.name,
-      credits: course.credits,
-      rating: averageRating,
-      difficulty: averageDifficultyRating,
-      workload: averageWorkload,
-      reviews: reviews.length,
-    };
+/**
+ * Query course table data based on the given year and term
+ *
+ * @param year - Year the courses were offered (or null or all)
+ * @param term - Term the courses were offered (or null or all)
+ * @return - Course table data for the courses based on year and terms
+ */
+export async function queryCourseTableDataByYearTerm(
+  year: number | null,
+  term: Term | null,
+): Promise<CourseTableColumn[]> {
+  const prisma = new PrismaClient();
+  const courses: Course[] = await prisma.course.findMany({
+    include: {
+      reviews: true,
+      sections: true,
+    },
   });
+
+  if (!courses) {
+    console.error("Failed to find any courses");
+    return [];
+  }
+
+  if (year !== null && term !== null) {
+    return courses
+      .filter((course: any) =>
+        course.sections.some(
+          (section: CourseSection) =>
+            section.term === term && section.year === year,
+        ),
+      )
+      .map((course: any) => getCourseTableRatings(course));
+  } else if (year !== null) {
+    return courses
+      .filter((course: any) =>
+        course.sections.some((section: CourseSection) => section.year === year),
+      )
+      .map((course: any) => getCourseTableRatings(course));
+  } else if (term !== null) {
+    return courses
+      .filter((course: any) =>
+        course.sections.some((section: CourseSection) => section.term === term),
+      )
+      .map((course: any) => getCourseTableRatings(course));
+  } else {
+    return courses.map((course: any) => getCourseTableRatings(course));
+  }
+}
+
+/**
+ * Returns overall ratings for a course based on its reviews to display on the course table
+ *
+ * @param course - Course we are interested
+ * @return - Overall ratings for that course
+ */
+function getCourseTableRatings(course: any): any {
+  const reviews: Review[] = course.reviews;
+  const reviewsWithDifficultyRating: Review[] = reviews.filter(
+    (review: Review) => review.difficultyRating !== null,
+  );
+  const reviewsWithWorkload: Review[] = reviews.filter(
+    (review: Review) => review.workload !== null,
+  );
+
+  const overallRatingSum = reviews.reduce(
+    (acc, review) => acc + (review.rating ?? 0),
+    0,
+  );
+  const averageRating =
+    reviews.length > 0 ? overallRatingSum / reviews.length : 0;
+
+  const difficultyRatingSum = reviewsWithDifficultyRating.reduce(
+    (acc, review) => acc + (review.difficultyRating ?? 0),
+    0,
+  );
+  const averageDifficultyRating =
+    reviewsWithDifficultyRating.length > 0
+      ? difficultyRatingSum / reviewsWithDifficultyRating.length
+      : 0;
+
+  const workloadSum = reviewsWithWorkload.reduce(
+    (acc, review) => acc + (review.workload ?? 0),
+    0,
+  );
+  const averageWorkload =
+    reviewsWithWorkload.length > 0
+      ? workloadSum / reviewsWithWorkload.length
+      : 0;
+
+  return {
+    courseCode: course.code,
+    courseName: course.name,
+    credits: course.credits,
+    rating: averageRating,
+    difficulty: averageDifficultyRating,
+    workload: averageWorkload,
+    reviews: reviews.length,
+  };
 }
 
 /**
