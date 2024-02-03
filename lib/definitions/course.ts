@@ -15,18 +15,6 @@ export type CourseSection = {
   webRegCourseSection: WebRegCourseSection;
 };
 
-// @TODO - Add more concise CourseSection type
-// export type CourseSection = {
-//   courseCode: string;
-//   year: number;
-//   term: Term;
-//   professorName: string;
-//   sectionNumber: string;
-//   index: string;
-//   open: boolean;
-//   meetingTimes: MeetingTimes[];
-// };
-
 export type WebRegCourseSection = {
   sectionEligibility?: boolean;
   sessionDatePrintIndicator: string;
@@ -85,7 +73,7 @@ export type CourseWebRegListing = {
 export type CourseTableColumn = {
   courseCode: number;
   courseName: string;
-  credits: number;
+  credits?: number;
   difficulty?: number;
   workload?: number;
   overall?: number;

@@ -9,6 +9,7 @@ import {
   getTerms,
   getValidYearTermMap,
   getYears,
+  parseProfessorName,
   validateCourseTermYear,
 } from "@/lib/utils";
 import {
@@ -17,44 +18,176 @@ import {
   WEBREG_BASE_URL,
 } from "@/lib/constants";
 import { JSDOM } from "jsdom";
+import { Course, PrismaClient, Review } from "@prisma/client";
+import { createProfessorNameIdMap } from "./professor";
 
 /**
- * Fetches a course by courseId
+ * Queries a course by courseId
  *
- * @param courseId - Course ID of the course we are trying to fetch
+ * @param courseCode - Course code of the course we are trying to fetch
  * @return - Course
  */
-export async function fetchCourseById(courseId: number): Promise<any> {
-  const webReg: CourseWebRegListing[] = await fetchWebRegListingById(courseId);
-  if (webReg.length === 0) {
-    return null;
+export async function queryCourseByCode(
+  courseCode: number,
+): Promise<Course | null> {
+  const prisma = new PrismaClient();
+  const course: Course | null = await prisma.course.findUnique({
+    where: {
+      code: courseCode,
+    },
+    include: {
+      reviews: true,
+    },
+  });
+
+  if (!course) {
+    console.error(`Failed to find course with code ${courseCode}`);
   }
 
-  const { credits, prereqs, courseCode }: CourseWebRegListing = webReg[0];
+  return course;
+}
 
-  let courseName: string, synopsisUrl: string;
-  const synopses: CourseSynopsesListing =
-    await fetchSynposesListingById(courseId);
+/**
+ *  Queries all courses
+ *
+ *  @return - List of all courses
+ */
+export async function queryAllCourses(): Promise<Course[]> {
+  const prisma = new PrismaClient();
+  const courses: Course[] = await prisma.course.findMany({
+    include: {
+      reviews: true,
+    },
+  });
 
-  if (synopses == null) {
-    courseName = webReg[0].title;
-    synopsisUrl = "";
+  if (!courses) {
+    console.error("Failed to find any courses");
+  }
+
+  return courses;
+}
+
+/**
+ * Queries all course table listings
+ *
+ * @return - List of all course table listings
+ */
+export async function queryAllCourseTableListings(): Promise<
+  CourseTableColumn[]
+> {
+  const prisma = new PrismaClient();
+  const courses: Course[] = await prisma.course.findMany({
+    include: {
+      reviews: true,
+    },
+  });
+
+  if (!courses) {
+    console.error("Failed to find any courses");
+    return [];
+  }
+
+  return courses.map((course: Course) => getCourseTableRatings(course));
+}
+
+/**
+ * Query course table data based on the given year and term
+ *
+ * @param year - Year the courses were offered (or null or all)
+ * @param term - Term the courses were offered (or null or all)
+ * @return - Course table data for the courses based on year and terms
+ */
+export async function queryCourseTableDataByYearTerm(
+  year: number | null,
+  term: Term | null,
+): Promise<CourseTableColumn[]> {
+  const prisma = new PrismaClient();
+  const courses: Course[] = await prisma.course.findMany({
+    include: {
+      reviews: true,
+      sections: true,
+    },
+  });
+
+  if (!courses) {
+    console.error("Failed to find any courses");
+    return [];
+  }
+
+  if (year !== null && term !== null) {
+    return courses
+      .filter((course: any) =>
+        course.sections.some(
+          (section: CourseSection) =>
+            section.term === term && section.year === year,
+        ),
+      )
+      .map((course: any) => getCourseTableRatings(course));
+  } else if (year !== null) {
+    return courses
+      .filter((course: any) =>
+        course.sections.some((section: CourseSection) => section.year === year),
+      )
+      .map((course: any) => getCourseTableRatings(course));
+  } else if (term !== null) {
+    return courses
+      .filter((course: any) =>
+        course.sections.some((section: CourseSection) => section.term === term),
+      )
+      .map((course: any) => getCourseTableRatings(course));
   } else {
-    courseName = synopses.courseName;
-    synopsisUrl = synopses.synopsisUrl;
+    return courses.map((course: any) => getCourseTableRatings(course));
   }
+}
 
-  const offered = await fetchCourseOfferedById(courseId);
-  const sections = await fetchCourseSectionsById(courseId);
+/**
+ * Returns overall ratings for a course based on its reviews to display on the course table
+ *
+ * @param course - Course we are interested
+ * @return - Overall ratings for that course
+ */
+function getCourseTableRatings(course: any): any {
+  const reviews: Review[] = course.reviews;
+  const reviewsWithDifficultyRating: Review[] = reviews.filter(
+    (review: Review) => review.difficultyRating !== null,
+  );
+  const reviewsWithWorkload: Review[] = reviews.filter(
+    (review: Review) => review.workload !== null,
+  );
+
+  const overallRatingSum = reviews.reduce(
+    (acc, review) => acc + (review.rating ?? 0),
+    0,
+  );
+  const averageRating =
+    reviews.length > 0 ? overallRatingSum / reviews.length : 0;
+
+  const difficultyRatingSum = reviewsWithDifficultyRating.reduce(
+    (acc, review) => acc + (review.difficultyRating ?? 0),
+    0,
+  );
+  const averageDifficultyRating =
+    reviewsWithDifficultyRating.length > 0
+      ? difficultyRatingSum / reviewsWithDifficultyRating.length
+      : 0;
+
+  const workloadSum = reviewsWithWorkload.reduce(
+    (acc, review) => acc + (review.workload ?? 0),
+    0,
+  );
+  const averageWorkload =
+    reviewsWithWorkload.length > 0
+      ? workloadSum / reviewsWithWorkload.length
+      : 0;
 
   return {
-    courseCode,
-    courseName,
-    synopsisUrl,
-    offered,
-    prereqs,
-    credits,
-    sections,
+    courseCode: course.code,
+    courseName: course.name,
+    credits: course.credits,
+    rating: averageRating,
+    difficulty: averageDifficultyRating,
+    workload: averageWorkload,
+    reviews: reviews.length,
   };
 }
 
@@ -165,8 +298,9 @@ async function fetchCourseTableListingsByYearTerm(
 /**
  * Parses the API request from webreg listing all of the CS courses for a given year and term
  *
- * @param url - API endpoint for term webreg with specified year and term as query params
- * @return - List of course names and open sections
+ * @param year - Year the course is/was offered (2022 - 2024)
+ * @param term - Term it is/was offered
+ * @return - List of course webreg listings
  */
 export async function parseWebRegListingByYearTerm(
   year: number,
@@ -214,26 +348,17 @@ export async function parseWebRegListingByYearTerm(
 }
 
 /**
- * Fetches WebReg listings for a particular course given the courses ID for all years and terms
+ * Fetches WebReg listings for a particular course for all years and terms
  *
- * @param courseId - Course ID for the course we are interested in
- * @return - WebReg listings for that course
+ * @return - List of course names and open sections
  */
-export async function fetchWebRegListingById(
-  courseId: number,
-): Promise<CourseWebRegListing[]> {
+export async function fetchAllWebRegListings(): Promise<CourseWebRegListing[]> {
   const validYearTermMap: Map<number, Term[]> = getValidYearTermMap();
 
   const courseWebRegListings: Promise<CourseWebRegListing[]>[] = Array.from(
     validYearTermMap,
   ).flatMap(([year, terms]: [number, Term[]]) => {
-    return terms.map((term: Term) =>
-      parseWebRegListingByYearTerm(year, term).then((listings) =>
-        listings.filter(
-          (listing: CourseWebRegListing) => listing.courseCode == courseId,
-        ),
-      ),
-    );
+    return terms.map((term: Term) => parseWebRegListingByYearTerm(year, term));
   });
 
   const listings = await Promise.all(courseWebRegListings);
@@ -348,6 +473,7 @@ function combineCourseListings(
       courseCode: webReg.courseCode,
       courseName: synposes?.courseName || webReg.title,
       credits: webReg.credits,
+      synopsisUrl: synposes?.synopsisUrl || "",
     };
   });
 }
@@ -377,51 +503,60 @@ function mergeCourseListings(
 }
 
 /**
- * Fetches all sections for a course given course id
+ * Fetches all course sections
  *
- * @param courseId - Course ID of the course we are interested in
- * @return - All sections for that course
+ * @return - All course sections
  */
-async function fetchCourseSectionsById(courseId: number): Promise<any> {
-  const webReg: CourseWebRegListing[] = await fetchWebRegListingById(courseId);
+export async function fetchCourseSections(): Promise<any[]> {
+  const webReg: any[] = await fetchAllWebRegListings();
   const courseSections: any[] = [];
+  const professorNameIdMap: Map<string, number> =
+    await createProfessorNameIdMap();
 
   webReg.forEach(
     ({
+      courseCode,
       year,
       term,
       sections,
     }: {
+      courseCode: string;
       year: number;
       term: Term;
       sections: CourseSection[];
     }) => {
-      sections.forEach((section: CourseSection) => {
-        courseSections.push({ year, term, section });
+      sections.forEach(async (section: any) => {
+        const [professorLastName, professorFirstName] = section.professorName[0]
+          ?.name
+          ? parseProfessorName(section.professorName[0].name)
+          : [null, null];
+
+        if (professorLastName) {
+          const professorId = professorNameIdMap.get(
+            `${professorLastName}, ${professorFirstName}`,
+          );
+
+          if (!professorId) {
+            console.error(
+              `Failed to find professor ${professorFirstName} ${professorLastName}`,
+            );
+          } else {
+            const sectionNumber = section.sectionNumber;
+
+            courseSections.push({
+              sectionNumber,
+              courseCode,
+              professorId,
+              term,
+              year,
+            });
+          }
+        }
       });
     },
   );
 
   return courseSections;
-}
-
-/**
- * Fetches all year and terms the course was offered given its course id
- *
- * @param courseId - Course ID of the course we are interested in
- * @return - All offerings for that course
- */
-async function fetchCourseOfferedById(
-  courseId: number,
-): Promise<[number, Term][]> {
-  const webReg: CourseWebRegListing[] = await fetchWebRegListingById(courseId);
-  const offered: [number, Term][] = [];
-
-  webReg.forEach(({ year, term }: { year: number; term: Term }) => {
-    offered.push([year, term]);
-  });
-
-  return offered;
 }
 
 /**

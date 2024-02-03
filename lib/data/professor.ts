@@ -3,6 +3,32 @@ import { ProfessorTableColumn } from "../definitions/professor";
 import { getValidYearTermMap } from "../utils";
 import { parseWebRegListingByYearTerm } from "./course";
 import { titleCase } from "../utils";
+import { PrismaClient, Professor } from "@prisma/client";
+
+/**
+ * Query professor by first and last name
+ *
+ * @param firstName - First name of professor or null
+ * @param lastName - Last name of professor
+ */
+export async function queryProfessorByName(
+  firstName: string | null,
+  lastName: string,
+): Promise<Professor | null> {
+  const prisma = new PrismaClient();
+  if (firstName === null) {
+    firstName = "";
+  }
+
+  const professor = await prisma.professor.findFirst({
+    where: {
+      firstName: firstName,
+      lastName: lastName,
+    },
+  });
+
+  return professor;
+}
 
 /**
  * Fetches professor table data
@@ -60,4 +86,22 @@ export async function fetchProfessorNames(): Promise<[string, string][]> {
 
     return [parts[0], ""];
   });
+}
+
+/**
+ * Creates a map of professor names to their respective IDs
+ *
+ * @return - Map of professor names to their respective IDs
+ */
+export async function createProfessorNameIdMap(): Promise<Map<string, number>> {
+  const prisma = new PrismaClient();
+  const professors = await prisma.professor.findMany();
+  const professorNameIdMap = new Map<string, number>();
+
+  professors.forEach((professor) => {
+    const fullName = `${professor.lastName}, ${professor.firstName}`;
+    professorNameIdMap.set(fullName, professor.id);
+  });
+
+  return professorNameIdMap;
 }

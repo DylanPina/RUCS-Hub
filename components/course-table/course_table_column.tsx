@@ -83,7 +83,7 @@ export const columns: ColumnDef<CourseTableColumn>[] = [
     },
   },
   {
-    accessorKey: "overall",
+    accessorKey: "rating",
     header: ({ column }) => {
       return (
         <Button
@@ -98,7 +98,7 @@ export const columns: ColumnDef<CourseTableColumn>[] = [
     },
   },
   {
-    accessorKey: "totalReviews",
+    accessorKey: "reviews",
     header: ({ column }) => {
       return (
         <Button
