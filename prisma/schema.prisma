@@ -38,6 +38,7 @@ model Section {
 model Course {
   code     Int       @id
   name     String
+  prereqs  String[]
   synopsis String?
   credits  Int?
   reviews  Review[]

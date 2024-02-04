@@ -474,6 +474,7 @@ function combineCourseListings(
       courseName: synposes?.courseName || webReg.title,
       credits: webReg.credits,
       synopsisUrl: synposes?.synopsisUrl || "",
+      prereqs: webReg.prereqs,
     };
   });
 }
@@ -567,13 +568,18 @@ export async function fetchCourseSections(): Promise<any[]> {
  */
 export function parsePrereqNotes(prereqNotes: string): string[] {
   const normalizedString = prereqNotes
+    .toLowerCase()
     .replace(/<[^>]*>/g, " ")
     .replace(/\s+/g, " ")
     .replace(/[()]/g, "")
     .replace(/\s/g, "")
-    .trim();
+    .trim()
+    .replace(
+      "anycourseequalorgreaterthan:",
+      "Any course equal x_x greater than ",
+    );
 
-  const prereqs: string[] = normalizedString.split("OR");
+  const prereqs: string[] = normalizedString.split("or");
 
   const prereqsSplit: string[][] = [];
   prereqs.forEach((s: string) => {
@@ -582,7 +588,9 @@ export function parsePrereqNotes(prereqNotes: string): string[] {
 
   const prereqsJoined: string[] = [];
   prereqsSplit.forEach((s: string[]) => {
-    prereqsJoined.push(s.join(" and ").replace("or", " or "));
+    prereqsJoined.push(
+      s.join(" and ").replace("or", " or ").replace("x_x", "or"),
+    );
   });
 
   return prereqsJoined;
