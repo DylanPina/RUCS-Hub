@@ -44,7 +44,7 @@ export async function queryCourseByCode(
     console.error(`Failed to find course with code ${courseCode}`);
   }
 
-  return course;
+  return getCoursePageRatings(course);
 }
 
 /**
@@ -138,6 +138,107 @@ export async function queryCourseTableDataByYearTerm(
   } else {
     return courses.map((course: any) => getCourseTableRatings(course));
   }
+}
+
+/**
+ * Returns overall ratings for a course based on its reviews to display on the course page
+ *
+ * @param course - Course we are interested
+ */
+function getCoursePageRatings(course: any): any {
+  const reviews: Review[] = course.reviews;
+  const overallRatingSum = reviews.reduce(
+    (acc, review) => acc + (review.rating ?? 0),
+    0,
+  );
+  const averageRating =
+    reviews.length > 0 ? overallRatingSum / reviews.length : 0;
+
+  const reviewsWithDifficultyRating: Review[] = reviews.filter(
+    (review: Review) => review.difficultyRating !== null,
+  );
+  const difficultyRatingSum = reviewsWithDifficultyRating.reduce(
+    (acc, review) => acc + (review.difficultyRating ?? 0),
+    0,
+  );
+  const averageDifficultyRating =
+    reviewsWithDifficultyRating.length > 0
+      ? difficultyRatingSum / reviewsWithDifficultyRating.length
+      : 0;
+
+  const reviewsWithWorkload: Review[] = reviews.filter(
+    (review: Review) => review.workload !== null,
+  );
+  const workloadSum = reviewsWithWorkload.reduce(
+    (acc, review) => acc + (review.workload ?? 0),
+    0,
+  );
+  const averageWorkload =
+    reviewsWithWorkload.length > 0
+      ? workloadSum / reviewsWithWorkload.length
+      : 0;
+
+  const reviewsWithProfessorQualityRating: Review[] = reviews.filter(
+    (review: Review) => review.professorQualityRating !== null,
+  );
+  const professorQualityRatingSum = reviewsWithProfessorQualityRating.reduce(
+    (acc, review) => acc + (review.professorQualityRating ?? 0),
+    0,
+  );
+  const averageProfessorQualityRating =
+    reviewsWithProfessorQualityRating.length > 0
+      ? professorQualityRatingSum / reviewsWithProfessorQualityRating.length
+      : 0;
+
+  const reviewsWithLectureRating: Review[] = reviews.filter(
+    (review: Review) => review.lectureRating !== null,
+  );
+  const lectureRatingSum = reviewsWithLectureRating.reduce(
+    (acc, review) => acc + (review.lectureRating ?? 0),
+    0,
+  );
+  const averageLectureRating =
+    reviewsWithLectureRating.length > 0
+      ? lectureRatingSum / reviewsWithLectureRating.length
+      : 0;
+
+  const reviewsWithBookRating: Review[] = reviews.filter(
+    (review: Review) => review.bookRating !== null,
+  );
+  const bookRatingSum = reviewsWithBookRating.reduce(
+    (acc, review) => acc + (review.bookRating ?? 0),
+    0,
+  );
+  const averageBookRating =
+    reviewsWithBookRating.length > 0
+      ? bookRatingSum / reviewsWithBookRating.length
+      : 0;
+
+  const reviewsWithPiazzaRating: Review[] = reviews.filter(
+    (review: Review) => review.piazzaRating !== null,
+  );
+  const piazzaRatingSum = reviewsWithPiazzaRating.reduce(
+    (acc, review) => acc + (review.piazzaRating ?? 0),
+    0,
+  );
+  const averagePiazzaRating =
+    reviewsWithPiazzaRating.length > 0
+      ? piazzaRatingSum / reviewsWithPiazzaRating.length
+      : 0;
+
+  return {
+    courseCode: course.code,
+    courseName: course.name,
+    credits: course.credits,
+    rating: averageRating,
+    difficulty: averageDifficultyRating,
+    professorQualityRating: averageProfessorQualityRating,
+    lectureRating: averageLectureRating,
+    bookRating: averageBookRating,
+    piazzaRating: averagePiazzaRating,
+    workload: averageWorkload,
+    reviews,
+  };
 }
 
 /**
