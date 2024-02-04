@@ -1,6 +1,7 @@
 import { queryCourseByCode } from "@/lib/data/course";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { CoursePage } from "@/lib/definitions/course";
 
 type Props = {
   params: { id: string };
@@ -14,7 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;
-  const course: any | null = await queryCourseByCode(Number(id));
+  const course: CoursePage | null = await queryCourseByCode(Number(id));
 
   if (!course) {
     notFound();
@@ -33,25 +34,30 @@ export default async function Page({ params }: { params: { id: string } }) {
       </li>
       <li>
         <span className="font-bold">Difficulty rating:</span>{" "}
-        {course.difficulty}
+        {course.difficulty !== -1 ? course.difficulty : "?"}
       </li>
       <li>
-        <span className="font-bold">Workload:</span> {course.workload} hours per
-        week
+        <span className="font-bold">Workload:</span>{" "}
+        {course.workload !== -1 ? `${course.workload} hours per week` : "?"}
       </li>
       <li>
         <span className="font-bold">Lecture rating:</span>{" "}
-        {course.lectureRating}
+        {course.lectureRating !== -1 ? course.lectureRating : "?"}
       </li>
       <li>
-        <span className="font-bold">Piazza rating:</span> {course.piazzaRating}
+        <span className="font-bold">Piazza rating:</span>{" "}
+        {course.piazzaRating !== -1 ? course.piazzaRating : "?"}
       </li>
       <h2 className="font-bold">Reviews:</h2>
-      <ul className="ml-10 flex flex-col space-y-5">
-        {course.reviews.map((review: any) => (
-          <li key={review.id}>{review.content}</li>
-        ))}
-      </ul>
+      {course.reviews.length !== 0 ? (
+        <ul className="ml-10 flex flex-col space-y-5">
+          {course.reviews.map((review: any) => (
+            <li key={review.id}>{review.content}</li>
+          ))}
+        </ul>
+      ) : (
+        <li className="ml-10">No reviews found</li>
+      )}
     </ul>
   );
 }

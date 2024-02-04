@@ -1,3 +1,5 @@
+import { Review } from "@prisma/client";
+
 export type Course = {
   courseCode: number;
   courseName: string;
@@ -6,6 +8,20 @@ export type Course = {
   prereqs: string[] | null;
   credits: number;
   sections: CourseSection[];
+};
+
+export type CoursePage = {
+  courseCode: number;
+  courseName: string;
+  credits: number;
+  rating: number;
+  difficulty: number;
+  professorQualityRating: number;
+  lectureRating: number;
+  workload: number;
+  bookRating: number;
+  piazzaRating: number;
+  reviews: Review[];
 };
 
 export type CourseSection = {

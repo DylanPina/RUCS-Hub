@@ -4,6 +4,7 @@ import {
   CourseTableColumn,
   CourseSection,
   Term,
+  CoursePage,
 } from "@/lib/definitions/course";
 import {
   getTerms,
@@ -29,7 +30,7 @@ import { createProfessorNameIdMap } from "./professor";
  */
 export async function queryCourseByCode(
   courseCode: number,
-): Promise<Course | null> {
+): Promise<CoursePage | null> {
   const prisma = new PrismaClient();
   const course: Course | null = await prisma.course.findUnique({
     where: {
@@ -145,7 +146,7 @@ export async function queryCourseTableDataByYearTerm(
  *
  * @param course - Course we are interested
  */
-function getCoursePageRatings(course: any): any {
+function getCoursePageRatings(course: any): CoursePage {
   const reviews: Review[] = course.reviews;
   const overallRatingSum = reviews.reduce(
     (acc, review) => acc + (review.rating ?? 0),
@@ -231,12 +232,16 @@ function getCoursePageRatings(course: any): any {
     courseName: course.name,
     credits: course.credits,
     rating: averageRating,
-    difficulty: averageDifficultyRating,
-    professorQualityRating: averageProfessorQualityRating,
-    lectureRating: averageLectureRating,
-    bookRating: averageBookRating,
-    piazzaRating: averagePiazzaRating,
-    workload: averageWorkload,
+    difficulty: averageDifficultyRating
+      ? reviewsWithProfessorQualityRating.length
+      : -1,
+    professorQualityRating: averageProfessorQualityRating
+      ? reviewsWithProfessorQualityRating.length
+      : -1,
+    lectureRating: averageLectureRating ? reviewsWithLectureRating.length : -1,
+    bookRating: averageBookRating ? reviewsWithBookRating.length : -1,
+    piazzaRating: averagePiazzaRating ? reviewsWithPiazzaRating.length : -1,
+    workload: averageWorkload ? reviewsWithWorkload.length : -1,
     reviews,
   };
 }
