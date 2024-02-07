@@ -230,6 +230,7 @@ function getCoursePageRatings(course: any): CoursePage {
   return {
     courseCode: course.code,
     courseName: course.name,
+    prereqs: course.prereqs,
     credits: course.credits,
     rating: averageRating,
     difficulty: averageDifficultyRating

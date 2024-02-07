@@ -22,32 +22,47 @@ export default async function Page({ params }: { params: { id: string } }) {
   }
 
   return (
-    <ul className="flex flex-col space-y-5">
-      <li>
-        <span className="font-bold">Code:</span> {course.courseCode}
-      </li>
-      <li>
-        <span className="font-bold">Name:</span> {course.courseName}
-      </li>
-      <li>
-        <span className="font-bold">Overall rating:</span> {course.rating}
-      </li>
-      <li>
-        <span className="font-bold">Difficulty rating:</span>{" "}
-        {course.difficulty !== -1 ? course.difficulty : "?"}
-      </li>
-      <li>
-        <span className="font-bold">Workload:</span>{" "}
-        {course.workload !== -1 ? `${course.workload} hours per week` : "?"}
-      </li>
-      <li>
-        <span className="font-bold">Lecture rating:</span>{" "}
-        {course.lectureRating !== -1 ? course.lectureRating : "?"}
-      </li>
-      <li>
-        <span className="font-bold">Piazza rating:</span>{" "}
-        {course.piazzaRating !== -1 ? course.piazzaRating : "?"}
-      </li>
+    <div className="flex flex-col space-y-5">
+      <div className="flex space-x-2">
+        <h3 className="font-bold">Code:</h3> <span>{course.courseCode}</span>
+      </div>
+      <div className="flex space-x-2">
+        <h3 className="font-bold">Name:</h3> <span>{course.courseName}</span>
+      </div>
+      <div className="flex space-x-2">
+        <h3 className="font-bold">Prereqs:</h3>
+        {course.prereqs.length !== 0 ? (
+          <ul className="flex flex-col space-y-5">
+            {course.prereqs.map((prereq: string) => (
+              <li key={prereq}>{prereq}</li>
+            ))}
+          </ul>
+        ) : (
+          <li className="ml-10">None</li>
+        )}
+      </div>
+      <div className="flex space-x-2">
+        <h3 className="font-bold">Overall rating:</h3>
+        <span>{course.rating}</span>
+      </div>
+      <div className="flex space-x-2">
+        <h3 className="font-bold">Difficulty rating:</h3>
+        <span>{course.difficulty !== -1 ? course.difficulty : "?"}</span>
+      </div>
+      <div className="flex space-x-2">
+        <h3 className="font-bold">Workload:</h3>
+        <span>
+          {course.workload !== -1 ? `${course.workload} hours per week` : "?"}
+        </span>
+      </div>
+      <div className="flex space-x-2">
+        <h3 className="font-bold">Lecture rating:</h3>
+        <span>{course.lectureRating !== -1 ? course.lectureRating : "?"}</span>
+      </div>
+      <div className="flex space-x-2">
+        <h3 className="font-bold">Piazza rating:</h3>{" "}
+        <span>{course.piazzaRating !== -1 ? course.piazzaRating : "?"}</span>
+      </div>
       <h2 className="font-bold">Reviews:</h2>
       {course.reviews.length !== 0 ? (
         <ul className="ml-10 flex flex-col space-y-5">
@@ -56,8 +71,8 @@ export default async function Page({ params }: { params: { id: string } }) {
           ))}
         </ul>
       ) : (
-        <li className="ml-10">No reviews found</li>
+        <span className="ml-10">No reviews found</span>
       )}
-    </ul>
+    </div>
   );
 }
