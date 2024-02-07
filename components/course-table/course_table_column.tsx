@@ -48,6 +48,7 @@ export const columns: ColumnDef<CourseTableColumn>[] = [
         </Button>
       );
     },
+    cell: (props: any) => <span>{props.getValue() ?? "?"}</span>,
     // meta: {
     //   align: "right",
     // },
@@ -66,6 +67,9 @@ export const columns: ColumnDef<CourseTableColumn>[] = [
         </Button>
       );
     },
+    cell: (props: any) => (
+      <span>{props.row.original.reviews ? props.getValue() : "?"}</span>
+    ),
   },
   {
     accessorKey: "workload",
@@ -81,6 +85,9 @@ export const columns: ColumnDef<CourseTableColumn>[] = [
         </Button>
       );
     },
+    cell: (props: any) => (
+      <span>{props.row.original.reviews ? props.getValue() : "?"}</span>
+    ),
   },
   {
     accessorKey: "rating",
@@ -96,6 +103,9 @@ export const columns: ColumnDef<CourseTableColumn>[] = [
         </Button>
       );
     },
+    cell: (props: any) => (
+      <span>{props.row.original.reviews ? props.getValue() : "?"}</span>
+    ),
   },
   {
     accessorKey: "reviews",
