@@ -77,8 +77,10 @@ export async function fetchProfessorNames(): Promise<[string, string][]> {
       }
     });
 
-  return Array.from(professorFullNames).map((professor) => {
-    const parts = professor.split(",").map((part) => part.trim());
+  return Array.from(professorFullNames).map((professor: string) => {
+    const parts = professor
+      .split(new RegExp("[, ]+"))
+      .map((part: string) => part.trim());
 
     if (parts.length > 1) {
       return [parts[0], parts[1]];
