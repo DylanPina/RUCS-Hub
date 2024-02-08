@@ -17,8 +17,6 @@ export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;
   const course: CoursePage | null = await queryCourseByCode(Number(id));
 
-  console.log(course);
-
   if (!course) {
     notFound();
   }

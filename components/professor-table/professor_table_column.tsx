@@ -2,6 +2,7 @@ import { ProfessorTableColumn } from "@/lib/definitions/professor";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "../shadcn/ui/button";
 import { ArrowUpDown } from "lucide-react";
+import { titleCase } from "@/lib/utils";
 
 export const columns: ColumnDef<ProfessorTableColumn>[] = [
   {
@@ -18,6 +19,7 @@ export const columns: ColumnDef<ProfessorTableColumn>[] = [
         </Button>
       );
     },
+    cell: (props: any) => <span>{titleCase(props.getValue())}</span>,
   },
   {
     accessorKey: "firstName",
@@ -33,6 +35,9 @@ export const columns: ColumnDef<ProfessorTableColumn>[] = [
         </Button>
       );
     },
+    cell: (props: any) => (
+      <span>{props.getValue() !== "" ? titleCase(props.getValue()) : "?"}</span>
+    ),
   },
   {
     accessorKey: "overall",
@@ -48,6 +53,9 @@ export const columns: ColumnDef<ProfessorTableColumn>[] = [
         </Button>
       );
     },
+    cell: (props: any) => (
+      <span>{props.row.original.reviews ? props.getValue() : "?"}</span>
+    ),
     // meta: {
     //   align: "right",
     // },
@@ -66,6 +74,9 @@ export const columns: ColumnDef<ProfessorTableColumn>[] = [
         </Button>
       );
     },
+    cell: (props: any) => (
+      <span>{props.row.original.reviews ? props.getValue() : "?"}</span>
+    ),
   },
   {
     accessorKey: "reviews",
@@ -81,5 +92,8 @@ export const columns: ColumnDef<ProfessorTableColumn>[] = [
         </Button>
       );
     },
+    cell: (props: any) => (
+      <span>{props.row.original.reviews ? props.getValue() : "?"}</span>
+    ),
   },
 ];
