@@ -43,7 +43,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       </div>
       <div className="flex space-x-2">
         <h3 className="font-bold">Overall rating:</h3>
-        <span>{course.rating}</span>
+        <span>{course.rating !== -1 ? course.rating : "?"}</span>
       </div>
       <div className="flex space-x-2">
         <h3 className="font-bold">Difficulty rating:</h3>

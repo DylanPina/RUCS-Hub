@@ -30,7 +30,7 @@ import { createProfessorNameIdMap } from "./professor";
  */
 export async function queryCourseByCode(
   courseCode: number,
-): Promise<CoursePage | null> {
+): Promise<CoursePage> {
   const prisma = new PrismaClient();
   const course: Course | null = await prisma.course.findUnique({
     where: {
@@ -232,17 +232,17 @@ function getCoursePageRatings(course: any): CoursePage {
     courseName: course.name,
     prereqs: course.prereqs,
     credits: course.credits,
-    rating: averageRating,
-    difficulty: averageDifficultyRating
-      ? reviewsWithProfessorQualityRating.length
+    rating: reviews.length ? averageRating : -1,
+    difficulty: reviewsWithDifficultyRating.length
+      ? averageDifficultyRating
       : -1,
-    professorQualityRating: averageProfessorQualityRating
-      ? reviewsWithProfessorQualityRating.length
+    professorQualityRating: reviewsWithProfessorQualityRating.length
+      ? averageProfessorQualityRating
       : -1,
-    lectureRating: averageLectureRating ? reviewsWithLectureRating.length : -1,
-    bookRating: averageBookRating ? reviewsWithBookRating.length : -1,
-    piazzaRating: averagePiazzaRating ? reviewsWithPiazzaRating.length : -1,
-    workload: averageWorkload ? reviewsWithWorkload.length : -1,
+    lectureRating: reviewsWithLectureRating.length ? averageLectureRating : -1,
+    bookRating: reviewsWithBookRating.length ? averageBookRating : -1,
+    piazzaRating: reviewsWithPiazzaRating ? averagePiazzaRating : -1,
+    workload: reviewsWithWorkload.length ? averageWorkload : -1,
     reviews,
   };
 }
@@ -291,9 +291,11 @@ function getCourseTableRatings(course: any): any {
     courseCode: course.code,
     courseName: course.name,
     credits: course.credits,
-    rating: averageRating,
-    difficulty: averageDifficultyRating,
-    workload: averageWorkload,
+    rating: reviews.length ? averageRating : -1,
+    difficulty: reviewsWithDifficultyRating.length
+      ? averageDifficultyRating
+      : -1,
+    workload: reviewsWithWorkload.length ? averageWorkload : -1,
     reviews: reviews.length,
   };
 }

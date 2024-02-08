@@ -1,5 +1,5 @@
 import { Term } from "../definitions/course";
-import { ProfessorTableColumn } from "../definitions/professor";
+import { ProfessorPage, ProfessorTableColumn } from "../definitions/professor";
 import { getValidYearTermMap } from "../utils";
 import { parseWebRegListingByYearTerm } from "./course";
 import { titleCase } from "../utils";
@@ -14,7 +14,7 @@ import { PrismaClient, Professor, Review } from "@prisma/client";
 export async function queryProfessorByName(
   firstName: string | null,
   lastName: string,
-): Promise<Professor | null> {
+): Promise<ProfessorPage> {
   const prisma = new PrismaClient();
   if (firstName === null) {
     firstName = "";
@@ -30,7 +30,7 @@ export async function queryProfessorByName(
     },
   });
 
-  return professor;
+  return getProfessorPageRatings(professor);
 }
 
 /**
@@ -132,7 +132,55 @@ export async function createProfessorNameIdMap(): Promise<Map<string, number>> {
 }
 
 /**
- * Returns overall ratings for a professor based on its reviews to display on the professor table
+ * Returns overall ratings for a professor based on its reviews for the professor page
+ *
+ * @param professor - Professor we are interested
+ * @return - Overall ratings for that professor
+ */
+function getProfessorPageRatings(professor: any): any {
+  const reviews: Review[] = professor.reviews;
+
+  const reviewsWithOverallRating: Review[] = reviews.filter(
+    (review: Review) => {
+      return review.professorQualityRating !== null;
+    },
+  );
+  const overallRatingSum = reviewsWithOverallRating.reduce(
+    (acc, review: any) => acc + (review.professorQualityRating ?? 0),
+    0,
+  );
+  const averageOverallRating =
+    reviewsWithOverallRating.length > 0
+      ? overallRatingSum / reviewsWithOverallRating.length
+      : 0;
+
+  const reviewsWithDifficultyRating: Review[] = reviews.filter(
+    (review: Review) => {
+      return review.professorDifficultyRating !== null;
+    },
+  );
+  const difficultyRatingSum = reviewsWithDifficultyRating.reduce(
+    (acc, review: any) => acc + (review.professorDifficultyRating ?? 0),
+    0,
+  );
+  const averageDifficultyRating =
+    reviewsWithDifficultyRating.length > 0
+      ? difficultyRatingSum / reviewsWithDifficultyRating.length
+      : 0;
+
+  return {
+    firstName: professor.firstName,
+    lastName: professor.lastName,
+    overall: reviewsWithOverallRating.length ? averageOverallRating : -1,
+    difficulty: reviewsWithDifficultyRating.length
+      ? averageDifficultyRating
+      : -1,
+    reviews,
+  };
+}
+
+/**
+ * Returns overall ratings for a professor based on its reviews for the professor table
  *
  * @param professor - Professor we are interested
  * @return - Overall ratings for that professor
@@ -171,8 +219,10 @@ function getProfessorTableRatings(professor: any): any {
   return {
     firstName: professor.firstName,
     lastName: professor.lastName,
-    overall: averageOverallRating,
-    difficulty: averageDifficultyRating,
+    overall: reviewsWithOverallRating.length ? averageOverallRating : -1,
+    difficulty: reviewsWithDifficultyRating.length
+      ? averageDifficultyRating
+      : -1,
     reviews: reviews.length,
   };
 }

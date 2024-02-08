@@ -54,7 +54,7 @@ export const columns: ColumnDef<ProfessorTableColumn>[] = [
       );
     },
     cell: (props: any) => (
-      <span>{props.row.original.reviews ? props.getValue() : "?"}</span>
+      <span>{props.row.original.overall !== -1 ? props.getValue() : "?"}</span>
     ),
     // meta: {
     //   align: "right",
@@ -75,7 +75,9 @@ export const columns: ColumnDef<ProfessorTableColumn>[] = [
       );
     },
     cell: (props: any) => (
-      <span>{props.row.original.reviews ? props.getValue() : "?"}</span>
+      <span>
+        {props.row.original.difficulty !== -1 ? props.getValue() : "?"}
+      </span>
     ),
   },
   {
