@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Input } from "../shadcn/ui/input";
 import { IoSearchSharp } from "react-icons/io5";
@@ -8,8 +10,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/shadcn/ui/dialog";
+import { useDebounce } from "use-debounce";
 
 export default function NavSearchBar() {
+  const [search, setSearch] = React.useState("");
+  const [debouncedSearch] = useDebounce(search, 300);
+
   return (
     <div className="flex place-items-center w-full">
       <div className="max-sm:hidden relative place-items-center w-full">
@@ -20,6 +26,7 @@ export default function NavSearchBar() {
         <Input
           className="max-w-md max-sm:hidden pl-10 focus:border-2 focus:border-primary-red transition-all duration-150 ease-out hover:ease-in"
           placeholder="Search for a course or a professor..."
+          onChange={(e) => setSearch(e.target.value)}
         />
       </div>
       <Dialog>

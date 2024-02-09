@@ -241,7 +241,7 @@ function getCoursePageRatings(course: any): CoursePage {
       : -1,
     lectureRating: reviewsWithLectureRating.length ? averageLectureRating : -1,
     bookRating: reviewsWithBookRating.length ? averageBookRating : -1,
-    piazzaRating: reviewsWithPiazzaRating ? averagePiazzaRating : -1,
+    piazzaRating: reviewsWithPiazzaRating.length ? averagePiazzaRating : -1,
     workload: reviewsWithWorkload.length ? averageWorkload : -1,
     reviews,
   };

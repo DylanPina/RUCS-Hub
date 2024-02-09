@@ -60,7 +60,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         <span>{course.lectureRating !== -1 ? course.lectureRating : "?"}</span>
       </div>
       <div className="flex space-x-2">
-        <h3 className="font-bold">Piazza rating:</h3>{" "}
+        <h3 className="font-bold">Piazza rating:</h3>
         <span>{course.piazzaRating !== -1 ? course.piazzaRating : "?"}</span>
       </div>
       <h2 className="font-bold">Reviews:</h2>
