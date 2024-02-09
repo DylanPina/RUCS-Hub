@@ -1,9 +1,7 @@
 import {
-  AARON_NEWLAND_GITHUB_URL,
-  ALEX_LAUDINO_GITHUB_URL,
   DYLAN_PINA_GITHUB_URL,
-  GITHUB_URL,
   JACK_BOGART_GITHUB_URL,
+  GITHUB_URL,
 } from "@/lib/constants";
 import Link from "next/link";
 import React from "react";
@@ -26,18 +24,6 @@ export default function Footer() {
           <Link href={JACK_BOGART_GITHUB_URL}>
             <span className="px-1 text-xs text-primary-white cursor-pointer hover:font-black transition-all duration-150 ease-out hover:ease-in">
               Jack<span className="max-sm:hidden"> Bogart</span>
-            </span>
-          </Link>
-          |
-          <Link href={ALEX_LAUDINO_GITHUB_URL}>
-            <span className="px-1 text-xs text-primary-white cursor-pointer hover:font-black transition-all duration-150 ease-out hover:ease-in">
-              Alex<span className="max-sm:hidden"> Laudino</span>
-            </span>
-          </Link>
-          |
-          <Link href={AARON_NEWLAND_GITHUB_URL}>
-            <span className="px-1 text-xs text-primary-white cursor-pointer hover:font-black transition-all duration-150 ease-out hover:ease-in">
-              Aaron<span className="max-sm:hidden"> Newland</span>
             </span>
           </Link>
         </h2>
