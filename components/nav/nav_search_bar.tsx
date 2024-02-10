@@ -19,13 +19,20 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/shadcn/ui/command";
-import { useDebounce } from "use-debounce";
 import { Button } from "../shadcn/ui/button";
+import { CourseTableColumn } from "@/lib/definitions/course";
+import { ProfessorTableColumn } from "@/lib/definitions/professor";
+import { getProfessorRoute, titleCase } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
-export default function NavSearchBar() {
+interface Props {
+  courses: CourseTableColumn[];
+  professors: ProfessorTableColumn[];
+}
+
+export default function NavSearchBar({ courses, professors }: Props) {
   const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState("");
-  const [debouncedSearch] = useDebounce(search, 300);
+  const router = useRouter();
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -37,6 +44,16 @@ export default function NavSearchBar() {
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
   }, []);
+
+  function handleCourseSelect(course: CourseTableColumn) {
+    setOpen(false);
+    router.push(`/course/${course.courseCode}`);
+  }
+
+  function handleProfessorSelect(professor: ProfessorTableColumn) {
+    setOpen(false);
+    router.push(getProfessorRoute(professor.lastName, professor.firstName));
+  }
 
   return (
     <div className="flex place-items-center w-full">
@@ -63,26 +80,27 @@ export default function NavSearchBar() {
           <CommandList className="text-primary-white">
             <CommandEmpty>No results found</CommandEmpty>
             <CommandGroup heading="Courses" className="text-primary-white">
-              <CommandItem className="aria-selected:bg-primary-red/50 aria-selected:text-primary-white rounded cursor-pointer">
-                Course 1
-              </CommandItem>
-              <CommandItem className="aria-selected:bg-primary-red/50 aria-selected:text-primary-white rounded cursor-pointer">
-                Course 2
-              </CommandItem>
-              <CommandItem className="aria-selected:bg-primary-red/50 aria-selected:text-primary-white rounded cursor-pointer">
-                Course 3
-              </CommandItem>
+              {courses.map((course: CourseTableColumn) => (
+                <CommandItem
+                  key={course.courseCode}
+                  className="aria-selected:bg-primary-red/50 aria-selected:text-primary-white rounded cursor-pointer"
+                  onSelect={() => handleCourseSelect(course)}
+                >
+                  ({course.courseCode}) {course.courseName}
+                </CommandItem>
+              ))}
             </CommandGroup>
             <CommandGroup heading="Professors" className="text-primary-white">
-              <CommandItem className="aria-selected:bg-primary-red/50 aria-selected:text-primary-white rounded cursor-pointer">
-                Professor 1
-              </CommandItem>
-              <CommandItem className="aria-selected:bg-primary-red/50 aria-selected:text-primary-white rounded cursor-pointer">
-                Professor 2
-              </CommandItem>
-              <CommandItem className="aria-selected:bg-primary-red/50 aria-selected:text-primary-white rounded cursor-pointer">
-                Professor 3
-              </CommandItem>
+              {professors.map((professor: ProfessorTableColumn) => (
+                <CommandItem
+                  key={`${professor.lastName}-${professor.firstName}`}
+                  className="aria-selected:bg-primary-red/50 aria-selected:text-primary-white rounded cursor-pointer"
+                  onSelect={() => handleProfessorSelect(professor)}
+                >
+                  {titleCase(professor.firstName)}{" "}
+                  {titleCase(professor.lastName)}
+                </CommandItem>
+              ))}
             </CommandGroup>
           </CommandList>
         </Command>
