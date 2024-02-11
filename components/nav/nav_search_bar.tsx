@@ -1,15 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Input } from "../shadcn/ui/input";
 import { IoSearchSharp } from "react-icons/io5";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/shadcn/ui/dialog";
 import {
   Command,
   CommandDialog,
@@ -63,7 +55,7 @@ export default function NavSearchBar({ courses, professors }: Props) {
           className="sm:absolute sm:left-2 sm:top-1/2 sm:transform sm:-translate-y-1/2"
         />
         <Button
-          className="max-w-md max-sm:hidden pl-10 focus:border-2 focus:border-primary-red text-zinc-500 font-normal transition-all duration-150 ease-out hover:ease-in outline outline-1 outline-primary-white hover:outline-2 hover:outline-primary-red hover:shadow-primary-red"
+          className="max-w-md max-sm:hidden pl-10 pr-2 focus:border-2 focus:border-primary-red text-zinc-500 font-normal transition-all duration-150 ease-out hover:ease-in outline outline-1 outline-primary-white hover:outline-primary-red hover:shadow-primary-red"
           onClick={() => setOpen(true)}
         >
           Search courses & professors...
@@ -75,7 +67,7 @@ export default function NavSearchBar({ courses, professors }: Props) {
         </Button>
       </div>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <Command className="bg-primary-black">
+        <Command className="bg-primary-black max-sm:rounded">
           <CommandInput placeholder="Search courses & professors..." />
           <CommandList className="text-primary-white">
             <CommandEmpty>No results found</CommandEmpty>
@@ -105,20 +97,11 @@ export default function NavSearchBar({ courses, professors }: Props) {
           </CommandList>
         </Command>
       </CommandDialog>
-      <Dialog>
-        <DialogTrigger className="sm:hidden">
-          <IoSearchSharp
-            size={24}
-            className="sm:absolute sm:left-2 sm:top-1/2 sm:transform sm:-translate-y-1/2"
-          />
-        </DialogTrigger>
-        <DialogContent className="w-10/12 bg-primary-black pt-12 rounded">
-          <DialogHeader>
-            <DialogTitle>Search courses and professors</DialogTitle>
-          </DialogHeader>
-          <Input className="focus:border-2 focus:border-primary-red" />
-        </DialogContent>
-      </Dialog>
+      <IoSearchSharp
+        size={24}
+        className="sm:hidden sm:absolute sm:left-2 sm:top-1/2 sm:transform sm:-translate-y-1/2"
+        onClick={() => setOpen(true)}
+      />
     </div>
   );
 }

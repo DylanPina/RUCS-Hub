@@ -41,7 +41,7 @@ export default function CourseFilterYear() {
     <div className="flex flex-col space-y-1">
       <label className="text-primary-white text-xs">Year</label>
       <Select value={year} onValueChange={setYearParam}>
-        <SelectTrigger className="w-fit">
+        <SelectTrigger className="aria-expanded:border-primary-red hover:border-primary-red transition duration-150 ease-out hover:ease-in">
           <SelectValue placeholder="Select a year..." />
         </SelectTrigger>
         <SelectContent>

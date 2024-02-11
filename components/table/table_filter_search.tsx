@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useRef } from "react";
 import { IoFilter } from "react-icons/io5";
 import { Input } from "../shadcn/ui/input";
 
@@ -12,8 +14,26 @@ export default function TableFilterSearch({
   setGlobalFilter,
   placeHolder,
 }: Props) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Effect hook to add and remove the event listener
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "/") {
+        event.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   return (
-    <div className="flex flex-col space-y-1">
+    <div className="flex w-lg flex-col space-y-1">
       <label className="text-primary-white text-xs">Filter</label>
       <div className="relative w-full">
         <IoFilter
@@ -24,8 +44,14 @@ export default function TableFilterSearch({
           placeholder={placeHolder}
           value={globalFilter || ""}
           onChange={(event) => setGlobalFilter(event.target.value)}
-          className="max-w-sm pl-8 focus:border-2 focus:border-primary-red transition-all duration-150 ease-out hover:ease-in"
+          ref={inputRef}
+          className="pl-8 pr-8 focus:border-2 focus:border-primary-red hover:border-primary-red transition-all duration-150 ease-out hover:ease-in"
         />
+        <p className="max-sm:hidden absolute text-xs text-zinc-400 right-2 top-1/2 transform -translate-y-1/2">
+          <kbd className="inline-flex ml-3 select-none items-center gap-1 rounded bg-primary-white/10 px-2 py-1 text-muted-foreground">
+            /
+          </kbd>
+        </p>
       </div>
     </div>
   );

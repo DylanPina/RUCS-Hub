@@ -41,7 +41,7 @@ export default function CourseFilterTerm() {
     <div className="flex flex-col space-y-1">
       <label className="text-primary-white text-xs">Term</label>
       <Select value={term} onValueChange={setTermParam}>
-        <SelectTrigger className="selection:border selection:border-red-400">
+        <SelectTrigger className="aria-expanded:border-primary-red hover:border-primary-red transition duration-150 ease-out hover:ease-in">
           <SelectValue placeholder="Select a term..." />
         </SelectTrigger>
         <SelectContent>

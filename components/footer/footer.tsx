@@ -17,13 +17,13 @@ export default function Footer() {
         <h2>
           <Link href={DYLAN_PINA_GITHUB_URL}>
             <span className="px-1 text-xs text-primary-white cursor-pointer hover:font-black transition-all duration-150 ease-out hover:ease-in">
-              Dylan<span className="max-sm:hidden"> Pina</span>
+              Dylan Pina
             </span>
           </Link>
           |
           <Link href={JACK_BOGART_GITHUB_URL}>
             <span className="px-1 text-xs text-primary-white cursor-pointer hover:font-black transition-all duration-150 ease-out hover:ease-in">
-              Jack<span className="max-sm:hidden"> Bogart</span>
+              Jack Bogart
             </span>
           </Link>
         </h2>

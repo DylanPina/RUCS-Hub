@@ -76,8 +76,8 @@ export default function CourseTable({ data }: CourseTableProps) {
   return (
     <div className="min-w-[75%] max-lg:w-screen max-lg:px-4">
       <div className="flex place-items-center py-4">
-        <div className="flex content-center md:space-x-4 max-md:flex-col-reverse">
-          <div className="max-md:pt-4">
+        <div className="flex w-full sm:content-center md:space-x-4 max-md:flex-col-reverse">
+          <div className="max-sm:w-full sm:max-w-[300px] max-md:pt-4">
             <TableFilterSearch
               globalFilter={globalFilter}
               setGlobalFilter={setGlobalFilter}
