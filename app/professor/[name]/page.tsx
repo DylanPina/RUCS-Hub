@@ -1,6 +1,6 @@
 import { queryProfessorByName } from "@/lib/data/professor";
 import { ProfessorPage } from "@/lib/definitions/professor";
-import { titleCase, kebabCaseToTitleCase } from "@/lib/utils";
+import { kebabCaseToTitleCase } from "@/lib/utils";
 import type { Metadata } from "next";
 import ProfessorBanner from "../professor_banner";
 
@@ -26,12 +26,7 @@ export default async function Page({ params }: Props) {
 
   return (
     <div className="flex flex-col">
-      <ProfessorBanner
-        name={`${titleCase(professor.firstName)} ${titleCase(
-          professor.lastName,
-        )}`}
-        professor={professor}
-      />
+      <ProfessorBanner professor={professor} />
     </div>
   );
 }

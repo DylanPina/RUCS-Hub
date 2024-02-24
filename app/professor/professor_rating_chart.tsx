@@ -53,14 +53,13 @@ export default class ProfessorReviewChart extends PureComponent {
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={chartData}>
           <CartesianGrid strokeDasharray="3 3" />
-          <Legend />
           <XAxis
             name="rating"
-            tick={{ stroke: "#18181b" }}
+            tick={{ stroke: "#fafafa" }}
             tickFormatter={(value: number) => String(Number(value) + 1)}
           />
-          <YAxis name="count" tick={{ stroke: "#18181b" }} />
-          <Bar dataKey="rating" fill="#18181b">
+          <YAxis name="count" tick={{ stroke: "#fafafa" }} />
+          <Bar dataKey="rating" fill="#E11D48">
             <LabelList dataKey="rating" content={renderCustomLabel} />
           </Bar>
         </BarChart>
