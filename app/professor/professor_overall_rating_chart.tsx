@@ -9,8 +9,9 @@ import {
   YAxis,
   CartesianGrid,
   ResponsiveContainer,
-  Legend,
   LabelList,
+  Legend,
+  Label,
 } from "recharts";
 
 const renderCustomLabel = (props: any) => {
@@ -31,7 +32,7 @@ const renderCustomLabel = (props: any) => {
   ) : null;
 };
 
-export default class ProfessorReviewChart extends PureComponent {
+export default class ProfessorOverallRatingChart extends PureComponent {
   render() {
     const { reviews } = this.props;
 

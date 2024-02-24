@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/shadcn/ui/button";
 import React, { useState } from "react";
-import ProfessorRatingChart from "./professor_rating_chart";
 import { ProfessorPage } from "@/lib/definitions/professor";
 import { titleCase } from "@/lib/utils";
 import {
@@ -12,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn/ui/select";
+import ProfessorOverallRatingChart from "./professor_overall_rating_chart";
 
 interface Props {
   professor: ProfessorPage;
@@ -24,7 +24,7 @@ export default function ProfessorBanner({ professor }: Props) {
   const name = `${titleCase(firstName)} ${titleCase(lastName)}`;
 
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between space-x-10">
       <div className="flex w-1/2 bg-primary-red outline outline-1 outline-primary-white rounded py-3 px-4">
         <div className="flex flex-col place-content-between min-w-fit space-y-4">
           <div className="flex flex-col space-y-1">
@@ -69,10 +69,10 @@ export default function ProfessorBanner({ professor }: Props) {
           </div>
         </div>
       </div>
-      <div className="flex flex-col space-y-4 w-1/4">
-        <div className="w-fit ml-7">
+      <div className="flex flex-col w-1/2 space-y-4">
+        <div className="w-fit">
           <Select value={ratingChart} onValueChange={setRatingChart}>
-            <SelectTrigger className="border-2 border-primary-white text-primary-white font-semibold">
+            <SelectTrigger className="ml-7 border-2 border-primary-white text-primary-white font-semibold">
               <SelectValue className="text-primary-black">
                 {ratingChart}
               </SelectValue>
@@ -85,26 +85,7 @@ export default function ProfessorBanner({ professor }: Props) {
           </Select>
         </div>
         <div className="w-full h-full">
-          <ProfessorRatingChart reviews={reviews} />
-        </div>
-      </div>
-      <div className="flex flex-col space-y-4 w-1/4">
-        <div className="w-fit ml-7">
-          <Select value={ratingChart} onValueChange={setRatingChart}>
-            <SelectTrigger className="border-2 border-primary-white text-primary-white font-semibold">
-              <SelectValue className="text-primary-black">
-                {ratingChart}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent className="text-primary-black">
-              <SelectItem value="Overall">Overall</SelectItem>
-              <SelectItem value="Difficulty">Difficulty</SelectItem>
-              <SelectItem value="Would Take Again">Would Take Again</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="w-full h-full">
-          <ProfessorRatingChart reviews={reviews} />
+          <ProfessorOverallRatingChart reviews={reviews} />
         </div>
       </div>
     </div>
