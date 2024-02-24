@@ -19,7 +19,7 @@ import {
   WEBREG_BASE_URL,
 } from "@/lib/constants";
 import { JSDOM } from "jsdom";
-import { Course, PrismaClient, Review } from "@prisma/client";
+import { Course, PrismaClient, Review, Section } from "@prisma/client";
 import { createProfessorNameIdMap } from "./professor";
 
 /**
@@ -667,6 +667,44 @@ export async function fetchCourseSections(): Promise<any[]> {
   );
 
   return courseSections;
+}
+
+/** Query all course section from the database
+ *
+ * @return - All course sections from the database
+ */
+export async function queryAllCourseSections(): Promise<Section[]> {
+  const prisma = new PrismaClient();
+  const courseSections: Section[] = await prisma.section.findMany();
+
+  if (!courseSections) {
+    console.error("Failed to find any course sections");
+  }
+
+  return courseSections;
+}
+
+/**
+ * Returns the unique course IDs that the professor is currently teaching
+ *
+ * @param professorId - ID for the professor we are interested in
+ * @return - Unique course IDs that the professor is currently teaching
+ */
+export async function getCoursesBeingTaughtByProfessor(
+  professorId: number,
+): Promise<number[]> {
+  const sections = await queryAllCourseSections();
+
+  const courseCodes = sections
+    .filter(
+      (section: Section) =>
+        section.professorId === professorId &&
+        section.year === 2024 &&
+        section.term === Term.Spring,
+    )
+    .map((section) => section.courseCode);
+
+  return Array.from(new Set(courseCodes));
 }
 
 /**

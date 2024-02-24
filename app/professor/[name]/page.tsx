@@ -3,6 +3,7 @@ import { ProfessorPage } from "@/lib/definitions/professor";
 import { kebabCaseToTitleCase } from "@/lib/utils";
 import type { Metadata } from "next";
 import ProfessorBanner from "../professor_banner";
+import { getCoursesBeingTaughtByProfessor } from "@/lib/data/course";
 
 type Props = {
   params: { name: string };
@@ -24,9 +25,16 @@ export default async function Page({ params }: Props) {
     lastName.toUpperCase(),
   );
 
+  const currentlyTeaching = await getCoursesBeingTaughtByProfessor(
+    professor.id,
+  );
+
   return (
     <div className="flex flex-col">
-      <ProfessorBanner professor={professor} />
+      <ProfessorBanner
+        professor={professor}
+        currentlyTeaching={currentlyTeaching}
+      />
     </div>
   );
 }

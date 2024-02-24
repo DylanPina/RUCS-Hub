@@ -36,8 +36,6 @@ export default class ProfessorDifficultyRatingChart extends PureComponent {
 
     const ratings = Array.from({ length: 10 }, (_, index) => index + 1);
 
-    console.log(reviews);
-
     const ratingCount = ratings.map((rating) => {
       return reviews.filter(
         (review: Review) => review.difficultyRating === rating,

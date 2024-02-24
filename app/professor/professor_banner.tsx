@@ -3,7 +3,7 @@
 import { Button } from "@/components/shadcn/ui/button";
 import React, { useState } from "react";
 import { ProfessorPage } from "@/lib/definitions/professor";
-import { titleCase } from "@/lib/utils";
+import { getCourseRoute, titleCase } from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -13,13 +13,19 @@ import {
 } from "@/components/shadcn/ui/select";
 import ProfessorOverallRatingChart from "./professor_overall_rating_chart";
 import ProfessorDifficultyRatingChart from "./professor_difficulty_rating_chart";
+import { useRouter } from "next/navigation";
 
 interface Props {
   professor: ProfessorPage;
+  currentlyTeaching: number[];
 }
 
-export default function ProfessorBanner({ professor }: Props) {
+export default function ProfessorBanner({
+  professor,
+  currentlyTeaching,
+}: Props) {
   const [ratingChart, setRatingChart] = useState("Overall");
+  const router = useRouter();
 
   const { firstName, lastName, overall, difficulty, reviews } = professor;
   const name = `${titleCase(firstName)} ${titleCase(lastName)}`;
@@ -54,8 +60,23 @@ export default function ProfessorBanner({ professor }: Props) {
               <h3 className="text-md text-primary-white">
                 Currently Teaching:{" "}
                 <span className="not-italic font-bold">
-                  <span className="underline">01:198:462</span>,{" "}
-                  <span className="underline">01:198:440</span>
+                  {currentlyTeaching.map(
+                    (courseCode: number, index: number, array: number[]) => (
+                      <React.Fragment key={courseCode}>
+                        <span
+                          className="underline cursor-pointer"
+                          onClick={() =>
+                            router.push(getCourseRoute(courseCode))
+                          }
+                        >
+                          01:198:{courseCode}
+                        </span>
+                        <span className="font-normal">
+                          {index < array.length - 1 && ", "}
+                        </span>
+                      </React.Fragment>
+                    ),
+                  )}
                 </span>
               </h3>
             </div>

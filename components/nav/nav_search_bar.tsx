@@ -14,7 +14,7 @@ import {
 import { Button } from "../shadcn/ui/button";
 import { CourseTableColumn } from "@/lib/definitions/course";
 import { ProfessorTableColumn } from "@/lib/definitions/professor";
-import { getProfessorRoute, titleCase } from "@/lib/utils";
+import { getCourseRoute, getProfessorRoute, titleCase } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
 interface Props {
@@ -39,7 +39,7 @@ export default function NavSearchBar({ courses, professors }: Props) {
 
   function handleCourseSelect(course: CourseTableColumn) {
     setOpen(false);
-    router.push(`/course/${course.courseCode}`);
+    router.push(getCourseRoute(course.courseCode));
   }
 
   function handleProfessorSelect(professor: ProfessorTableColumn) {

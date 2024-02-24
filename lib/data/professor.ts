@@ -169,6 +169,7 @@ function getProfessorPageRatings(professor: any): any {
       : 0;
 
   return {
+    id: professor.id,
     firstName: professor.firstName,
     lastName: professor.lastName,
     overall: reviewsWithOverallRating.length ? averageOverallRating : -1,
