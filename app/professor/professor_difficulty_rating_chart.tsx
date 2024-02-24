@@ -30,15 +30,18 @@ const renderCustomLabel = (props: any) => {
   ) : null;
 };
 
-export default class ProfessorOverallRatingChart extends PureComponent {
+export default class ProfessorDifficultyRatingChart extends PureComponent {
   render() {
     const { reviews } = this.props;
 
     const ratings = Array.from({ length: 10 }, (_, index) => index + 1);
 
+    console.log(reviews);
+
     const ratingCount = ratings.map((rating) => {
-      return reviews.filter((review: Review) => review.rating === rating)
-        .length;
+      return reviews.filter(
+        (review: Review) => review.difficultyRating === rating,
+      ).length;
     });
 
     const chartData = ratingCount.map((rating, index) => {

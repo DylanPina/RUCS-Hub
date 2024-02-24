@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/shadcn/ui/select";
 import ProfessorOverallRatingChart from "./professor_overall_rating_chart";
+import ProfessorDifficultyRatingChart from "./professor_difficulty_rating_chart";
 
 interface Props {
   professor: ProfessorPage;
@@ -24,7 +25,7 @@ export default function ProfessorBanner({ professor }: Props) {
   const name = `${titleCase(firstName)} ${titleCase(lastName)}`;
 
   return (
-    <div className="flex justify-between space-x-10">
+    <div className="flex justify-between">
       <div className="flex w-1/2 bg-primary-red outline outline-1 outline-primary-white rounded py-3 px-4">
         <div className="flex flex-col place-content-between min-w-fit space-y-4">
           <div className="flex flex-col space-y-1">
@@ -80,12 +81,16 @@ export default function ProfessorBanner({ professor }: Props) {
             <SelectContent className="text-primary-black">
               <SelectItem value="Overall">Overall</SelectItem>
               <SelectItem value="Difficulty">Difficulty</SelectItem>
-              <SelectItem value="Would Take Again">Would Take Again</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="w-full h-full">
-          <ProfessorOverallRatingChart reviews={reviews} />
+          {ratingChart === "Overall" && (
+            <ProfessorOverallRatingChart reviews={reviews} />
+          )}
+          {ratingChart === "Difficulty" && (
+            <ProfessorDifficultyRatingChart reviews={reviews} />
+          )}
         </div>
       </div>
     </div>
