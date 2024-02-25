@@ -29,6 +29,12 @@ export default function ProfessorBanner({
 
   const { firstName, lastName, overall, difficulty, reviews } = professor;
   const name = `${titleCase(firstName)} ${titleCase(lastName)}`;
+  const totalOverallRatings = reviews.filter(
+    (review) => review.professorQualityRating !== null,
+  ).length;
+  const totalDifficultyRatings = reviews.filter(
+    (review) => review.professorDifficultyRating !== null,
+  ).length;
 
   return (
     <div className="flex justify-between">
@@ -37,21 +43,49 @@ export default function ProfessorBanner({
           <div className="flex flex-col space-y-1">
             <h1 className="text-4xl text-primary-black font-black">{name}</h1>
             <div className="flex flex-col space-y-1">
+              {totalOverallRatings > 0 ? (
+                <h3 className="text-md text-primary-white">
+                  Overall:{" "}
+                  <span className="not-italic font-bold">{overall}</span>
+                  <span className="not-italic text-xs text-primary-white/50">
+                    /10
+                  </span>{" "}
+                  <span className="text-xs italic text-primary-white/50">
+                    based on{" "}
+                    <span className="underline">
+                      {totalOverallRatings} reviews
+                    </span>
+                  </span>
+                </h3>
+              ) : (
+                <h3 className="text-md text-primary-white">
+                  Overall: <span className="not-italic font-bold">?</span>
+                </h3>
+              )}
+              {totalDifficultyRatings > 0 ? (
+                <h3 className="text-md text-primary-white">
+                  Difficulty:{" "}
+                  <span className="not-italic font-bold">{difficulty}</span>
+                  <span className="not-italic text-primary-white/50 text-xs">
+                    /10
+                  </span>{" "}
+                  <span className="text-xs italic text-primary-white/50">
+                    based on{" "}
+                    <span className="underline">
+                      {totalDifficultyRatings} reviews
+                    </span>
+                  </span>
+                </h3>
+              ) : (
+                <h3 className="text-md text-primary-white">
+                  Difficulty: <span className="not-italic font-bold">?</span>
+                </h3>
+              )}
               <h3 className="text-md text-primary-white">
-                Overall: <span className="not-italic font-bold">{overall}</span>
-                <span className="not-italic text-primary-white/50 text-xs">
-                  /10
+                Would Take Again: <span className="font-bold">100%</span>{" "}
+                <span className="text-xs italic text-primary-white/50">
+                  based on <span className="underline">X reviews</span>
                 </span>
-              </h3>
-              <h3 className="text-md text-primary-white">
-                Difficulty:{" "}
-                <span className="not-italic font-bold">{difficulty}</span>
-                <span className="not-italic text-primary-white/50 text-xs">
-                  /10
-                </span>
-              </h3>
-              <h3 className="text-md text-primary-white">
-                Would Take Again: <span className="font-bold">100%</span>
               </h3>
               <h3 className="text-md text-primary-white">
                 Total Reviews:{" "}
