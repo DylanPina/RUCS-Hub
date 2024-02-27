@@ -217,3 +217,26 @@ export function parseProfessorName(name: string): [string, string | null] {
   const names: string[] = name.split(", ");
   return names.length === 2 ? [names[0], names[1]] : [names[0], null];
 }
+
+/**
+ * Formats a review date into a readable format
+ *
+ * @param date - Date to be formatted
+ * @return - Formatted date
+ * */
+export function formatReviewDate(date: Date): string {
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hour12: true,
+    timeZone: "America/New_York",
+    timeZoneName: "short",
+  };
+
+  const formatter = new Intl.DateTimeFormat("en-US", options);
+  return formatter.format(date);
+}

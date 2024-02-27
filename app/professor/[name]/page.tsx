@@ -2,8 +2,9 @@ import { queryProfessorByName } from "@/lib/data/professor";
 import { ProfessorPage } from "@/lib/definitions/professor";
 import { kebabCaseToTitleCase } from "@/lib/utils";
 import type { Metadata } from "next";
-import ProfessorBanner from "../professor_banner";
+import ProfessorBanner from "../professor-banner/professor_banner";
 import { getCoursesBeingTaughtByProfessor } from "@/lib/data/course";
+import ProfessorReviews from "../professor-reviews/professor_reviews";
 
 type Props = {
   params: { name: string };
@@ -30,11 +31,12 @@ export default async function Page({ params }: Props) {
   );
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col space-y-4">
       <ProfessorBanner
         professor={professor}
         currentlyTeaching={currentlyTeaching}
       />
+      <ProfessorReviews reviews={professor.reviews} />
     </div>
   );
 }

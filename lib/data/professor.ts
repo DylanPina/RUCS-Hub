@@ -22,7 +22,12 @@ export async function queryProfessorByName(
 
   const professor = await prisma.professor.findFirst({
     include: {
-      reviews: true,
+      reviews: {
+        include: {
+          course: true,
+          professor: true,
+        },
+      },
     },
     where: {
       firstName: firstName,
