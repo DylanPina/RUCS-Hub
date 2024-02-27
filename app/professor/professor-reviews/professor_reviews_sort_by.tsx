@@ -14,7 +14,7 @@ interface ProfessorReviewSortByProps {
   onSelectChange: (value: string) => void;
 }
 
-export default function ProfessorReviewSortBy({
+export default function ProfessorReviewsSortBy({
   selectedValue,
   onSelectChange,
 }: ProfessorReviewSortByProps) {

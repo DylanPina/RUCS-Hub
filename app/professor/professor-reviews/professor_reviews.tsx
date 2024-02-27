@@ -3,14 +3,18 @@
 import { Review } from "@prisma/client";
 import React, { useEffect, useState } from "react";
 import ProfessorReview from "./professor_review";
-import ProfessorReviewSortBy from "./professor_review_sort_by";
+import ProfessorReviewsSortBy from "./professor_reviews_sort_by";
+import ProfessorReviewsFilterTerm from "./professor_reviews_filter_term";
+import { getTermNameByValue } from "@/lib/utils";
 
 interface ProfessorReviewProps {
   reviews: Review[];
 }
 
 export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
+  const [filteredReviews, setFilteredReviews] = useState(reviews);
   const [sortBy, setSortBy] = useState("newest");
+  const [term, setTerm] = useState("Any");
 
   function sortReviewsByNewest(reviews: Review[]) {
     return reviews.sort((a, b) => {
@@ -76,7 +80,17 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
     } else if (sortBy === "downvotes") {
       sortReviewsByDownvotes(reviews);
     }
-  }, [sortBy, reviews]);
+
+    if (term === "Any") {
+      setFilteredReviews(reviews);
+    } else {
+      setFilteredReviews(
+        reviews.filter(
+          (review) => getTermNameByValue(review.semester) === term,
+        ),
+      );
+    }
+  }, [sortBy, term, reviews]);
 
   return (
     <div className="flex flex-col space-y-4">
@@ -85,14 +99,18 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
           Professor Reviews:
         </h3>
         <div className="flex space-x-2">
-          <ProfessorReviewSortBy
+          <ProfessorReviewsSortBy
             selectedValue={sortBy}
             onSelectChange={(value) => setSortBy(value)}
+          />
+          <ProfessorReviewsFilterTerm
+            selectedTerm={term}
+            onTermChange={setTerm}
           />
         </div>
       </div>
       <div className="flex flex-col space-y-3">
-        {reviews.map((review: Review) => (
+        {filteredReviews.map((review: Review) => (
           <ProfessorReview key={review.id} review={review} />
         ))}
       </div>

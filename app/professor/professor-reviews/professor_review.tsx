@@ -1,4 +1,4 @@
-import { formatReviewDate, titleCase } from "@/lib/utils";
+import { formatReviewDate, getTermNameByValue, titleCase } from "@/lib/utils";
 import { Review } from "@prisma/client";
 import React from "react";
 
@@ -14,11 +14,14 @@ export default function ProfessorReview({ review }: ProfessorReviewProps) {
           {review.title}
         </h3>
         <p className="text-xs text-primary-white/50">
-          01:198:{review.courseCode} {review.course.name}
+          Course: {review.course.name}
         </p>
         <p className="text-xs text-primary-white/50">
           Professor: {titleCase(review.professor.firstName)}{" "}
           {titleCase(review.professor.lastName)}
+        </p>
+        <p className="text-xs text-primary-white/50">
+          Term: {getTermNameByValue(review.semester)}
         </p>
         <p className="text-xs text-primary-white/50">
           Created at: {formatReviewDate(review.createdAt)}

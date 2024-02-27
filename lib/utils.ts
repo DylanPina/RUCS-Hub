@@ -86,6 +86,28 @@ export function getTermByValue(value: number): Term | null {
 }
 
 /**
+ * Retrieves Term name with the given value.
+ *
+ * @param value - The numeric value of the Term enum to find the enum for.
+ * @return - The Term name that matches the given value, or null if no match is found.
+ *
+ */
+export function getTermNameByValue(value: number): string | null {
+  switch (value) {
+    case 0:
+      return "Winter";
+    case 1:
+      return "Spring";
+    case 7:
+      return "Summer";
+    case 9:
+      return "Fall";
+    default:
+      return null;
+  }
+}
+
+/**
  * Retrieves Term enum with the given key name.
  *
  * @param term - The string value of the Term enum to find the enum for.
