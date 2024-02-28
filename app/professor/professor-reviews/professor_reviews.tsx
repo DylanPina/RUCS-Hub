@@ -6,6 +6,7 @@ import ProfessorReview from "./professor_review";
 import ProfessorReviewsSortBy from "./professor_reviews_sort_by";
 import ProfessorReviewsFilterTerm from "./professor_reviews_filter_term";
 import { getTermNameByValue } from "@/lib/utils";
+import ProfessorReviewsFilterYear from "./professor_reviews_filter_year";
 
 interface ProfessorReviewProps {
   reviews: Review[];
@@ -14,6 +15,7 @@ interface ProfessorReviewProps {
 export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
   const [filteredReviews, setFilteredReviews] = useState(reviews);
   const [sortBy, setSortBy] = useState("newest");
+  const [year, setYear] = useState("Any");
   const [term, setTerm] = useState("Any");
 
   function sortReviewsByNewest(reviews: Review[]) {
@@ -71,26 +73,28 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
   }
 
   useEffect(() => {
+    let sortedReviews = [...reviews];
+
     if (sortBy === "newest") {
-      sortReviewsByNewest(reviews);
+      sortedReviews = sortReviewsByNewest(sortedReviews);
     } else if (sortBy === "oldest") {
-      sortReviewsByOldest(reviews);
+      sortedReviews = sortReviewsByOldest(sortedReviews);
     } else if (sortBy === "upvotes") {
-      sortReviewsByUpvotes(reviews);
+      sortedReviews = sortReviewsByUpvotes(sortedReviews);
     } else if (sortBy === "downvotes") {
-      sortReviewsByDownvotes(reviews);
+      sortedReviews = sortReviewsByDownvotes(sortedReviews);
     }
 
-    if (term === "Any") {
-      setFilteredReviews(reviews);
-    } else {
-      setFilteredReviews(
-        reviews.filter(
-          (review) => getTermNameByValue(review.semester) === term,
-        ),
-      );
-    }
-  }, [sortBy, term, reviews]);
+    const filtered = sortedReviews.filter((review) => {
+      const yearMatches =
+        year === "Any" || review.year.toString() === year.toString();
+      const termMatches =
+        term === "Any" || getTermNameByValue(review.semester) === term;
+      return yearMatches && termMatches;
+    });
+
+    setFilteredReviews(filtered);
+  }, [sortBy, term, reviews, year]);
 
   return (
     <div className="flex flex-col space-y-4">
@@ -103,6 +107,10 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
             selectedValue={sortBy}
             onSelectChange={(value) => setSortBy(value)}
           />
+          <ProfessorReviewsFilterYear
+            selectedYear={year}
+            onYearChange={setYear}
+          />
           <ProfessorReviewsFilterTerm
             selectedTerm={term}
             onTermChange={setTerm}
@@ -110,9 +118,22 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
         </div>
       </div>
       <div className="flex flex-col space-y-3">
-        {filteredReviews.map((review: Review) => (
-          <ProfessorReview key={review.id} review={review} />
-        ))}
+        {filteredReviews.length ? (
+          filteredReviews.map((review: Review) => (
+            <ProfessorReview key={review.id} review={review} />
+          ))
+        ) : reviews.length ? (
+          <p className="font-bold text-primary-red">
+            No reviews found for the{" "}
+            <span className="underline">
+              {term}
+              {year ? " " + year : ""}
+            </span>{" "}
+            term
+          </p>
+        ) : (
+          <p className="font-bold text-primary-red">No reviews found</p>
+        )}
       </div>
     </div>
   );

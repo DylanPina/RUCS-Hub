@@ -30,6 +30,8 @@ export default async function Page({ params }: Props) {
     professor.id,
   );
 
+  console.log(`Reviews: ${JSON.stringify(professor.reviews, null, 2)}`);
+
   return (
     <div className="flex flex-col space-y-4">
       <ProfessorBanner

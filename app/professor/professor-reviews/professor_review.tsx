@@ -21,7 +21,7 @@ export default function ProfessorReview({ review }: ProfessorReviewProps) {
           {titleCase(review.professor.lastName)}
         </p>
         <p className="text-xs text-primary-white/50">
-          Term: {getTermNameByValue(review.semester)}
+          Term: {getTermNameByValue(review.semester)} {review.year}
         </p>
         <p className="text-xs text-primary-white/50">
           Created at: {formatReviewDate(review.createdAt)}
