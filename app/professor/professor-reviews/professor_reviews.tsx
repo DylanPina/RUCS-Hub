@@ -8,6 +8,7 @@ import ProfessorReviewsFilterTerm from "./professor_reviews_filter_term";
 import { getTermNameByValue } from "@/lib/utils";
 import ProfessorReviewsFilterYear from "./professor_reviews_filter_year";
 import ProfessorReviewsFilterCourse from "./professor_reviews_filter_course";
+import ProfessorReviewsFilterSearch from "./professor_reviews_filter_search";
 
 interface ProfessorReviewProps {
   reviews: Review[];
@@ -15,6 +16,7 @@ interface ProfessorReviewProps {
 
 export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
   const [filteredReviews, setFilteredReviews] = useState(reviews);
+  const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("newest");
   const [year, setYear] = useState("Any");
   const [term, setTerm] = useState("Any");
@@ -98,36 +100,47 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
       const termMatches =
         term === "Any" || getTermNameByValue(review.semester) === term;
       const courseMatches = course === "Any" || review.course.name === course;
-      return yearMatches && termMatches && courseMatches;
+      const searchMatches =
+        review.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        review.content.toLowerCase().includes(searchTerm.toLowerCase());
+      return yearMatches && termMatches && courseMatches && searchMatches;
     });
 
     setFilteredReviews(filtered);
-  }, [sortBy, term, reviews, year, course]);
+  }, [sortBy, term, reviews, year, course, searchTerm]);
 
   return (
     <div className="flex flex-col space-y-4">
-      <div className="flex place-content-between space-x-4">
+      <div className="flex flex-col">
         <h3 className="text-xl text-primary-white font-bold mt-auto">
           Professor Reviews:
         </h3>
-        <div className="flex space-x-2">
-          <ProfessorReviewsSortBy
-            selectedValue={sortBy}
-            onSelectChange={(value) => setSortBy(value)}
-          />
-          <ProfessorReviewsFilterYear
-            selectedYear={year}
-            onYearChange={setYear}
-          />
-          <ProfessorReviewsFilterTerm
-            selectedTerm={term}
-            onTermChange={setTerm}
-          />
-          <ProfessorReviewsFilterCourse
-            courses={courses}
-            selectedCourse={course}
-            onCourseChange={setCourse}
-          />
+        <div className="flex place-content-between w-full space-y-1">
+          <div className="max-sm:w-full sm:max-w-[300px] self-end">
+            <ProfessorReviewsFilterSearch
+              onFilterChange={(value: string) => setSearchTerm(value)}
+              placeHolder="Filter reviews..."
+            />
+          </div>
+          <div className="flex space-x-2">
+            <ProfessorReviewsSortBy
+              selectedValue={sortBy}
+              onSelectChange={(value) => setSortBy(value)}
+            />
+            <ProfessorReviewsFilterYear
+              selectedYear={year}
+              onYearChange={setYear}
+            />
+            <ProfessorReviewsFilterTerm
+              selectedTerm={term}
+              onTermChange={setTerm}
+            />
+            <ProfessorReviewsFilterCourse
+              courses={courses}
+              selectedCourse={course}
+              onCourseChange={setCourse}
+            />
+          </div>
         </div>
       </div>
       <div className="flex flex-col space-y-3">
@@ -135,7 +148,7 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
           filteredReviews.map((review: Review) => (
             <ProfessorReview key={review.id} review={review} />
           ))
-        ) : reviews.length ? (
+        ) : reviews.length && !searchTerm ? (
           <p className="font-bold text-primary-red">
             No reviews found for{" "}
             {course && course !== "Any" && (

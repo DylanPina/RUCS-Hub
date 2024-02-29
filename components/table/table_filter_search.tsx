@@ -16,7 +16,6 @@ export default function TableFilterSearch({
 }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Effect hook to add and remove the event listener
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "/") {
