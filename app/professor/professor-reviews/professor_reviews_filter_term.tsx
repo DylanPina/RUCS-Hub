@@ -20,7 +20,7 @@ export default function ProfessorReviewsFilterTerm({
   onTermChange,
 }: ProfessorReviewsFilterTermProps) {
   const terms = getValidTerms(null);
-  terms.push("Any");
+  terms.unshift("Any");
 
   return (
     <div className="flex flex-col space-y-2">

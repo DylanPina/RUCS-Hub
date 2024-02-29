@@ -20,7 +20,7 @@ export default function ProfessorReviewsFilterYear({
   onYearChange,
 }: ProfessorReviewsFilterYearProps) {
   const years = getYears().map((year) => year.toString());
-  years.push("Any");
+  years.unshift("Any");
 
   return (
     <div className="flex flex-col space-y-2">

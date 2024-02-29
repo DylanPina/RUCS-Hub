@@ -7,6 +7,7 @@ import ProfessorReviewsSortBy from "./professor_reviews_sort_by";
 import ProfessorReviewsFilterTerm from "./professor_reviews_filter_term";
 import { getTermNameByValue } from "@/lib/utils";
 import ProfessorReviewsFilterYear from "./professor_reviews_filter_year";
+import ProfessorReviewsFilterCourse from "./professor_reviews_filter_course";
 
 interface ProfessorReviewProps {
   reviews: Review[];
@@ -17,6 +18,12 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
   const [sortBy, setSortBy] = useState("newest");
   const [year, setYear] = useState("Any");
   const [term, setTerm] = useState("Any");
+  const [course, setCourse] = useState("Any");
+
+  const courses = [
+    "Any",
+    ...new Set(reviews.map((review: Review) => review.course.name)),
+  ];
 
   function sortReviewsByNewest(reviews: Review[]) {
     return reviews.sort((a, b) => {
@@ -90,11 +97,12 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
         year === "Any" || review.year.toString() === year.toString();
       const termMatches =
         term === "Any" || getTermNameByValue(review.semester) === term;
-      return yearMatches && termMatches;
+      const courseMatches = course === "Any" || review.course.name === course;
+      return yearMatches && termMatches && courseMatches;
     });
 
     setFilteredReviews(filtered);
-  }, [sortBy, term, reviews, year]);
+  }, [sortBy, term, reviews, year, course]);
 
   return (
     <div className="flex flex-col space-y-4">
@@ -115,6 +123,11 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
             selectedTerm={term}
             onTermChange={setTerm}
           />
+          <ProfessorReviewsFilterCourse
+            courses={courses}
+            selectedCourse={course}
+            onCourseChange={setCourse}
+          />
         </div>
       </div>
       <div className="flex flex-col space-y-3">
@@ -124,12 +137,20 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
           ))
         ) : reviews.length ? (
           <p className="font-bold text-primary-red">
-            No reviews found for the{" "}
+            No reviews found for{" "}
+            {course && course !== "Any" && (
+              <span>
+                <span className="underline">{course}</span>
+                {" in "}
+              </span>
+            )}
+            {term && term !== "Any" && "the"}{" "}
             <span className="underline">
-              {term}
-              {year ? " " + year : ""}
+              {term && term !== "Any" ? term : ""}
+              {year && year !== "Any" ? " " + year : ""}
             </span>{" "}
             term
+            {(year && year === "Any") || (term && term === "Any") ? "s" : ""}
           </p>
         ) : (
           <p className="font-bold text-primary-red">No reviews found</p>
