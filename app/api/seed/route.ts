@@ -5,7 +5,8 @@ import {
 import { fetchProfessorNames } from "@/lib/data/professor";
 import { mockReviews } from "@/lib/mock-data/review-mock-data";
 import { mockUsers } from "@/lib/mock-data/user-mock-data";
-import { PrismaClient, Professor, Review } from "@prisma/client";
+import { mockVotes } from "@/lib/mock-data/vote-mock-data";
+import { PrismaClient, Professor, Review, Vote } from "@prisma/client";
 
 export async function GET() {
   const prisma = new PrismaClient();
@@ -28,6 +29,7 @@ async function seedDatabase(prisma: any): Promise<Response> {
   const seedProfessorsResponse: Response = await seedProfessors(prisma);
   const seedSectionsResponse: Response = await seedSections(prisma);
   const seedReviewsResponse: Response = await seedMockReviews(prisma);
+  const seedVotesResponse: Response = await seedVotes(prisma);
 
   return Response.json({
     users: seedUsersResponse,
@@ -35,6 +37,7 @@ async function seedDatabase(prisma: any): Promise<Response> {
     professors: seedProfessorsResponse,
     sections: seedSectionsResponse,
     reviews: seedReviewsResponse,
+    votes: seedVotesResponse,
   });
 }
 
@@ -116,9 +119,12 @@ async function seedMockReviews(prisma: any): Promise<Response> {
  * @param prisma - The Prisma client
  */
 async function seedVotes(prisma: any): Promise<Response> {
-  const createVotes: any = await prisma.vote.createMany({
-    data: [],
+  console.log(`Mock votes: ${mockVotes}`);
+  const createVotes: Vote[] | null = await prisma.vote.createMany({
+    data: mockVotes,
   });
+
+  return Response.json(createVotes);
 }
 
 /**
