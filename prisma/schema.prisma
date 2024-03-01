@@ -13,6 +13,7 @@ model User {
   createdAt DateTime @default(now())
   email     String   @unique
   reviews   Review[]
+  votes     Vote[]
 }
 
 model Professor {
@@ -58,8 +59,7 @@ model Review {
   createdAt                 DateTime   @default(now())
   lastModified              DateTime   @default(now())
   rating                    Int?
-  upvotes                   Int?
-  downvotes                 Int?
+  votes                     Vote[]
   difficultyRating          Int?
   professor                 Professor? @relation(fields: [professorId], references: [id])
   professorId               Int?
@@ -69,4 +69,14 @@ model Review {
   bookRating                Int?
   piazzaRating              Int?
   workload                  Int?
+}
+
+model Vote {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  review    Review   @relation(fields: [reviewId], references: [id])
+  reviewId  Int
+  upvote    Boolean
+  createdAt DateTime @default(now())
 }

@@ -111,6 +111,17 @@ async function seedMockReviews(prisma: any): Promise<Response> {
 }
 
 /**
+ * Seed the database with votes
+ *
+ * @param prisma - The Prisma client
+ */
+async function seedVotes(prisma: any): Promise<Response> {
+  const createVotes: any = await prisma.vote.createMany({
+    data: [],
+  });
+}
+
+/**
  * Seed the database with course, professor, and review data
  *
  * @param prisma - The Prisma client
