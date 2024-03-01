@@ -1,6 +1,7 @@
+import React from "react";
+import ProfessorReviewVotes from "./professor_review_votes";
 import { formatReviewDate, getTermNameByValue, titleCase } from "@/lib/utils";
 import { Review } from "@prisma/client";
-import React from "react";
 
 interface ProfessorReviewProps {
   review: Review;
@@ -103,6 +104,12 @@ export default function ProfessorReview({ review }: ProfessorReviewProps) {
       <div className="flex flex-col space-y-1">
         <h3 className="text-sm text-primary-white font-semibold">Review:</h3>
         <p className="text-xs text-primary-white/50">{review.content}</p>
+      </div>
+      <div className="flex space-x-3">
+        <ProfessorReviewVotes
+          upvotes={review.upvotes ?? 0}
+          downvotes={review.downvotes ?? 0}
+        />
       </div>
     </div>
   );
