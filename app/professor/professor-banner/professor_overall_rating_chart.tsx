@@ -1,7 +1,6 @@
 "use client";
 
-import { Review } from "@prisma/client";
-import React, { PureComponent } from "react";
+import React from "react";
 import {
   BarChart,
   Bar,
@@ -11,8 +10,9 @@ import {
   ResponsiveContainer,
   LabelList,
 } from "recharts";
+import { Review } from "@prisma/client";
 
-const renderCustomLabel = (props: any) => {
+function renderCustomLabel(props: any) {
   const { x, y, width, height, value } = props;
   const labelX = x + width / 2;
   const labelY = y + height / 2 + (props.offset || 0);
@@ -28,41 +28,31 @@ const renderCustomLabel = (props: any) => {
       {value}
     </text>
   ) : null;
-};
+}
 
-export default class ProfessorOverallRatingChart extends PureComponent {
-  render() {
-    const { reviews } = this.props;
+export default function ProfessorOverallRatingChart(props: any) {
+  const { reviews } = props;
+  const ratings = Array.from({ length: 10 }, (_, index) => index + 1);
 
-    const ratings = Array.from({ length: 10 }, (_, index) => index + 1);
+  const ratingCount = ratings.map((rating) => {
+    return reviews.filter((review: Review) => review.rating === rating).length;
+  });
 
-    const ratingCount = ratings.map((rating) => {
-      return reviews.filter((review: Review) => review.rating === rating)
-        .length;
-    });
+  const chartData = ratingCount.map((count, index) => ({
+    rating: index + 1,
+    count,
+  }));
 
-    const chartData = ratingCount.map((rating, index) => {
-      return {
-        rating: rating,
-        count: index + 1,
-      };
-    });
-
-    return (
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={chartData}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis
-            name="rating"
-            tick={{ stroke: "#fafafa" }}
-            tickFormatter={(value: number) => String(Number(value) + 1)}
-          />
-          <YAxis name="count" tick={{ stroke: "#fafafa" }} />
-          <Bar dataKey="rating" fill="#E11D48">
-            <LabelList dataKey="rating" content={renderCustomLabel} />
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
-    );
-  }
+  return (
+    <ResponsiveContainer width="100%" height="100%">
+      <BarChart data={chartData}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="rating" tick={{ stroke: "#fafafa" }} />
+        <YAxis tick={{ stroke: "#fafafa" }} />
+        <Bar dataKey="count" fill="#E11D48">
+          <LabelList dataKey="count" content={renderCustomLabel} />
+        </Bar>
+      </BarChart>
+    </ResponsiveContainer>
+  );
 }
