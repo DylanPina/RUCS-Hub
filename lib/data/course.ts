@@ -19,8 +19,9 @@ import {
   WEBREG_BASE_URL,
 } from "@/lib/constants";
 import { JSDOM } from "jsdom";
-import { Course, PrismaClient, Review, Section } from "@prisma/client";
+import { Course, PrismaClient, Section } from "@prisma/client";
 import { createProfessorNameIdMap } from "./professor";
+import { Review } from "../definitions/review";
 
 /**
  * Queries a course by courseId

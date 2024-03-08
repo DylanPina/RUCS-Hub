@@ -1,12 +1,12 @@
-import { Review } from "@prisma/client";
+import { Review } from "./review";
 
 export type Course = {
-  courseCode: number;
-  courseName: string;
-  synopsisUrl: string | null;
-  offered: [number, Term][];
-  prereqs: string[] | null;
+  code: number;
+  name: string;
+  prereqs: string[];
+  synopsisUrl: string;
   credits: number;
+  reviews?: Review[];
   sections: CourseSection[];
 };
 

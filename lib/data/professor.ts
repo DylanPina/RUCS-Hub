@@ -26,6 +26,7 @@ export async function queryProfessorByName(
         include: {
           course: true,
           professor: true,
+          votes: true,
         },
       },
     },

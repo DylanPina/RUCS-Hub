@@ -1,6 +1,5 @@
 "use client";
 
-import { Review } from "@prisma/client";
 import React, { useEffect, useState } from "react";
 import ProfessorReview from "./professor_review";
 import ProfessorReviewsSortBy from "./professor_reviews_sort_by";
@@ -9,6 +8,8 @@ import { getTermNameByValue } from "@/lib/utils";
 import ProfessorReviewsFilterYear from "./professor_reviews_filter_year";
 import ProfessorReviewsFilterCourse from "./professor_reviews_filter_course";
 import ProfessorReviewsFilterSearch from "./professor_reviews_filter_search";
+import { Review } from "@/lib/definitions/review";
+import { Vote } from "@/lib/definitions/vote";
 
 interface ProfessorReviewProps {
   reviews: Review[];
@@ -22,10 +23,9 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
   const [term, setTerm] = useState("Any");
   const [course, setCourse] = useState("Any");
 
-  const courses = [
-    "Any",
-    ...new Set(reviews.map((review: Review) => review.course.name)),
-  ];
+  const courses: string[] = ["Any"].concat(
+    Array.from(new Set(reviews.map((review: Review) => review.course.name))),
+  );
 
   function sortReviewsByNewest(reviews: Review[]) {
     return reviews.sort((a, b) => {
@@ -53,8 +53,8 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
 
   function sortReviewsByUpvotes(reviews: Review[]) {
     return reviews.sort((a, b) => {
-      const upvotesA = a.upvotes ?? 0;
-      const upvotesB = b.upvotes ?? 0;
+      const upvotesA = a.votes.filter((vote: Vote) => vote.upvote).length ?? 0;
+      const upvotesB = b.votes.filter((vote: Vote) => vote.upvote).length ?? 0;
 
       if (upvotesA > upvotesB) {
         return -1;
@@ -68,8 +68,10 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
 
   function sortReviewsByDownvotes(reviews: Review[]) {
     return reviews.sort((a, b) => {
-      const downvotesA = a.downvotes ?? 0;
-      const downvotesB = b.downvotes ?? 0;
+      const downvotesA =
+        a.votes.filter((vote: Vote) => !vote.upvote).length ?? 0;
+      const downvotesB =
+        b.votes.filter((vote: Vote) => !vote.upvote).length ?? 0;
 
       if (downvotesA > downvotesB) {
         return -1;

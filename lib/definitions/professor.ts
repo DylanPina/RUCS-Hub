@@ -1,4 +1,4 @@
-import { Review } from "@prisma/client";
+import { Review } from "./review";
 
 export interface Professor {
   id: number;

@@ -119,7 +119,6 @@ async function seedMockReviews(prisma: any): Promise<Response> {
  * @param prisma - The Prisma client
  */
 async function seedVotes(prisma: any): Promise<Response> {
-  console.log(`Mock votes: ${mockVotes}`);
   const createVotes: Vote[] | null = await prisma.vote.createMany({
     data: mockVotes,
   });

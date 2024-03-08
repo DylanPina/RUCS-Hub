@@ -1,5 +1,6 @@
 "use client";
 
+import { Review } from "@/lib/definitions/review";
 import React from "react";
 import {
   BarChart,
@@ -10,7 +11,6 @@ import {
   ResponsiveContainer,
   LabelList,
 } from "recharts";
-import { Review } from "@prisma/client";
 
 function renderCustomLabel(props: any): JSX.Element | null {
   const { x, y, width, height, value, offset = 0 } = props;

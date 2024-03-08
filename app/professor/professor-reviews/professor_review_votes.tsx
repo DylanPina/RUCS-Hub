@@ -6,16 +6,29 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/shadcn/ui/tooltip";
+import { Vote } from "@prisma/client";
+import { useSession } from "next-auth/react";
 
 interface ProfessorReviewVotesProps {
-  upvotes: number;
-  downvotes: number;
+  votes: Vote[];
 }
 
 export default function ProfessorReviewVotes({
-  upvotes,
-  downvotes,
+  votes,
 }: ProfessorReviewVotesProps) {
+  const upvotes =
+    votes && votes.length
+      ? votes.filter((vote: Vote) => vote.upvote).length
+      : 0;
+  const downvotes =
+    votes && votes.length
+      ? votes.filter((vote: Vote) => !vote.upvote).length
+      : 0;
+  console.log(`Votes: ${JSON.stringify(votes, null, 2)}`);
+
+  const session = useSession();
+  console.log(`Session: ${JSON.stringify(session, null, 2)}`);
+
   return (
     <div className="flex space-x-2">
       <div className="flex space-x-1">
