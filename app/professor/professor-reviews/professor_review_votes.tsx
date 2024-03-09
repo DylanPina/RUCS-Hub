@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BiDownvote, BiUpvote } from "react-icons/bi";
 import {
   Tooltip,
@@ -10,6 +10,8 @@ import {
 } from "@/components/shadcn/ui/tooltip";
 import { Vote } from "@prisma/client";
 import { Review } from "@/lib/definitions/review";
+import { useSession } from "next-auth/react";
+import { hashEmailAddress } from "@/lib/utils";
 
 interface ProfessorReviewVotesProps {
   review: Review;
@@ -19,16 +21,41 @@ export default function ProfessorReviewVotes({
   review,
 }: ProfessorReviewVotesProps) {
   const { votes } = review;
-  const upvotes =
-    votes && votes.length
-      ? votes.filter((vote: Vote) => vote.upvote).length
-      : 0;
-  const downvotes =
-    votes && votes.length
-      ? votes.filter((vote: Vote) => !vote.upvote).length
-      : 0;
+  const userId = hashEmailAddress(useSession().data?.user?.email ?? "");
+
+  const [upvotes, setUpvotes] = useState(0);
+  const [downvotes, setDownvotes] = useState(0);
+  const [upvoted, setUpvoted] = useState(false);
+  const [downvoted, setDownvoted] = useState(false);
+
+  useEffect(() => {
+    setUpvotes(votes.filter((vote: Vote) => vote.upvote).length);
+    setDownvotes(votes.filter((vote: Vote) => !vote.upvote).length);
+
+    if (userId) {
+      setUpvoted(
+        votes.some((vote: Vote) => vote.userId === userId && vote.upvote),
+      );
+      setDownvoted(
+        votes.some((vote: Vote) => vote.userId === userId && !vote.upvote),
+      );
+    }
+  }, [votes, userId]);
 
   async function handleUpvote() {
+    if (upvoted) {
+      setUpvotes(upvotes - 1);
+      setUpvoted(false);
+    } else if (downvoted) {
+      setDownvotes(downvotes - 1);
+      setUpvotes(upvotes + 1);
+      setDownvoted(false);
+      setUpvoted(true);
+    } else {
+      setUpvotes(upvotes + 1);
+      setUpvoted(true);
+    }
+
     await fetch("/api/vote", {
       method: "POST",
       headers: {
@@ -42,6 +69,19 @@ export default function ProfessorReviewVotes({
   }
 
   async function handleDownvote() {
+    if (downvoted) {
+      setDownvotes(downvotes - 1);
+      setDownvoted(false);
+    } else if (upvoted) {
+      setUpvotes(upvotes - 1);
+      setDownvotes(downvotes + 1);
+      setUpvoted(false);
+      setDownvoted(true);
+    } else {
+      setDownvotes(downvotes + 1);
+      setDownvoted(true);
+    }
+
     await fetch("/api/vote", {
       method: "POST",
       headers: {
@@ -62,7 +102,9 @@ export default function ProfessorReviewVotes({
             <TooltipTrigger className="focus:outline-none">
               <BiUpvote
                 style={{ color: "primary-white" }}
-                className="fill-primary-white cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in"
+                className={`${
+                  upvoted ? "fill-primary-red" : "fill-primary-white"
+                }  cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in`}
                 onClick={() => handleUpvote()}
                 size={18}
               />
@@ -78,7 +120,9 @@ export default function ProfessorReviewVotes({
             <TooltipTrigger className="focus:outline-none">
               <BiDownvote
                 style={{ color: "primary-white" }}
-                className="fill-primary-white cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in"
+                className={`${
+                  downvoted ? "fill-primary-red" : "fill-primary-white"
+                } cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in`}
                 onClick={() => handleDownvote()}
                 size={18}
               />
