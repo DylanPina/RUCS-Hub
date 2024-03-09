@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import ProfessorReviewVotes from "./professor_review_votes";
 import { formatReviewDate, getTermNameByValue, titleCase } from "@/lib/utils";
@@ -106,7 +108,7 @@ export default function ProfessorReview({ review }: ProfessorReviewProps) {
         <p className="text-xs text-primary-white/50">{review.content}</p>
       </div>
       <div className="flex space-x-3">
-        <ProfessorReviewVotes votes={review.votes} />
+        <ProfessorReviewVotes review={review} />
       </div>
     </div>
   );

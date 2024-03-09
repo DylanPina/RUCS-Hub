@@ -1,5 +1,6 @@
 import { Term } from "@/lib/definitions/course";
 import { MAX_YEAR, MIN_YEAR } from "@/lib/constants";
+import sha256 from "crypto-js/sha256";
 
 /**
  * Validates the supported term and year range for a course.
@@ -261,4 +262,14 @@ export function formatReviewDate(date: Date): string {
 
   const formatter = new Intl.DateTimeFormat("en-US", options);
   return formatter.format(date);
+}
+
+/**
+ * Compute a hash of a string
+ *
+ * @param str - String to be hashed
+ * @return - Hash of the string
+ */
+export function hashEmailAddress(email: string): string {
+  return sha256(email).toString();
 }

@@ -1,8 +1,9 @@
 import { Term } from "../definitions/course";
+import { hashEmailAddress } from "../utils";
 
 export const mockReviews: any[] = [
   {
-    userId: 1,
+    userId: hashEmailAddress("dsp209@scarletmail.rutgers.edu"),
     semester: Term.Spring,
     year: 2024,
     courseCode: 462,
@@ -18,7 +19,7 @@ export const mockReviews: any[] = [
     workload: 12,
   },
   {
-    userId: 1,
+    userId: hashEmailAddress("dsp209@scarletmail.rutgers.edu"),
     semester: Term.Spring,
     year: 2024,
     courseCode: 462,
@@ -34,7 +35,7 @@ export const mockReviews: any[] = [
     workload: 20,
   },
   {
-    userId: 1,
+    userId: hashEmailAddress("dsp209@scarletmail.rutgers.edu"),
     semester: Term.Fall,
     year: 2023,
     courseCode: 440,
@@ -44,7 +45,7 @@ export const mockReviews: any[] = [
     rating: 10,
   },
   {
-    userId: 1,
+    userId: hashEmailAddress("dsp209@scarletmail.rutgers.edu"),
     semester: Term.Spring,
     year: 2023,
     courseCode: 206,
@@ -54,7 +55,7 @@ export const mockReviews: any[] = [
     rating: 8,
   },
   {
-    userId: 1,
+    userId: hashEmailAddress("dsp209@scarletmail.rutgers.edu"),
     semester: Term.Summer,
     year: 2022,
     courseCode: 205,

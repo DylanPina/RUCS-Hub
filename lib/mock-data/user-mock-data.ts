@@ -1,9 +1,9 @@
 import { User } from "@prisma/client";
+import { hashEmailAddress } from "../utils";
 
 export const mockUsers: User[] = [
   {
-    id: 1,
-    email: "dsp209@scarletmail.rutgers.edu",
+    id: hashEmailAddress("dsp209@scarletmail.rutgers.edu"),
     createdAt: new Date(),
   },
 ];

@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Vote } from "@prisma/client";
 
 /**
  * Upvotes a review
@@ -6,9 +6,9 @@ import { PrismaClient } from "@prisma/client";
  * @param reviewId - ID of the review
  */
 export async function upvoteReview(
-  userId: number,
+  userId: string,
   reviewId: number,
-): Promise<void> {
+): Promise<Vote | null> {
   const prisma = new PrismaClient();
 
   const alreadyUpvoted = await prisma.vote.findFirst({
@@ -20,8 +20,14 @@ export async function upvoteReview(
   });
 
   if (alreadyUpvoted) {
-    console.error(`User ${userId} already upvoted review ${reviewId}`);
-    return;
+    await prisma.vote.deleteMany({
+      where: {
+        userId: userId,
+        reviewId: reviewId,
+        upvote: true,
+      },
+    });
+    return null;
   }
 
   await prisma.vote.deleteMany({
@@ -32,7 +38,7 @@ export async function upvoteReview(
     },
   });
 
-  await prisma.vote.create({
+  return await prisma.vote.create({
     data: {
       userId: userId,
       reviewId: reviewId,
@@ -47,9 +53,9 @@ export async function upvoteReview(
  * @param reviewId - ID of the review
  */
 export async function downvoteReview(
-  userId: number,
+  userId: string,
   reviewId: number,
-): Promise<void> {
+): Promise<Vote | null> {
   const prisma = new PrismaClient();
 
   const alreadyDownvoted = await prisma.vote.findFirst({
@@ -61,8 +67,14 @@ export async function downvoteReview(
   });
 
   if (alreadyDownvoted) {
-    console.error(`User ${userId} already downvoted review ${reviewId}`);
-    return;
+    await prisma.vote.deleteMany({
+      where: {
+        userId: userId,
+        reviewId: reviewId,
+        upvote: false,
+      },
+    });
+    return null;
   }
 
   await prisma.vote.deleteMany({
@@ -73,7 +85,7 @@ export async function downvoteReview(
     },
   });
 
-  await prisma.vote.create({
+  return await prisma.vote.create({
     data: {
       userId: userId,
       reviewId: reviewId,

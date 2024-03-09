@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { BiDownvote, BiUpvote } from "react-icons/bi";
 import {
@@ -7,15 +9,16 @@ import {
   TooltipTrigger,
 } from "@/components/shadcn/ui/tooltip";
 import { Vote } from "@prisma/client";
-import { useSession } from "next-auth/react";
+import { Review } from "@/lib/definitions/review";
 
 interface ProfessorReviewVotesProps {
-  votes: Vote[];
+  review: Review;
 }
 
 export default function ProfessorReviewVotes({
-  votes,
+  review,
 }: ProfessorReviewVotesProps) {
+  const { votes } = review;
   const upvotes =
     votes && votes.length
       ? votes.filter((vote: Vote) => vote.upvote).length
@@ -24,10 +27,32 @@ export default function ProfessorReviewVotes({
     votes && votes.length
       ? votes.filter((vote: Vote) => !vote.upvote).length
       : 0;
-  console.log(`Votes: ${JSON.stringify(votes, null, 2)}`);
 
-  const session = useSession();
-  console.log(`Session: ${JSON.stringify(session, null, 2)}`);
+  async function handleUpvote() {
+    await fetch("/api/vote", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        reviewId: review.id,
+        upvote: true,
+      }),
+    });
+  }
+
+  async function handleDownvote() {
+    await fetch("/api/vote", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        reviewId: review.id,
+        upvote: false,
+      }),
+    });
+  }
 
   return (
     <div className="flex space-x-2">
@@ -38,6 +63,7 @@ export default function ProfessorReviewVotes({
               <BiUpvote
                 style={{ color: "primary-white" }}
                 className="fill-primary-white cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in"
+                onClick={() => handleUpvote()}
                 size={18}
               />
             </TooltipTrigger>
@@ -53,6 +79,7 @@ export default function ProfessorReviewVotes({
               <BiDownvote
                 style={{ color: "primary-white" }}
                 className="fill-primary-white cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in"
+                onClick={() => handleDownvote()}
                 size={18}
               />
             </TooltipTrigger>

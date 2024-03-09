@@ -144,7 +144,7 @@ export async function createProfessorNameIdMap(): Promise<Map<string, number>> {
  * @return - Overall ratings for that professor
  */
 function getProfessorPageRatings(professor: any): any {
-  const reviews: Review[] = professor.reviews;
+  const reviews: Review[] = professor.reviews ?? [];
 
   const reviewsWithOverallRating: Review[] = reviews.filter(
     (review: Review) => {
@@ -193,7 +193,7 @@ function getProfessorPageRatings(professor: any): any {
  * @return - Overall ratings for that professor
  */
 function getProfessorTableRatings(professor: any): any {
-  const reviews: Review[] = professor.reviews;
+  const reviews: Review[] = professor.reviews ?? [];
 
   const reviewsWithOverallRating: Review[] = reviews.filter(
     (review: Review) => {

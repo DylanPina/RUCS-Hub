@@ -9,9 +9,8 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String      @id
   createdAt DateTime @default(now())
-  email     String   @unique
   reviews   Review[]
   votes     Vote[]
 }
@@ -49,7 +48,7 @@ model Course {
 model Review {
   id                        Int        @id @default(autoincrement())
   user                      User       @relation(fields: [userId], references: [id])
-  userId                    Int
+  userId                    String
   semester                  Int
   year                      Int
   course                    Course     @relation(fields: [courseCode], references: [code])
@@ -74,7 +73,7 @@ model Review {
 model Vote {
   id        Int      @id @default(autoincrement())
   user      User     @relation(fields: [userId], references: [id])
-  userId    Int
+  userId    String
   review    Review   @relation(fields: [reviewId], references: [id])
   reviewId  Int
   upvote    Boolean
