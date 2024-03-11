@@ -12,6 +12,7 @@ import { Vote } from "@prisma/client";
 import { Review } from "@/lib/definitions/review";
 import { useSession } from "next-auth/react";
 import { hashEmailAddress } from "@/lib/utils";
+import { toast } from "react-toastify";
 
 interface ProfessorReviewVotesProps {
   review: Review;
@@ -21,7 +22,7 @@ export default function ProfessorReviewVotes({
   review,
 }: ProfessorReviewVotesProps) {
   const { votes } = review;
-  const userId = hashEmailAddress(useSession().data?.user?.email ?? "");
+  const { data: session, status } = useSession();
 
   const [upvotes, setUpvotes] = useState(0);
   const [downvotes, setDownvotes] = useState(0);
@@ -32,7 +33,9 @@ export default function ProfessorReviewVotes({
     setUpvotes(votes.filter((vote: Vote) => vote.upvote).length);
     setDownvotes(votes.filter((vote: Vote) => !vote.upvote).length);
 
-    if (userId) {
+    if (status === "authenticated") {
+      const userId = hashEmailAddress(session?.user?.email ?? "");
+
       setUpvoted(
         votes.some((vote: Vote) => vote.userId === userId && vote.upvote),
       );
@@ -40,9 +43,14 @@ export default function ProfessorReviewVotes({
         votes.some((vote: Vote) => vote.userId === userId && !vote.upvote),
       );
     }
-  }, [votes, userId]);
+  }, [session, status, votes]);
 
   async function handleUpvote() {
+    if (status !== "authenticated") {
+      toast.error("Must be signed in to vote.");
+      return;
+    }
+
     if (upvoted) {
       setUpvotes(upvotes - 1);
       setUpvoted(false);
@@ -69,6 +77,11 @@ export default function ProfessorReviewVotes({
   }
 
   async function handleDownvote() {
+    if (status !== "authenticated") {
+      toast.error("Must be signed in to vote.");
+      return;
+    }
+
     if (downvoted) {
       setDownvotes(downvotes - 1);
       setDownvoted(false);

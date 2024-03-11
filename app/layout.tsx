@@ -4,6 +4,8 @@ import Nav from "@/components/nav/nav";
 import "@/app/globals.css";
 import Footer from "@/components/footer/footer";
 import { AuthProvider } from "@/components/auth/auth_provider";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const font = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -24,6 +26,10 @@ export default function RootLayout({
       <body className={font.className}>
         <AuthProvider>
           <div className="flex flex-col place-items-center min-h-screen bg-zinc-900 overflow-auto">
+            <ToastContainer
+              toastClassName="toast-background"
+              position="top-center"
+            />
             <Nav />
             <main className="flex-grow w-full max-w-screen-2xl p-4 overflow-auto">
               {children}
