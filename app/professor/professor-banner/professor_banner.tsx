@@ -37,9 +37,9 @@ export default function ProfessorBanner({
   ).length;
 
   return (
-    <div className="flex justify-between">
-      <div className="flex w-1/2 bg-primary-red outline outline-1 outline-primary-white rounded py-3 px-4">
-        <div className="flex flex-col place-content-between min-w-fit space-y-4">
+    <div className="flex flex-col lg:flex-row justify-start lg:justify-between space-y-3">
+      <div className="flex w-full lg:w-1/2 bg-primary-red outline outline-1 outline-primary-white rounded py-3 px-4">
+        <div className="flex flex-col place-content-between min-w-fit space-y-3">
           <div className="flex flex-col space-y-1">
             <h1 className="text-4xl text-primary-black font-black">{name}</h1>
             <div className="flex flex-col space-y-1">
@@ -82,12 +82,6 @@ export default function ProfessorBanner({
                 </h3>
               )}
               <h3 className="text-md text-primary-white">
-                Would Take Again: <span className="font-bold">100%</span>{" "}
-                <span className="text-xs italic text-primary-white/50">
-                  based on <span className="underline">X reviews</span>
-                </span>
-              </h3>
-              <h3 className="text-md text-primary-white">
                 Total Reviews:{" "}
                 <span className="not-italic font-bold">{reviews.length}</span>
               </h3>
@@ -125,10 +119,10 @@ export default function ProfessorBanner({
           </div>
         </div>
       </div>
-      <div className="flex flex-col w-1/2 space-y-4">
+      <div className="flex flex-col w-full lg:w-1/2 space-y-3">
         <div className="w-fit">
           <Select value={ratingChart} onValueChange={setRatingChart}>
-            <SelectTrigger className="ml-7 border-2 border-primary-white text-primary-white font-semibold">
+            <SelectTrigger className="ml-0 lg:ml-7 border-2 border-primary-white text-primary-white font-semibold">
               <SelectValue className="text-primary-black">
                 {ratingChart}
               </SelectValue>

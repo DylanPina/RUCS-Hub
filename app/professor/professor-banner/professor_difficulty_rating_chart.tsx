@@ -53,7 +53,7 @@ export default function ProfessorDifficultyRatingChart({
   );
 
   return (
-    <ResponsiveContainer width="100%" height="100%">
+    <ResponsiveContainer width="100%" height="100%" minHeight={176}>
       <BarChart data={chartData}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="rating" tick={{ stroke: "#fafafa" }} />
