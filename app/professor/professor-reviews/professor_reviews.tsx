@@ -112,23 +112,19 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
   }, [sortBy, term, reviews, year, course, searchTerm]);
 
   return (
-    <div className="flex flex-col space-y-4">
-      <div className="flex flex-col">
-        <h3 className="text-xl text-primary-white font-bold mt-auto">
-          Professor Reviews:
-        </h3>
-        <div className="flex place-content-between w-full space-y-1">
-          <div className="max-sm:w-full sm:max-w-[300px] self-end">
+    <div className="flex flex-col space-y-3">
+      <div className="flex flex-col max-sm:space-y-3">
+        <div className="flex max-sm:flex-col max-sm:space-y-3 place-content-between w-full space-y-1">
+          <div className="flex-col space-y-3 max-sm:w-full sm:max-w-[300px] self-end">
+            <h3 className="text-xl text-primary-white font-bold mt-auto">
+              Professor Reviews:
+            </h3>
             <ProfessorReviewsFilterSearch
               onFilterChange={(value: string) => setSearchTerm(value)}
               placeHolder="Filter reviews..."
             />
           </div>
-          <div className="flex space-x-2">
-            <ProfessorReviewsSortBy
-              selectedValue={sortBy}
-              onSelectChange={(value) => setSortBy(value)}
-            />
+          <div className="flex max-sm:place-self-start self-end space-x-2">
             <ProfessorReviewsFilterYear
               selectedYear={year}
               onYearChange={setYear}
@@ -141,6 +137,10 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
               courses={courses}
               selectedCourse={course}
               onCourseChange={setCourse}
+            />
+            <ProfessorReviewsSortBy
+              selectedValue={sortBy}
+              onSelectChange={(value) => setSortBy(value)}
             />
           </div>
         </div>
