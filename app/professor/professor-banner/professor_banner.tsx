@@ -11,8 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn/ui/select";
-import ProfessorOverallRatingChart from "./professor_overall_rating_chart";
-import ProfessorDifficultyRatingChart from "./professor_difficulty_rating_chart";
 import { useRouter } from "next/navigation";
 import RatingChart from "@/components/charts/rating-chart";
 

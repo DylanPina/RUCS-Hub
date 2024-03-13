@@ -9,7 +9,7 @@ interface ProfessorReviewsFilterSearchProps {
   placeHolder: string;
 }
 
-export default function ProfessorReviewsFilterSearch({
+export default function ReviewsFilterSearch({
   onFilterChange,
   placeHolder,
 }: ProfessorReviewsFilterSearchProps) {

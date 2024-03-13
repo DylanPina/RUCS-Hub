@@ -14,13 +14,11 @@ import { useSession } from "next-auth/react";
 import { hashEmailAddress } from "@/lib/utils";
 import { toast } from "react-toastify";
 
-interface ProfessorReviewVotesProps {
+interface ReviewVotesProps {
   review: Review;
 }
 
-export default function ProfessorReviewVotes({
-  review,
-}: ProfessorReviewVotesProps) {
+export default function ReviewVotes({ review }: ReviewVotesProps) {
   const { votes } = review;
   const { data: session, status } = useSession();
 

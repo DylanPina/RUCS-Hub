@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/shadcn/ui/button";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import { CoursePage } from "@/lib/definitions/course";
 import {
   Select,
@@ -19,7 +18,6 @@ interface Props {
 
 export default function CourseBanner({ coursePage }: Props) {
   const [ratingChart, setRatingChart] = useState("Rating");
-  const router = useRouter();
 
   const {
     courseCode,
@@ -27,14 +25,9 @@ export default function CourseBanner({ coursePage }: Props) {
     rating,
     difficulty,
     workload,
-    lectureRating,
-    prereqs,
-    synopsisUrl,
     credits,
     reviews,
   } = coursePage;
-
-  console.log("Synopsis URL: ", synopsisUrl);
 
   const totalDifficultyRatings = reviews.filter((review) => {
     return review.difficultyRating !== null;

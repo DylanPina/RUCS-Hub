@@ -9,15 +9,15 @@ import {
   SelectValue,
 } from "@/components/shadcn/ui/select";
 
-interface ProfessorReviewSortByProps {
+interface ReviewSortByProps {
   selectedValue: string;
   onSelectChange: (value: string) => void;
 }
 
-export default function ProfessorReviewsSortBy({
+export default function ReviewsSortBy({
   selectedValue,
   onSelectChange,
-}: ProfessorReviewSortByProps) {
+}: ReviewSortByProps) {
   return (
     <div className="flex flex-col space-y-2">
       <label className="text-primary-white text-xs">Sort By</label>

@@ -9,17 +9,12 @@ interface ProfessorReviewProps {
   reviews: Review[];
 }
 
-export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
+export default function CourseReviews({ reviews }: ProfessorReviewProps) {
   const [filteredReviews, setFilteredReviews] = useState(reviews);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("newest");
   const [year, setYear] = useState("Any");
   const [term, setTerm] = useState("Any");
-  const [course, setCourse] = useState("Any");
-
-  const courses: string[] = ["Any"].concat(
-    Array.from(new Set(reviews.map((review: Review) => review.course.name))),
-  );
 
   function sortReviewsByNewest(reviews: Review[]) {
     return reviews.sort((a, b) => {
@@ -95,15 +90,14 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
         year === "Any" || review.year.toString() === year.toString();
       const termMatches =
         term === "Any" || getTermNameByValue(review.semester) === term;
-      const courseMatches = course === "Any" || review.course.name === course;
       const searchMatches =
         review.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         review.content.toLowerCase().includes(searchTerm.toLowerCase());
-      return yearMatches && termMatches && courseMatches && searchMatches;
+      return yearMatches && termMatches && searchMatches;
     });
 
     setFilteredReviews(filtered);
-  }, [sortBy, term, reviews, year, course, searchTerm]);
+  }, [sortBy, term, reviews, year, searchTerm]);
 
   return (
     <div className="flex flex-col space-y-3">

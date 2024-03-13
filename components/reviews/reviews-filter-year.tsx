@@ -15,7 +15,7 @@ interface ProfessorReviewsFilterYearProps {
   onYearChange: (value: string) => void;
 }
 
-export default function ProfessorReviewsFilterYear({
+export default function ReviewsFilterYear({
   selectedYear,
   onYearChange,
 }: ProfessorReviewsFilterYearProps) {

@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import ProfessorReview from "./professor_review";
-import ProfessorReviewsSortBy from "./professor_reviews_sort_by";
-import ProfessorReviewsFilterTerm from "./professor_reviews_filter_term";
 import { getTermNameByValue } from "@/lib/utils";
-import ProfessorReviewsFilterYear from "./professor_reviews_filter_year";
-import ProfessorReviewsFilterCourse from "./professor_reviews_filter_course";
-import ProfessorReviewsFilterSearch from "./professor_reviews_filter_search";
 import { Review } from "@/lib/definitions/review";
 import { Vote } from "@/lib/definitions/vote";
+import ReviewsSortBy from "@/components/reviews/reviews-sort-by";
+import ReviewsFilterCourse from "@/components/reviews/reviews-filter-course";
+import ReviewsFilterTerm from "@/components/reviews/reviews-filter-term";
+import ReviewsFilterYear from "@/components/reviews/reviews-filter-year";
+import ReviewsFilterSearch from "@/components/reviews/reviews-filter-search";
+import ReviewCard from "@/components/reviews/review-card";
 
 interface ProfessorReviewProps {
   reviews: Review[];
@@ -119,26 +119,20 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
             <h3 className="text-xl text-primary-white font-bold mt-auto">
               Professor Reviews:
             </h3>
-            <ProfessorReviewsFilterSearch
+            <ReviewsFilterSearch
               onFilterChange={(value: string) => setSearchTerm(value)}
               placeHolder="Filter reviews..."
             />
           </div>
           <div className="flex max-sm:place-self-start self-end space-x-2">
-            <ProfessorReviewsFilterYear
-              selectedYear={year}
-              onYearChange={setYear}
-            />
-            <ProfessorReviewsFilterTerm
-              selectedTerm={term}
-              onTermChange={setTerm}
-            />
-            <ProfessorReviewsFilterCourse
+            <ReviewsFilterYear selectedYear={year} onYearChange={setYear} />
+            <ReviewsFilterTerm selectedTerm={term} onTermChange={setTerm} />
+            <ReviewsFilterCourse
               courses={courses}
               selectedCourse={course}
               onCourseChange={setCourse}
             />
-            <ProfessorReviewsSortBy
+            <ReviewsSortBy
               selectedValue={sortBy}
               onSelectChange={(value) => setSortBy(value)}
             />
@@ -148,7 +142,7 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
       <div className="flex flex-col space-y-3">
         {filteredReviews.length ? (
           filteredReviews.map((review: Review) => (
-            <ProfessorReview key={review.id} review={review} />
+            <ReviewCard key={review.id} review={review} />
           ))
         ) : reviews.length && !searchTerm ? (
           <p className="font-bold text-primary-red">

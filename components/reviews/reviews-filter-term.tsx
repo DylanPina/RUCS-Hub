@@ -15,7 +15,7 @@ interface ProfessorReviewsFilterTermProps {
   onTermChange: (value: string) => void;
 }
 
-export default function ProfessorReviewsFilterTerm({
+export default function ReviewsFilterTerm({
   selectedTerm,
   onTermChange,
 }: ProfessorReviewsFilterTermProps) {
