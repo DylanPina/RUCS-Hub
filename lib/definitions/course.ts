@@ -14,6 +14,7 @@ export type CoursePage = {
   courseCode: number;
   courseName: string;
   prereqs: string[];
+  synopsisUrl: string;
   credits: number;
   rating: number;
   difficulty: number;

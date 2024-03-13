@@ -14,6 +14,7 @@ import {
 import ProfessorOverallRatingChart from "./professor_overall_rating_chart";
 import ProfessorDifficultyRatingChart from "./professor_difficulty_rating_chart";
 import { useRouter } from "next/navigation";
+import RatingChart from "@/components/charts/rating-chart";
 
 interface Props {
   professor: ProfessorPage;
@@ -36,6 +37,8 @@ export default function ProfessorBanner({
     (review) => review.professorDifficultyRating !== null,
   ).length;
 
+  console.log(`Reviews: ${JSON.stringify(reviews, null, 2)}`);
+
   return (
     <div className="flex flex-col lg:flex-row justify-start lg:justify-between max-lg:space-y-3">
       <div className="flex w-full lg:w-1/2 bg-primary-red outline outline-1 outline-primary-white rounded py-3 px-4">
@@ -44,12 +47,9 @@ export default function ProfessorBanner({
             <h1 className="text-4xl text-primary-black font-black">{name}</h1>
             <div className="flex flex-col space-y-1">
               {totalOverallRatings > 0 ? (
-                <h3 className="text-md text-primary-white">
-                  Overall:{" "}
-                  <span className="not-italic font-bold">{overall}</span>
-                  <span className="not-italic text-xs text-primary-white/50">
-                    /10
-                  </span>{" "}
+                <h3 className="text-md text-primary-white font-bold">
+                  Overall: <span className="font-normal">{overall}</span>
+                  <span className="font-normal">/10</span>{" "}
                   <span className="text-xs italic text-primary-white/50">
                     based on{" "}
                     <span className="underline">
@@ -58,17 +58,14 @@ export default function ProfessorBanner({
                   </span>
                 </h3>
               ) : (
-                <h3 className="text-md text-primary-white">
-                  Overall: <span className="not-italic font-bold">?</span>
+                <h3 className="text-md text-primary-white font-bold">
+                  Overall: <span className="not-italic">?</span>
                 </h3>
               )}
               {totalDifficultyRatings > 0 ? (
-                <h3 className="text-md text-primary-white">
-                  Difficulty:{" "}
-                  <span className="not-italic font-bold">{difficulty}</span>
-                  <span className="not-italic text-primary-white/50 text-xs">
-                    /10
-                  </span>{" "}
+                <h3 className="text-md text-primary-white font-bold">
+                  Difficulty: <span className="font-normal">{difficulty}</span>
+                  <span className="font-normal">/10</span>{" "}
                   <span className="text-xs italic text-primary-white/50">
                     based on{" "}
                     <span className="underline">
@@ -77,17 +74,17 @@ export default function ProfessorBanner({
                   </span>
                 </h3>
               ) : (
-                <h3 className="text-md text-primary-white">
-                  Difficulty: <span className="not-italic font-bold">?</span>
+                <h3 className="text-md text-primary-white font-bold">
+                  Difficulty: <span className="font-normal">?</span>
                 </h3>
               )}
-              <h3 className="text-md text-primary-white">
+              <h3 className="text-md text-primary-white font-bold">
                 Total Reviews:{" "}
-                <span className="not-italic font-bold">{reviews.length}</span>
+                <span className="font-normal">{reviews.length}</span>
               </h3>
-              <h3 className="text-md text-primary-white">
+              <h3 className="text-md text-primary-white font-bold">
                 Currently Teaching:{" "}
-                <span className="not-italic font-bold">
+                <span className="font-normal">
                   {currentlyTeaching.map(
                     (courseCode: number, index: number, array: number[]) => (
                       <React.Fragment key={courseCode}>
@@ -135,10 +132,13 @@ export default function ProfessorBanner({
         </div>
         <div className="w-full h-full">
           {ratingChart === "Overall" && (
-            <ProfessorOverallRatingChart reviews={reviews} />
+            <RatingChart reviews={reviews} attribute="professorQualityRating" />
           )}
           {ratingChart === "Difficulty" && (
-            <ProfessorDifficultyRatingChart reviews={reviews} />
+            <RatingChart
+              reviews={reviews}
+              attribute="professorDifficultyRating"
+            />
           )}
         </div>
       </div>

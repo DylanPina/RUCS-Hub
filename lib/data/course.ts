@@ -33,12 +33,18 @@ export async function queryCourseByCode(
   courseCode: number,
 ): Promise<CoursePage> {
   const prisma = new PrismaClient();
-  const course: Course | null = await prisma.course.findUnique({
+  const course = await prisma.course.findUnique({
     where: {
       code: courseCode,
     },
     include: {
-      reviews: true,
+      reviews: {
+        include: {
+          course: true,
+          professor: true,
+          votes: true,
+        },
+      },
     },
   });
 
@@ -233,6 +239,7 @@ function getCoursePageRatings(course: any): CoursePage {
     courseName: course.name,
     prereqs: course.prereqs,
     credits: course.credits,
+    synopsisUrl: course.synopsis,
     rating: reviews.length ? averageRating : -1,
     difficulty: reviewsWithDifficultyRating.length
       ? averageDifficultyRating

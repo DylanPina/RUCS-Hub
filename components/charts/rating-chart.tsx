@@ -32,17 +32,18 @@ function renderCustomLabel(props: any): JSX.Element | null {
 
 interface ProfessorDifficultyRatingChartProps {
   reviews: Review[];
+  attribute: keyof Review;
 }
 
 export default function ProfessorDifficultyRatingChart({
   reviews,
+  attribute,
 }: ProfessorDifficultyRatingChartProps): JSX.Element {
   const ratings: number[] = Array.from({ length: 10 }, (_, index) => index + 1);
 
   const ratingCount: number[] = ratings.map((rating) => {
-    return reviews.filter(
-      (review: Review) => review.difficultyRating === rating,
-    ).length;
+    return reviews.filter((review: Review) => review[attribute] === rating)
+      .length;
   });
 
   const chartData: { count: number; rating: number }[] = ratingCount.map(

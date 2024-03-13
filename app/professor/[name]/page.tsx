@@ -31,7 +31,7 @@ export default async function Page({ params }: Props) {
   );
 
   return (
-    <div className="flex flex-col space-y-4">
+    <div className="flex flex-col space-y-3">
       <ProfessorBanner
         professor={professor}
         currentlyTeaching={currentlyTeaching}
