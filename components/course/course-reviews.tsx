@@ -129,8 +129,8 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
       <div className="flex flex-col max-sm:space-y-3">
         <div className="flex max-sm:flex-col max-sm:space-y-3 place-content-between w-full space-y-1">
           <div className="flex-col space-y-3 max-sm:w-full sm:max-w-[300px] self-end">
-            <h3 className="text-xl text-primary-white font-bold mt-auto">
-              Professor Reviews:
+            <h3 className="text-lg text-primary-white font-bold mt-auto">
+              Course Reviews:
             </h3>
             <ReviewsFilterSearch
               onFilterChange={(value: string) => setSearchTerm(value)}

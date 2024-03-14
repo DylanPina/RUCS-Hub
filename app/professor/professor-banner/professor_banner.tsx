@@ -40,7 +40,7 @@ export default function ProfessorBanner({
       <div className="flex w-full lg:w-1/2 bg-primary-red outline outline-1 outline-primary-white rounded py-3 px-4">
         <div className="flex flex-col place-content-between min-w-fit space-y-3">
           <div className="flex flex-col space-y-1">
-            <h1 className="text-4xl text-primary-black font-black">{name}</h1>
+            <h1 className="text-2xl text-primary-black font-black">{name}</h1>
             <div className="flex flex-col space-y-1">
               {totalOverallRatings > 0 ? (
                 <h3 className="text-md text-primary-white font-bold">
