@@ -35,8 +35,6 @@ export default function ProfessorBanner({
     (review) => review.professorDifficultyRating !== null,
   ).length;
 
-  console.log(`Reviews: ${JSON.stringify(reviews, null, 2)}`);
-
   return (
     <div className="flex flex-col lg:flex-row justify-start lg:justify-between max-lg:space-y-3">
       <div className="flex w-full lg:w-1/2 bg-primary-red outline outline-1 outline-primary-white rounded py-3 px-4">

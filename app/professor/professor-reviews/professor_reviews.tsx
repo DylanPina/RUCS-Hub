@@ -125,13 +125,13 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
             />
           </div>
           <div className="flex max-sm:place-self-start self-end space-x-2">
-            <ReviewsFilterYear selectedYear={year} onYearChange={setYear} />
-            <ReviewsFilterTerm selectedTerm={term} onTermChange={setTerm} />
             <ReviewsFilterCourse
               courses={courses}
               selectedCourse={course}
               onCourseChange={setCourse}
             />
+            <ReviewsFilterYear selectedYear={year} onYearChange={setYear} />
+            <ReviewsFilterTerm selectedTerm={term} onTermChange={setTerm} />
             <ReviewsSortBy
               selectedValue={sortBy}
               onSelectChange={(value) => setSortBy(value)}
