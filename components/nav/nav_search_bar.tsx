@@ -49,13 +49,13 @@ export default function NavSearchBar({ courses, professors }: Props) {
 
   return (
     <div className="flex place-items-center w-full">
-      <div className="max-sm:hidden relative place-items-center w-full">
+      <div className="max-md:hidden relative place-items-center w-full">
         <IoSearchSharp
           size={24}
-          className="sm:absolute sm:left-2 sm:top-1/2 sm:transform sm:-translate-y-1/2"
+          className="md:absolute md:left-2 md:top-1/2 md:transform md:-translate-y-1/2"
         />
         <Button
-          className="max-w-md max-sm:hidden pl-10 pr-2 focus:border-2 focus:border-primary-red text-zinc-500 font-normal transition-all duration-150 ease-out hover:ease-in outline outline-1 outline-primary-white hover:outline-primary-red hover:shadow-primary-red"
+          className="max-w-md max-md:hidden pl-10 pr-2 focus:border-2 focus:border-primary-red text-zinc-500 font-normal transition-all duration-150 ease-out hover:ease-in outline outline-1 outline-primary-white hover:outline-primary-red hover:shadow-primary-red"
           onClick={() => setOpen(true)}
         >
           Search courses & professors...
@@ -99,7 +99,7 @@ export default function NavSearchBar({ courses, professors }: Props) {
       </CommandDialog>
       <IoSearchSharp
         size={24}
-        className="sm:hidden sm:absolute sm:left-2 sm:top-1/2 sm:transform sm:-translate-y-1/2"
+        className="md:hidden md:absolute md:left-2 md:top-1/2 md:transform md:-translate-y-1/2 w-8 h-8 fill-primary-white max-sm:w-6 max-sm:h-6"
         onClick={() => setOpen(true)}
       />
     </div>
