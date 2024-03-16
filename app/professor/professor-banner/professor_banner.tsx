@@ -1,23 +1,16 @@
-"use client";
-
 import { Button } from "@/components/shadcn/ui/button";
 import React from "react";
 import { ProfessorPage } from "@/lib/definitions/professor";
-import { getCourseRoute, titleCase } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { titleCase } from "@/lib/utils";
 import ProfessorCharts from "@/components/charts/professor_charts";
+import CurrentlyTeaching from "@/components/professor/currently_teaching";
+import { getCoursesBeingTaughtByProfessor } from "@/lib/data/course";
 
 interface Props {
   professor: ProfessorPage;
-  currentlyTeaching: number[];
 }
 
-export default function ProfessorBanner({
-  professor,
-  currentlyTeaching,
-}: Props) {
-  const router = useRouter();
-
+export default async function ProfessorBanner({ professor }: Props) {
   const { firstName, lastName, overall, difficulty, reviews } = professor;
   const name = `${titleCase(firstName)} ${titleCase(lastName)}`;
   const totalOverallRatings = reviews.filter(
@@ -26,6 +19,10 @@ export default function ProfessorBanner({
   const totalDifficultyRatings = reviews.filter(
     (review) => review.professorDifficultyRating !== null,
   ).length;
+
+  const currentlyTeaching = await getCoursesBeingTaughtByProfessor(
+    professor.id,
+  );
 
   return (
     <div className="flex flex-col lg:flex-row justify-start lg:justify-between max-lg:space-y-3">
@@ -70,28 +67,7 @@ export default function ProfessorBanner({
                 Total Reviews:{" "}
                 <span className="font-normal">{reviews.length}</span>
               </h3>
-              <h3 className="text-md text-primary-white font-bold">
-                Currently Teaching:{" "}
-                <span className="font-normal">
-                  {currentlyTeaching.map(
-                    (courseCode: number, index: number, array: number[]) => (
-                      <React.Fragment key={courseCode}>
-                        <span
-                          className="underline cursor-pointer"
-                          onClick={() =>
-                            router.push(getCourseRoute(courseCode))
-                          }
-                        >
-                          01:198:{courseCode}
-                        </span>
-                        <span className="font-normal">
-                          {index < array.length - 1 && ", "}
-                        </span>
-                      </React.Fragment>
-                    ),
-                  )}
-                </span>
-              </h3>
+              <CurrentlyTeaching currentlyTeaching={currentlyTeaching} />
             </div>
           </div>
           <div className="flex space-x-2">

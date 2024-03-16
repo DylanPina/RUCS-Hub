@@ -693,6 +693,24 @@ export async function queryAllCourseSections(): Promise<Section[]> {
 }
 
 /**
+ * Returns the unique course IDs that the professor taught
+ *
+ * @param professorId - ID for the professor we are interested in
+ * @return - Unique course IDs that the professor taught
+ */
+export async function getTaughtByProfessor(
+  professorId: number,
+): Promise<number[]> {
+  const sections = await queryAllCourseSections();
+
+  const courseCodes = sections
+    .filter((section: Section) => section.professorId === professorId)
+    .map((section) => section.courseCode);
+
+  return Array.from(new Set(courseCodes));
+}
+
+/**
  * Returns the unique course IDs that the professor is currently teaching
  *
  * @param professorId - ID for the professor we are interested in
