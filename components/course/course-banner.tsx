@@ -1,25 +1,16 @@
 "use client";
 
 import { Button } from "@/components/shadcn/ui/button";
-import React, { useState } from "react";
+import React from "react";
 import { CoursePage } from "@/lib/definitions/course";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/shadcn/ui/select";
-import RatingChart from "../charts/rating-chart";
 import ReviewButton from "../reviews/review_button";
+import CourseCharts from "../charts/course_charts";
 
 interface Props {
   coursePage: CoursePage;
 }
 
 export default function CourseBanner({ coursePage }: Props) {
-  const [ratingChart, setRatingChart] = useState("Rating");
-
   const {
     courseCode,
     courseName,
@@ -114,29 +105,7 @@ export default function CourseBanner({ coursePage }: Props) {
           </div>
         </div>
       </div>
-      <div className="flex flex-col w-full lg:w-1/2 space-y-3">
-        <div className="w-fit">
-          <Select value={ratingChart} onValueChange={setRatingChart}>
-            <SelectTrigger className="ml-0 lg:ml-7 border-2 border-primary-white text-primary-white font-semibold">
-              <SelectValue className="text-primary-black">
-                {ratingChart}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent className="text-primary-black">
-              <SelectItem value="Rating">Rating</SelectItem>
-              <SelectItem value="Difficulty">Difficulty</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="w-full h-full">
-          {ratingChart === "Rating" && (
-            <RatingChart reviews={reviews} attribute="rating" />
-          )}
-          {ratingChart === "Difficulty" && (
-            <RatingChart reviews={reviews} attribute="difficultyRating" />
-          )}
-        </div>
-      </div>
+      <CourseCharts reviews={reviews} />
     </div>
   );
 }

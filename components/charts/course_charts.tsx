@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+
 import {
   Select,
   SelectContent,
@@ -8,15 +9,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn/ui/select";
-import RatingChart from "./rating_chart";
 import { Review } from "@/lib/definitions/review";
+import RatingChart from "./rating_chart";
 
 interface Props {
   reviews: Review[];
 }
 
-export default function ProfessorCharts({ reviews }: Props) {
-  const [ratingChart, setRatingChart] = useState("Overall");
+export default function CourseCharts({ reviews }: Props) {
+  const [ratingChart, setRatingChart] = useState("Rating");
 
   return (
     <div className="flex flex-col w-full lg:w-1/2 space-y-3">
@@ -28,20 +29,17 @@ export default function ProfessorCharts({ reviews }: Props) {
             </SelectValue>
           </SelectTrigger>
           <SelectContent className="text-primary-black">
-            <SelectItem value="Overall">Overall</SelectItem>
+            <SelectItem value="Rating">Rating</SelectItem>
             <SelectItem value="Difficulty">Difficulty</SelectItem>
           </SelectContent>
         </Select>
       </div>
       <div className="w-full h-full">
-        {ratingChart === "Overall" && (
-          <RatingChart reviews={reviews} attribute="professorQualityRating" />
+        {ratingChart === "Rating" && (
+          <RatingChart reviews={reviews} attribute="rating" />
         )}
         {ratingChart === "Difficulty" && (
-          <RatingChart
-            reviews={reviews}
-            attribute="professorDifficultyRating"
-          />
+          <RatingChart reviews={reviews} attribute="difficultyRating" />
         )}
       </div>
     </div>
