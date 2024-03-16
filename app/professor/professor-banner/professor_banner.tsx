@@ -1,18 +1,11 @@
 "use client";
 
 import { Button } from "@/components/shadcn/ui/button";
-import React, { useState } from "react";
+import React from "react";
 import { ProfessorPage } from "@/lib/definitions/professor";
 import { getCourseRoute, titleCase } from "@/lib/utils";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/shadcn/ui/select";
 import { useRouter } from "next/navigation";
-import RatingChart from "@/components/charts/rating-chart";
+import ProfessorCharts from "@/components/charts/professor_charts";
 
 interface Props {
   professor: ProfessorPage;
@@ -23,7 +16,6 @@ export default function ProfessorBanner({
   professor,
   currentlyTeaching,
 }: Props) {
-  const [ratingChart, setRatingChart] = useState("Overall");
   const router = useRouter();
 
   const { firstName, lastName, overall, difficulty, reviews } = professor;
@@ -112,32 +104,7 @@ export default function ProfessorBanner({
           </div>
         </div>
       </div>
-      <div className="flex flex-col w-full lg:w-1/2 space-y-3">
-        <div className="w-fit">
-          <Select value={ratingChart} onValueChange={setRatingChart}>
-            <SelectTrigger className="ml-0 lg:ml-7 border-2 border-primary-white text-primary-white font-semibold">
-              <SelectValue className="text-primary-black">
-                {ratingChart}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent className="text-primary-black">
-              <SelectItem value="Overall">Overall</SelectItem>
-              <SelectItem value="Difficulty">Difficulty</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="w-full h-full">
-          {ratingChart === "Overall" && (
-            <RatingChart reviews={reviews} attribute="professorQualityRating" />
-          )}
-          {ratingChart === "Difficulty" && (
-            <RatingChart
-              reviews={reviews}
-              attribute="professorDifficultyRating"
-            />
-          )}
-        </div>
-      </div>
+      <ProfessorCharts reviews={reviews} />
     </div>
   );
 }

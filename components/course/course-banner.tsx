@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/shadcn/ui/select";
 import RatingChart from "../charts/rating-chart";
+import ReviewButton from "../reviews/review_button";
 
 interface Props {
   coursePage: CoursePage;
@@ -109,9 +110,7 @@ export default function CourseBanner({ coursePage }: Props) {
             <Button className="max-w-fit text-xs transition-all duration-150 hover:bg-primary-black hover:shadow-primary-black">
               Compare Courses
             </Button>
-            <Button className="max-w-fit text-xs transition-all duration-150 hover:bg-primary-black hover:shadow-primary-black">
-              Leave a Review
-            </Button>
+            <ReviewButton course={coursePage} />
           </div>
         </div>
       </div>
