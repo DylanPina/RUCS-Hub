@@ -1,7 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getTermNameByValue, titleCase } from "@/lib/utils";
+import {
+  formatProfessorName,
+  getTermNameByValue,
+  titleCase,
+} from "@/lib/utils";
 import { Review } from "@/lib/definitions/review";
 import { Vote } from "@/lib/definitions/vote";
 import ReviewsSortBy from "@/components/reviews/reviews-sort-by";
@@ -26,11 +30,11 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
   const professors: string[] = ["Any"].concat(
     Array.from(
       new Set(
-        reviews.map(
-          (review: Review) =>
-            `${titleCase(review.professor.firstName ?? "")} ${titleCase(
-              review.professor.lastName ?? "",
-            )}`,
+        reviews.map((review: Review) =>
+          formatProfessorName(
+            review.professor.lastName,
+            review.professor.firstName,
+          ),
         ),
       ),
     ),
@@ -112,9 +116,10 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
         term === "Any" || getTermNameByValue(review.semester) === term;
       const professorMatches =
         professor === "Any" ||
-        `${titleCase(review.professor.firstName ?? "")} ${titleCase(
-          review.professor.lastName ?? "",
-        )}` === professor;
+        formatProfessorName(
+          review.professor.lastName,
+          review.professor.firstName,
+        ) === professor;
       const searchMatches =
         review.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         review.content.toLowerCase().includes(searchTerm.toLowerCase());

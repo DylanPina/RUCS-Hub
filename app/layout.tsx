@@ -5,6 +5,7 @@ import "@/app/globals.css";
 import Footer from "@/components/footer/footer";
 import { AuthProvider } from "@/components/auth/auth_provider";
 import { ToastContainer } from "react-toastify";
+import { Toaster } from "@/components/shadcn/ui/toaster";
 import "react-toastify/dist/ReactToastify.css";
 
 const font = Source_Code_Pro({ subsets: ["latin"] });
@@ -30,6 +31,7 @@ export default function RootLayout({
               toastClassName="toast-background"
               position="top-center"
             />
+            <Toaster />
             <Nav />
             <main className="flex-grow w-full max-w-screen-2xl p-4 overflow-auto">
               {children}

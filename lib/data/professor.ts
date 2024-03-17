@@ -1,6 +1,6 @@
 import { Term } from "../definitions/course";
 import { ProfessorPage, ProfessorTableColumn } from "../definitions/professor";
-import { getValidYearTermMap } from "../utils";
+import { formatProfessorName, getValidYearTermMap } from "../utils";
 import { parseWebRegListingByYearTerm } from "./course";
 import { titleCase } from "../utils";
 import { PrismaClient, Professor, Review } from "@prisma/client";
@@ -130,7 +130,10 @@ export async function createProfessorNameIdMap(): Promise<Map<string, number>> {
   const professorNameIdMap = new Map<string, number>();
 
   professors.forEach((professor) => {
-    const fullName = `${professor.lastName}, ${professor.firstName}`;
+    const fullName = formatProfessorName(
+      professor.lastName,
+      professor.firstName,
+    );
     professorNameIdMap.set(fullName, professor.id);
   });
 
@@ -232,4 +235,26 @@ function getProfessorTableRatings(professor: any): any {
       : -1,
     reviews: reviews.length,
   };
+}
+
+/**
+ * Query for professor by course
+ *
+ * @param courseId - Course ID
+ * @return - List of professors
+ */
+export async function queryProfessorsByCourse(
+  courseCode: number,
+): Promise<Professor[]> {
+  const prisma = new PrismaClient();
+  const professors = await prisma.professor.findMany({
+    where: {
+      sections: {
+        some: {
+          courseCode: courseCode,
+        },
+      },
+    },
+  });
+  return professors;
 }

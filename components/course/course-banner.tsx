@@ -1,16 +1,15 @@
-"use client";
-
 import { Button } from "@/components/shadcn/ui/button";
 import React from "react";
 import { CoursePage } from "@/lib/definitions/course";
 import ReviewButton from "../reviews/review_button";
 import CourseCharts from "../charts/course_charts";
+import { queryProfessorsByCourse } from "@/lib/data/professor";
 
 interface Props {
   coursePage: CoursePage;
 }
 
-export default function CourseBanner({ coursePage }: Props) {
+export default async function CourseBanner({ coursePage }: Props) {
   const {
     courseCode,
     courseName,
@@ -28,6 +27,8 @@ export default function CourseBanner({ coursePage }: Props) {
   const totalWorkloadRatings = reviews.filter((review) => {
     return review.workload !== null;
   }).length;
+
+  const professors = await queryProfessorsByCourse(courseCode);
 
   return (
     <div className="flex flex-col lg:flex-row justify-start lg:justify-between max-lg:space-y-3">
@@ -101,7 +102,7 @@ export default function CourseBanner({ coursePage }: Props) {
             <Button className="max-w-fit text-xs transition-all duration-150 hover:bg-primary-black hover:shadow-primary-black">
               Compare Courses
             </Button>
-            <ReviewButton course={coursePage} />
+            <ReviewButton course={coursePage} professors={professors} />
           </div>
         </div>
       </div>

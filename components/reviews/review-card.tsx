@@ -1,7 +1,11 @@
 "use client";
 
 import React from "react";
-import { formatReviewDate, getTermNameByValue, titleCase } from "@/lib/utils";
+import {
+  formatProfessorName,
+  formatReviewDate,
+  getTermNameByValue,
+} from "@/lib/utils";
 import { Review } from "@/lib/definitions/review";
 import ReviewVotes from "./review-votes";
 
@@ -20,8 +24,11 @@ export default function ReviewCard({ review }: ReviewCardProps) {
           Course: {review.course.name}
         </p>
         <p className="text-xs text-primary-white/50">
-          Professor: {titleCase(review.professor.firstName)}{" "}
-          {titleCase(review.professor.lastName)}
+          Professor:{" "}
+          {formatProfessorName(
+            review.professor.lastName,
+            review.professor.firstName,
+          )}
         </p>
         <p className="text-xs text-primary-white/50">
           Term: {getTermNameByValue(review.semester)} {review.year}

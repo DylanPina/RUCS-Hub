@@ -14,7 +14,12 @@ import {
 import { Button } from "../shadcn/ui/button";
 import { CourseTableColumn } from "@/lib/definitions/course";
 import { ProfessorTableColumn } from "@/lib/definitions/professor";
-import { getCourseRoute, getProfessorRoute, titleCase } from "@/lib/utils";
+import {
+  formatProfessorName,
+  getCourseRoute,
+  getProfessorRoute,
+  titleCase,
+} from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
 interface Props {
@@ -85,12 +90,14 @@ export default function NavSearchBar({ courses, professors }: Props) {
             <CommandGroup heading="Professors" className="text-primary-white">
               {professors.map((professor: ProfessorTableColumn) => (
                 <CommandItem
-                  key={`${professor.lastName}-${professor.firstName}`}
+                  key={formatProfessorName(
+                    professor.lastName,
+                    professor.firstName,
+                  )}
                   className="aria-selected:bg-primary-red/50 aria-selected:text-primary-white rounded cursor-pointer"
                   onSelect={() => handleProfessorSelect(professor)}
                 >
-                  {titleCase(professor.firstName)}{" "}
-                  {titleCase(professor.lastName)}
+                  {formatProfessorName(professor.lastName, professor.firstName)}
                 </CommandItem>
               ))}
             </CommandGroup>

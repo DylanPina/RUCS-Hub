@@ -242,6 +242,22 @@ export function parseProfessorName(name: string): [string, string | null] {
 }
 
 /**
+ * Format professor name
+ *
+ * @param lastName - Last name of the professor
+ * @param firstName - First name of the professor
+ * @return - Last name and first name of the professor
+ */
+export function formatProfessorName(
+  lastName: string,
+  firstName?: string,
+): string {
+  return firstName
+    ? `${titleCase(firstName)} ${titleCase(lastName ?? "")}`
+    : titleCase(lastName ?? "");
+}
+
+/**
  * Formats a review date into a readable format
  *
  * @param date - Date to be formatted
