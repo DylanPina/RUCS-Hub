@@ -40,6 +40,17 @@ export async function queryProfessorByName(
 }
 
 /**
+ * Query all professors
+ *
+ * @return - List of all professors
+ */
+export async function queryAllProfessors(): Promise<Professor[]> {
+  const prisma = new PrismaClient();
+  const professors = await prisma.professor.findMany();
+  return professors;
+}
+
+/**
  * Query for professor table data
  *
  * @return - Professor table data
