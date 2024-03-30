@@ -18,7 +18,6 @@ import {
   formatProfessorName,
   getCourseRoute,
   getProfessorRoute,
-  titleCase,
 } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
