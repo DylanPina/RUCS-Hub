@@ -17,8 +17,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/shadcn/ui/form";
-import { CoursePage } from "@/lib/definitions/course";
-import { ProfessorPage } from "@/lib/definitions/professor";
 import { useToast } from "@/components/shadcn/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -30,14 +28,16 @@ import {
   getTerms,
   getYears,
 } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { Input } from "../shadcn/ui/input";
+import getProfessorsByCourse from "@/lib/actions/course";
+import getCoursesByProfessor from "@/lib/actions/professor";
 
 interface Props {
-  course?: CoursePage;
+  course?: Course | null;
   courses?: Course[];
-  professor?: ProfessorPage;
+  professor?: Professor | null;
   professors?: Professor[];
 }
 
@@ -48,16 +48,30 @@ export default function ReviewCreateForm({
   professors,
 }: Props) {
   const { data: session, status } = useSession();
+  const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
-  const [open, setOpen] = useState(false);
   const [terms, setTerms] = useState<number[]>(getTerms());
   const [years, setYears] = useState<number[]>(getYears());
+  const [filteredCourses, setFilteredCourses] = useState<Course[]>(
+    courses ?? [],
+  );
+  const [filteredProfessors, setFilteredProfessors] = useState<Professor[]>(
+    professors ?? [],
+  );
 
   useEffect(() => {
     if (status === "unauthenticated") {
       signIn();
     }
-  }, [status]);
+
+    if (course) {
+      startTransition(async () => {
+        setFilteredProfessors(await getProfessorsByCourse(course.code));
+      });
+    } else if (professor) {
+      console.log(`Professor: ${professor}`);
+    }
+  }, [status, course, professor]);
 
   const FormSchema = z.object({
     course: z.string().min(1, {
@@ -106,7 +120,7 @@ export default function ReviewCreateForm({
     resolver: zodResolver(FormSchema),
     mode: "onChange",
     defaultValues: {
-      course: course ? `(${course.courseCode}) ${course.courseName}` : "",
+      course: course ? `(${course.code}) ${course.name}` : "",
       professor: professor
         ? formatProfessorName(
             professor?.lastName || "",
@@ -115,6 +129,40 @@ export default function ReviewCreateForm({
         : "",
     },
   });
+
+  function onCourseChange(course: any) {
+    const courseCode = parseInt(course.split("(")[1].split(")")[0]);
+    startTransition(async () => {
+      setFilteredProfessors(await getProfessorsByCourse(courseCode));
+    });
+    form.setValue("course", course);
+  }
+
+  function onProfessorChange(professor: string) {
+    const professorId = filteredProfessors.find(
+      (p) => formatProfessorName(p.lastName, p.firstName) === professor,
+    )?.id;
+
+    if (!professorId) return;
+
+    startTransition(async () => {
+      const filteredCourseCodes = await getCoursesByProfessor(professorId);
+      setFilteredCourses(
+        courses?.filter((c) => filteredCourseCodes.includes(c.code)) ?? [],
+      );
+    });
+    form.setValue("professor", professor);
+  }
+
+  function clearCourseSelection() {
+    setFilteredProfessors(professors ?? []);
+    form.resetField("course");
+  }
+
+  function clearProfessorSelection() {
+    setFilteredCourses(courses ?? []);
+    form.resetField("professor");
+  }
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     toast({
@@ -126,8 +174,6 @@ export default function ReviewCreateForm({
         </pre>
       ),
     });
-
-    setOpen(false);
   }
 
   return (
@@ -142,38 +188,50 @@ export default function ReviewCreateForm({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Course *</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-                disabled={!!course}
-              >
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue className="placeholder-primary-white" />
-                  </SelectTrigger>
-                </FormControl>
-                {!course && courses ? (
-                  <SelectContent>
-                    {courses.map((course: Course) => (
+              <div className="flex items-center space-x-2">
+                <Select
+                  onValueChange={(value) => {
+                    onCourseChange(value);
+                    field.onChange(value);
+                  }}
+                  value={field.value}
+                  disabled={!!course}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue className="placeholder-primary-white" />
+                    </SelectTrigger>
+                  </FormControl>
+                  {!course && courses ? (
+                    <SelectContent>
+                      {filteredCourses.map((course: Course) => (
+                        <SelectItem
+                          key={course.code}
+                          value={`(${course.code}) ${course.name}`}
+                        >
+                          {`(${course.code}) ${course.name}`}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  ) : (
+                    <SelectContent>
                       <SelectItem
-                        key={course.code}
-                        value={`(${course.code}) ${course.name}`}
+                        key={course?.code}
+                        value={`(${course?.code}) ${course?.name}`}
                       >
-                        {`(${course.code}) ${course.name}`}
+                        {`(${course?.code}) ${course?.name}`}
                       </SelectItem>
-                    ))}
-                  </SelectContent>
-                ) : (
-                  <SelectContent>
-                    <SelectItem
-                      key={course?.courseCode}
-                      value={`(${course?.courseCode}) ${course?.courseName}`}
-                    >
-                      {`(${course?.courseCode}) ${course?.courseName}`}
-                    </SelectItem>
-                  </SelectContent>
-                )}
-              </Select>
+                    </SelectContent>
+                  )}
+                </Select>
+                <Button
+                  type="button"
+                  onClick={clearCourseSelection}
+                  className="transition-all duration-150 bg-primary-white text-primary-black hover:bg-primary-white hover:shadow-primary-white/90"
+                >
+                  Reset
+                </Button>
+              </div>
               <FormMessage />
             </FormItem>
           )}
@@ -184,56 +242,68 @@ export default function ReviewCreateForm({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Professor *</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-                disabled={!!professor}
-              >
-                <FormControl>
-                  <SelectTrigger className="placeholder-primary-white/50">
-                    <SelectValue />
-                  </SelectTrigger>
-                </FormControl>
-                {!professor && professors ? (
-                  <SelectContent>
-                    {professors.map((professor: any) => (
+              <div className="flex items-center space-x-2">
+                <Select
+                  onValueChange={(value) => {
+                    onProfessorChange(value);
+                    field.onChange(value);
+                  }}
+                  value={field.value}
+                  disabled={!!professor}
+                >
+                  <FormControl>
+                    <SelectTrigger className="placeholder-primary-white/50">
+                      <SelectValue />
+                    </SelectTrigger>
+                  </FormControl>
+                  {!professor && professors ? (
+                    <SelectContent>
+                      {filteredProfessors.map((professor: any) => (
+                        <SelectItem
+                          key={formatProfessorName(
+                            professor.lastName,
+                            professor.firstName,
+                          )}
+                          value={formatProfessorName(
+                            professor.lastName,
+                            professor.firstName,
+                          )}
+                        >
+                          {formatProfessorName(
+                            professor.lastName,
+                            professor.firstName,
+                          )}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  ) : (
+                    <SelectContent>
                       <SelectItem
                         key={formatProfessorName(
-                          professor.lastName,
-                          professor.firstName,
+                          professor?.lastName || "",
+                          professor?.firstName,
                         )}
                         value={formatProfessorName(
-                          professor.lastName,
-                          professor.firstName,
+                          professor?.lastName || "",
+                          professor?.firstName,
                         )}
                       >
                         {formatProfessorName(
-                          professor.lastName,
-                          professor.firstName,
+                          professor?.lastName || "",
+                          professor?.firstName,
                         )}
                       </SelectItem>
-                    ))}
-                  </SelectContent>
-                ) : (
-                  <SelectContent>
-                    <SelectItem
-                      key={formatProfessorName(
-                        professor?.lastName || "",
-                        professor?.firstName,
-                      )}
-                      value={formatProfessorName(
-                        professor?.lastName || "",
-                        professor?.firstName,
-                      )}
-                    >
-                      {formatProfessorName(
-                        professor?.lastName || "",
-                        professor?.firstName,
-                      )}
-                    </SelectItem>
-                  </SelectContent>
-                )}
-              </Select>
+                    </SelectContent>
+                  )}
+                </Select>
+                <Button
+                  type="button"
+                  onClick={clearProfessorSelection}
+                  className="transition-all duration-150 bg-primary-white text-primary-black hover:bg-primary-white hover:shadow-primary-white/90"
+                >
+                  Reset
+                </Button>
+              </div>
               <FormMessage />
             </FormItem>
           )}

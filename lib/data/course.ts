@@ -698,7 +698,7 @@ export async function queryAllCourseSections(): Promise<Section[]> {
  * @param professorId - ID for the professor we are interested in
  * @return - Unique course IDs that the professor taught
  */
-export async function getTaughtByProfessor(
+export async function queryCoursesTaughtByProfessor(
   professorId: number,
 ): Promise<number[]> {
   const sections = await queryAllCourseSections();
