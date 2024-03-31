@@ -5,6 +5,7 @@ import { titleCase } from "@/lib/utils";
 import ProfessorCharts from "@/components/charts/professor_charts";
 import CurrentlyTeaching from "@/components/professor/currently_teaching";
 import { getCoursesBeingTaughtByProfessor } from "@/lib/data/course";
+import AddReviewBannerButton from "@/components/reviews/add_review_banner_button";
 
 interface Props {
   professor: ProfessorPage;
@@ -74,9 +75,7 @@ export default async function ProfessorBanner({ professor }: Props) {
             <Button className="max-w-fit text-xs transition-all duration-150 hover:bg-primary-black hover:shadow-primary-black">
               Compare professors
             </Button>
-            <Button className="max-w-fit text-xs transition-all duration-150 hover:bg-primary-black hover:shadow-primary-black">
-              Leave a Review
-            </Button>
+            <AddReviewBannerButton professorId={professor.id} />
           </div>
         </div>
       </div>

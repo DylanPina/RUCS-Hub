@@ -1,11 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  formatProfessorName,
-  getTermNameByValue,
-  titleCase,
-} from "@/lib/utils";
+import { formatProfessorName, getTermNameByValue } from "@/lib/utils";
 import { Review } from "@/lib/definitions/review";
 import { Vote } from "@/lib/definitions/vote";
 import ReviewsSortBy from "@/components/reviews/reviews-sort-by";

@@ -36,9 +36,9 @@ import getCoursesByProfessor from "@/lib/actions/professor";
 
 interface Props {
   course?: Course | null;
-  courses?: Course[];
+  courses: Course[];
   professor?: Professor | null;
-  professors?: Professor[];
+  professors: Professor[];
 }
 
 export default function ReviewCreateForm({
@@ -50,28 +50,41 @@ export default function ReviewCreateForm({
   const { data: session, status } = useSession();
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
-  const [terms, setTerms] = useState<number[]>(getTerms());
-  const [years, setYears] = useState<number[]>(getYears());
   const [filteredCourses, setFilteredCourses] = useState<Course[]>(
     courses ?? [],
   );
   const [filteredProfessors, setFilteredProfessors] = useState<Professor[]>(
     professors ?? [],
   );
+  const terms = getTerms();
+  const years = getYears();
 
   useEffect(() => {
     if (status === "unauthenticated") {
       signIn();
     }
 
-    if (course) {
+    if (course && professor) {
+      startTransition(async () => {
+        setFilteredProfessors(await getProfessorsByCourse(course.code));
+        const filteredCourseCodes = await getCoursesByProfessor(professor.id);
+        setFilteredCourses(
+          courses?.filter((c) => filteredCourseCodes.includes(c.code)) ?? [],
+        );
+      });
+    } else if (course) {
       startTransition(async () => {
         setFilteredProfessors(await getProfessorsByCourse(course.code));
       });
     } else if (professor) {
-      console.log(`Professor: ${professor}`);
+      startTransition(async () => {
+        const filteredCourseCodes = await getCoursesByProfessor(professor.id);
+        setFilteredCourses(
+          courses?.filter((c) => filteredCourseCodes.includes(c.code)) ?? [],
+        );
+      });
     }
-  }, [status, course, professor]);
+  }, [status, course, courses, professor, professors]);
 
   const FormSchema = z.object({
     course: z.string().min(1, {
@@ -122,10 +135,7 @@ export default function ReviewCreateForm({
     defaultValues: {
       course: course ? `(${course.code}) ${course.name}` : "",
       professor: professor
-        ? formatProfessorName(
-            professor?.lastName || "",
-            professor?.firstName || "",
-          )
+        ? formatProfessorName(professor.lastName, professor.firstName)
         : "",
     },
   });
@@ -139,7 +149,7 @@ export default function ReviewCreateForm({
   }
 
   function onProfessorChange(professor: string) {
-    const professorId = filteredProfessors.find(
+    const professorId = filteredProfessors?.find(
       (p) => formatProfessorName(p.lastName, p.firstName) === professor,
     )?.id;
 
@@ -156,12 +166,12 @@ export default function ReviewCreateForm({
 
   function clearCourseSelection() {
     setFilteredProfessors(professors ?? []);
-    form.resetField("course");
+    form.setValue("course", "");
   }
 
   function clearProfessorSelection() {
     setFilteredCourses(courses ?? []);
-    form.resetField("professor");
+    form.setValue("professor", "");
   }
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
@@ -192,37 +202,24 @@ export default function ReviewCreateForm({
                 <Select
                   onValueChange={(value) => {
                     onCourseChange(value);
-                    field.onChange(value);
                   }}
-                  value={field.value}
-                  disabled={!!course}
+                  value={form.watch("course") ?? ""}
                 >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue className="placeholder-primary-white" />
                     </SelectTrigger>
                   </FormControl>
-                  {!course && courses ? (
-                    <SelectContent>
-                      {filteredCourses.map((course: Course) => (
-                        <SelectItem
-                          key={course.code}
-                          value={`(${course.code}) ${course.name}`}
-                        >
-                          {`(${course.code}) ${course.name}`}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  ) : (
-                    <SelectContent>
+                  <SelectContent>
+                    {filteredCourses?.map((course: Course) => (
                       <SelectItem
-                        key={course?.code}
-                        value={`(${course?.code}) ${course?.name}`}
+                        key={course.code}
+                        value={`(${course.code}) ${course.name}`}
                       >
-                        {`(${course?.code}) ${course?.name}`}
+                        {`(${course.code}) ${course.name}`}
                       </SelectItem>
-                    </SelectContent>
-                  )}
+                    ))}
+                  </SelectContent>
                 </Select>
                 <Button
                   type="button"
@@ -246,55 +243,33 @@ export default function ReviewCreateForm({
                 <Select
                   onValueChange={(value) => {
                     onProfessorChange(value);
-                    field.onChange(value);
                   }}
                   value={field.value}
-                  disabled={!!professor}
                 >
                   <FormControl>
                     <SelectTrigger className="placeholder-primary-white/50">
                       <SelectValue />
                     </SelectTrigger>
                   </FormControl>
-                  {!professor && professors ? (
-                    <SelectContent>
-                      {filteredProfessors.map((professor: any) => (
-                        <SelectItem
-                          key={formatProfessorName(
-                            professor.lastName,
-                            professor.firstName,
-                          )}
-                          value={formatProfessorName(
-                            professor.lastName,
-                            professor.firstName,
-                          )}
-                        >
-                          {formatProfessorName(
-                            professor.lastName,
-                            professor.firstName,
-                          )}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  ) : (
-                    <SelectContent>
+                  <SelectContent>
+                    {filteredProfessors?.map((professor: any) => (
                       <SelectItem
                         key={formatProfessorName(
-                          professor?.lastName || "",
-                          professor?.firstName,
+                          professor.lastName,
+                          professor.firstName,
                         )}
                         value={formatProfessorName(
-                          professor?.lastName || "",
-                          professor?.firstName,
+                          professor.lastName,
+                          professor.firstName,
                         )}
                       >
                         {formatProfessorName(
-                          professor?.lastName || "",
-                          professor?.firstName,
+                          professor.lastName,
+                          professor.firstName,
                         )}
                       </SelectItem>
-                    </SelectContent>
-                  )}
+                    ))}
+                  </SelectContent>
                 </Select>
                 <Button
                   type="button"
@@ -326,7 +301,7 @@ export default function ReviewCreateForm({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {years.map((year: number) => (
+                      {years?.map((year: number) => (
                         <SelectItem key={year} value={year.toString()}>
                           {year.toString()}
                         </SelectItem>
@@ -355,7 +330,7 @@ export default function ReviewCreateForm({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {terms.map((term: number) => (
+                      {terms?.map((term: number) => (
                         <SelectItem key={term} value={term.toString()}>
                           {getTermNameByValue(term)}
                         </SelectItem>

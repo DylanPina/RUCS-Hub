@@ -1,6 +1,7 @@
 import { Term } from "@/lib/definitions/course";
 import { MAX_YEAR, MIN_YEAR } from "@/lib/constants";
 import sha256 from "crypto-js/sha256";
+import { NextRouter } from "next/router";
 
 /**
  * Validates the supported term and year range for a course.
@@ -289,3 +290,23 @@ export function formatReviewDate(date: Date): string {
 export function hashEmailAddress(email: string): string {
   return sha256(email).toString();
 }
+
+/**
+ * Removes a query parameter from the URL
+ *
+ * @param paramKey - Key of the query parameter to remove
+ */
+export const removeQueryParam = (router: NextRouter, paramKey: string) => {
+  // Destructure the query object to exclude the param to remove
+  const { [paramKey]: _, ...rest } = router.query;
+
+  // Push the new query to the router, without the removed param
+  router.push(
+    {
+      pathname: router.pathname,
+      query: { ...rest },
+    },
+    undefined,
+    { shallow: true },
+  );
+};
