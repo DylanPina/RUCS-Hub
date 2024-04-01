@@ -66,6 +66,9 @@ export async function queryAllCourses(): Promise<Course[]> {
     include: {
       reviews: true,
     },
+    orderBy: {
+      code: "asc",
+    },
   });
 
   if (!courses) {

@@ -27,3 +27,18 @@ export type Review = {
   piazzaRating?: number;
   workload?: number;
 };
+
+export type ReviewForm = {
+  course: string;
+  professor: string;
+  year: string;
+  term: string;
+  title: string;
+  content: string;
+  courseRating: number;
+  courseDifficultyRating?: number;
+  courseWorkload?: number;
+  professorRating?: number;
+  professorDifficultyRating?: number;
+  lectureRating?: number;
+};

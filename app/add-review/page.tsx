@@ -31,9 +31,6 @@ export default async function Page({
     );
 
     if (!professorExistsInCourse) {
-      console.log(
-        `Invalid professor for course: ${JSON.stringify(professor, null, 2)}`,
-      );
       professor = null;
       course = null;
     }

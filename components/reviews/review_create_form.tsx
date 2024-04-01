@@ -27,12 +27,16 @@ import {
   getTermNameByValue,
   getTerms,
   getYears,
+  hashEmailAddress,
 } from "@/lib/utils";
 import { useEffect, useState, useTransition } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { Input } from "../shadcn/ui/input";
 import getProfessorsByCourse from "@/lib/actions/course";
 import getCoursesByProfessor from "@/lib/actions/professor";
+import { Textarea } from "../shadcn/ui/textarea";
+import createReview from "@/lib/actions/review";
+import { ReviewForm } from "@/lib/definitions/review";
 
 interface Props {
   course?: Course | null;
@@ -106,7 +110,8 @@ export default function ReviewCreateForm({
     courseDifficultyRating: z
       .number()
       .min(1, "Rating must be at least 1")
-      .max(10, "Rating cannot exceed 10"),
+      .max(10, "Rating cannot exceed 10")
+      .optional(),
     courseWorkload: z
       .number()
       .min(1, "Workload must be at least 1 hour")
@@ -127,6 +132,14 @@ export default function ReviewCreateForm({
       .min(1, "Rating must be at least 1 hour")
       .max(10, "Rating cannot exceed 10 hours")
       .optional(),
+    title: z
+      .string()
+      .min(2, "Title must be at least 2 characters")
+      .max(100, "Title cannot exceed 100 characters"),
+    content: z
+      .string()
+      .min(1, "Review must have content")
+      .max(1000, "Review cannot exceed 1000 characters"),
   });
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -174,7 +187,10 @@ export default function ReviewCreateForm({
     form.setValue("professor", "");
   }
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    const userId = hashEmailAddress(session?.user?.email as string);
+    await createReview(data as ReviewForm, userId);
+
     toast({
       title: "Successfully submitted review:",
       className: "bg-primary-black text-primary-white",
@@ -183,6 +199,12 @@ export default function ReviewCreateForm({
           <code className="text-white">{JSON.stringify(data, null, 2)}</code>
         </pre>
       ),
+    });
+    form.reset({
+      year: "",
+      term: "",
+      title: "",
+      content: "",
     });
   }
 
@@ -203,7 +225,7 @@ export default function ReviewCreateForm({
                   onValueChange={(value) => {
                     onCourseChange(value);
                   }}
-                  value={form.watch("course") ?? ""}
+                  value={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -291,10 +313,7 @@ export default function ReviewCreateForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Year *</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue />
@@ -320,10 +339,7 @@ export default function ReviewCreateForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Term *</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue />
@@ -521,6 +537,38 @@ export default function ReviewCreateForm({
             />
           </div>
         </div>
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Title *</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormDescription className="text-primary-white/50 text-xs">
+                Max 100 characters
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="content"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Content *</FormLabel>
+              <FormControl>
+                <Textarea className="min-h-[150px]" {...field} />
+              </FormControl>
+              <FormDescription className="text-primary-white/50 text-xs">
+                Max 1000 characters
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button
           className="place-self-end max-w-fit transition-all duration-150 bg-primary-red hover:bg-primary-red/90 hover:shadow-primary-red/90"
           type="submit"
