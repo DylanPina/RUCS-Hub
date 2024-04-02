@@ -44,7 +44,8 @@ export default async function CourseBanner({ coursePage }: Props) {
               </h3>
               {reviews.length > 0 ? (
                 <h3 className="text-md text-primary-white font-bold">
-                  Rating: <span className="font-normal">{rating}</span>
+                  Rating:{" "}
+                  <span className="font-normal">{rating.toFixed(1)}</span>
                   <span className="text-xs text-primary-white/50 font-normal">
                     /10
                   </span>{" "}
@@ -60,7 +61,8 @@ export default async function CourseBanner({ coursePage }: Props) {
               )}
               {totalDifficultyRatings > 0 ? (
                 <h3 className="text-md text-primary-white font-bold">
-                  Difficulty: <span className="font-normal">{difficulty}</span>
+                  Difficulty:{" "}
+                  <span className="font-normal">{difficulty.toFixed(1)}</span>
                   <span className="text-xs text-primary-white/50 font-normal">
                     /10
                   </span>{" "}
@@ -79,7 +81,9 @@ export default async function CourseBanner({ coursePage }: Props) {
               {totalWorkloadRatings > 0 ? (
                 <h3 className="text-md text-primary-white font-bold">
                   Workload:{" "}
-                  <span className="font-normal">{workload} hours per week</span>
+                  <span className="font-normal">
+                    {workload.toFixed(1)} hours per week
+                  </span>
                   <span className="text-xs italic text-primary-white/50 font-normal">
                     {" "}
                     based on{" "}

@@ -34,7 +34,8 @@ export default async function ProfessorBanner({ professor }: Props) {
             <div className="flex flex-col space-y-1">
               {totalOverallRatings > 0 ? (
                 <h3 className="text-md text-primary-white font-bold">
-                  Overall: <span className="font-normal">{overall}</span>
+                  Overall:{" "}
+                  <span className="font-normal">{overall.toFixed(1)}</span>
                   <span className="font-normal">/10</span>{" "}
                   <span className="text-xs italic text-primary-white/50">
                     based on{" "}
@@ -50,7 +51,8 @@ export default async function ProfessorBanner({ professor }: Props) {
               )}
               {totalDifficultyRatings > 0 ? (
                 <h3 className="text-md text-primary-white font-bold">
-                  Difficulty: <span className="font-normal">{difficulty}</span>
+                  Difficulty:{" "}
+                  <span className="font-normal">{difficulty.toFixed(1)}</span>
                   <span className="font-normal">/10</span>{" "}
                   <span className="text-xs italic text-primary-white/50">
                     based on{" "}
