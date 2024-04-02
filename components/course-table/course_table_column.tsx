@@ -69,7 +69,9 @@ export const columns: ColumnDef<CourseTableColumn>[] = [
     },
     cell: (props: any) => (
       <span>
-        {props.row.original.difficulty !== -1 ? props.getValue() : "?"}
+        {props.row.original.difficulty !== -1
+          ? props.getValue().toFixed(1)
+          : "?"}
       </span>
     ),
   },
@@ -88,7 +90,9 @@ export const columns: ColumnDef<CourseTableColumn>[] = [
       );
     },
     cell: (props: any) => (
-      <span>{props.row.original.workload !== -1 ? props.getValue() : "?"}</span>
+      <span>
+        {props.row.original.workload !== -1 ? props.getValue().toFixed(1) : "?"}
+      </span>
     ),
   },
   {
@@ -106,7 +110,9 @@ export const columns: ColumnDef<CourseTableColumn>[] = [
       );
     },
     cell: (props: any) => (
-      <span>{props.row.original.rating !== -1 ? props.getValue() : "?"}</span>
+      <span>
+        {props.row.original.rating !== -1 ? props.getValue().toFixed(1) : "?"}
+      </span>
     ),
   },
   {
