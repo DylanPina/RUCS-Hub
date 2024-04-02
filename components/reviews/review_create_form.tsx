@@ -60,6 +60,7 @@ export default function ReviewCreateForm({
   const [filteredProfessors, setFilteredProfessors] = useState<Professor[]>(
     professors ?? [],
   );
+  const [submitting, setSubmitting] = useState(false);
   const terms = getTerms();
   const years = getYears();
 
@@ -188,6 +189,7 @@ export default function ReviewCreateForm({
   }
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
+    setSubmitting(true);
     const userId = hashEmailAddress(session?.user?.email as string);
     await createReview(data as ReviewForm, userId);
 
@@ -206,6 +208,7 @@ export default function ReviewCreateForm({
       title: "",
       content: "",
     });
+    setSubmitting(false);
   }
 
   return (
@@ -570,6 +573,7 @@ export default function ReviewCreateForm({
           )}
         />
         <Button
+          disabled={submitting}
           className="place-self-end max-w-fit transition-all duration-150 bg-primary-red hover:bg-primary-red/90 hover:shadow-primary-red/90"
           type="submit"
         >
