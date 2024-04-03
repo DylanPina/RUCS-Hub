@@ -10,6 +10,14 @@ import ReviewsFilterTerm from "@/components/reviews/reviews-filter-term";
 import ReviewsFilterYear from "@/components/reviews/reviews-filter-year";
 import ReviewsFilterSearch from "@/components/reviews/reviews-filter-search";
 import ReviewCard from "@/components/reviews/review-card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/shadcn/ui/select";
+import { Button } from "@/components/shadcn/ui/button";
 
 interface ProfessorReviewProps {
   reviews: Review[];
@@ -17,11 +25,15 @@ interface ProfessorReviewProps {
 
 export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
   const [filteredReviews, setFilteredReviews] = useState(reviews);
+  const [paginatedReviews, setPaginatedReviews] = useState(reviews);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("newest");
   const [year, setYear] = useState("Any");
   const [term, setTerm] = useState("Any");
   const [course, setCourse] = useState("Any");
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [startIndex, setStartIndex] = useState(0);
+  const [endIndex, setEndIndex] = useState(rowsPerPage);
 
   const courses: string[] = ["Any"].concat(
     Array.from(new Set(reviews.map((review: Review) => review.course.name))),
@@ -109,7 +121,69 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
     });
 
     setFilteredReviews(filtered);
-  }, [sortBy, term, reviews, year, course, searchTerm]);
+    setPaginatedReviews(filtered.slice(startIndex, endIndex));
+  }, [sortBy, term, reviews, year, course, searchTerm, startIndex, endIndex]);
+
+  function noReviewsMessage() {
+    if (reviews.length > 0 && !searchTerm) {
+      const isAnyTermOrYear =
+        (term === "Any" || !term) && (year === "Any" || !year);
+      const messageParts = [];
+
+      if (term && term !== "Any") {
+        messageParts.push(`the ${term}`);
+      }
+      if (year && year !== "Any") {
+        messageParts.push(year);
+      }
+      const message = messageParts.join(" ");
+
+      return (
+        <p className="font-bold text-primary-red">
+          No reviews found for{" "}
+          {messageParts.length > 0 ? (
+            <span className="underline">{message}</span>
+          ) : (
+            ""
+          )}{" "}
+          {isAnyTermOrYear ? "" : "term"}
+          {isAnyTermOrYear ? "s" : ""}
+        </p>
+      );
+    } else {
+      return <p className="font-bold text-primary-red">No reviews found</p>;
+    }
+  }
+
+  function handleSearchTermChange(value: string) {
+    setSearchTerm(value);
+    setStartIndex(0);
+    setEndIndex(rowsPerPage);
+  }
+
+  function handleRowsPerPageChange(value: string) {
+    setRowsPerPage(parseInt(value));
+    setStartIndex(0);
+    setEndIndex(parseInt(value));
+    setPaginatedReviews(filteredReviews.slice(0, parseInt(value)));
+  }
+
+  function handlePrev() {
+    const newStartIndex = Math.max(startIndex - rowsPerPage, 0);
+    const newEndIndex = Math.max(endIndex - rowsPerPage, rowsPerPage);
+    setStartIndex(newStartIndex);
+    setEndIndex(newEndIndex);
+  }
+
+  function handleNext() {
+    const newStartIndex = startIndex + rowsPerPage;
+    const newEndIndex = Math.min(
+      endIndex + rowsPerPage,
+      filteredReviews.length,
+    );
+    setStartIndex(newStartIndex);
+    setEndIndex(newEndIndex);
+  }
 
   return (
     <div className="flex flex-col space-y-3">
@@ -120,7 +194,7 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
               Professor Reviews:
             </h3>
             <ReviewsFilterSearch
-              onFilterChange={(value: string) => setSearchTerm(value)}
+              onFilterChange={handleSearchTermChange}
               placeHolder="Filter reviews..."
             />
           </div>
@@ -140,31 +214,63 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
         </div>
       </div>
       <div className="flex flex-col space-y-3">
-        {filteredReviews.length ? (
-          filteredReviews.map((review: Review) => (
-            <ReviewCard key={review.id} review={review} />
-          ))
-        ) : reviews.length && !searchTerm ? (
-          <p className="font-bold text-primary-red">
-            No reviews found for{" "}
-            {course && course !== "Any" && (
-              <span>
-                <span className="underline">{course}</span>
-                {" in "}
-              </span>
-            )}
-            {term && term !== "Any" && "the"}{" "}
-            <span className="underline">
-              {term && term !== "Any" ? term : ""}
-              {year && year !== "Any" ? " " + year : ""}
-            </span>{" "}
-            term
-            {(year && year === "Any") || (term && term === "Any") ? "s" : ""}
-          </p>
-        ) : (
-          <p className="font-bold text-primary-red">No reviews found</p>
-        )}
+        {filteredReviews.length > 0
+          ? paginatedReviews.map((review) => (
+              <ReviewCard key={review.id} review={review} />
+            ))
+          : noReviewsMessage()}
       </div>
+
+      {filteredReviews.length > 0 && (
+        <div className="flex max-sm:flex-col max-sm:place-content-start sm:place-content-between sm:space-x-2 max-sm:space-y-4 w-full">
+          <div className="flex space-x-4">
+            <span className="flex items-center text-sm font-semibold align-top">
+              {` Page ${startIndex / rowsPerPage + 1} of ${Math.ceil(
+                filteredReviews.length / rowsPerPage,
+              )}`}
+            </span>
+            <Select
+              value={rowsPerPage.toString()}
+              onValueChange={handleRowsPerPageChange}
+            >
+              <SelectTrigger className="w-fit">
+                <SelectValue placeholder="Select a year..." />
+              </SelectTrigger>
+              <SelectContent>
+                {[5, 10, 15, 20, 25].map((pageSize: number) => (
+                  <SelectItem value={pageSize.toString()} key={pageSize}>
+                    Show {pageSize}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                handlePrev();
+              }}
+              disabled={startIndex === 0}
+              className="bg-primary-white text-primary-black hover:bg-primary-red border-0 disabled:bg-primary-white/90 transition duration-150 ease-out hover:ease-in"
+            >
+              Previous
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                handleNext();
+              }}
+              disabled={endIndex >= filteredReviews.length}
+              className="bg-primary-white text-primary-black hover:bg-primary-red border-0 disabled:bg-primary-white/90 transition duration-150 ease-out hover:ease-in"
+            >
+              Next
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

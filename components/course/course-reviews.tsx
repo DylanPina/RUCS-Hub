@@ -31,7 +31,7 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
   const [year, setYear] = useState("Any");
   const [term, setTerm] = useState("Any");
   const [professor, setProfessor] = useState("Any");
-  const [rowsPerPage, setRowsPerPage] = useState(2);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [startIndex, setStartIndex] = useState(0);
   const [endIndex, setEndIndex] = useState(rowsPerPage);
 
@@ -248,7 +248,7 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
           <div className="flex space-x-4">
             <span className="flex items-center text-sm font-semibold align-top">
               {` Page ${startIndex / rowsPerPage + 1} of ${Math.ceil(
-                reviews.length / rowsPerPage,
+                filteredReviews.length / rowsPerPage,
               )}`}
             </span>
             <Select
@@ -259,7 +259,7 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
                 <SelectValue placeholder="Select a year..." />
               </SelectTrigger>
               <SelectContent>
-                {[2, 10, 20, 30, 40].map((pageSize: number) => (
+                {[5, 10, 15, 20, 25].map((pageSize: number) => (
                   <SelectItem value={pageSize.toString()} key={pageSize}>
                     Show {pageSize}
                   </SelectItem>
