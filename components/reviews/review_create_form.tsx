@@ -30,7 +30,7 @@ import {
   hashEmailAddress,
 } from "@/lib/utils";
 import { useEffect, useState, useTransition } from "react";
-import { signIn, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { Input } from "../shadcn/ui/input";
 import getProfessorsByCourse from "@/lib/actions/course";
 import getCoursesByProfessor from "@/lib/actions/professor";
@@ -65,10 +65,6 @@ export default function ReviewCreateForm({
   const years = getYears();
 
   useEffect(() => {
-    if (status === "unauthenticated") {
-      signIn();
-    }
-
     if (course && professor) {
       startTransition(async () => {
         setFilteredProfessors(await getProfessorsByCourse(course.code));
