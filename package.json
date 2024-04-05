@@ -10,6 +10,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@auth0/nextjs-auth0": "^3.5.0",
     "@heroicons/react": "^2.0.18",
     "@hookform/resolvers": "^3.3.4",
     "@prisma/client": "^5.8.1",
@@ -38,7 +39,6 @@
     "jsdom": "^23.2.0",
     "lucide-react": "^0.309.0",
     "next": "^14.0.2",
-    "next-auth": "^4.24.5",
     "postcss": "8.4.31",
     "react": "18.2.0",
     "react-dom": "18.2.0",

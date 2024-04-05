@@ -1,3 +1,7 @@
-export { default } from "next-auth/middleware";
+import { withMiddlewareAuthRequired } from "@auth0/nextjs-auth0/edge";
 
-export const config = { matcher: ["/add-review"] };
+export default withMiddlewareAuthRequired();
+
+export const config = {
+  matcher: "/add-review",
+};

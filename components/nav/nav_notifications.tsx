@@ -9,14 +9,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/shadcn/ui/tooltip";
-import { useSession } from "next-auth/react";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 export default function NavNotification() {
-  const { data: session } = useSession();
+  const { user } = useUser();
 
   return (
-    session &&
-    session.user && (
+    user && (
       <Button
         asChild
         variant="ghost"

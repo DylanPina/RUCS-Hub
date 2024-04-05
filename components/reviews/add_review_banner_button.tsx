@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Button } from "../shadcn/ui/button";
-import { useSession } from "next-auth/react";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
@@ -15,11 +15,11 @@ export default function AddReviewBannerButton({
   courseCode,
   professorId,
 }: Props) {
-  const { status } = useSession();
+  const { user } = useUser();
   const router = useRouter();
 
   function handleClick() {
-    if (status !== "authenticated") {
+    if (!user) {
       toast.error("Must be signed in to leave a review");
       return;
     }

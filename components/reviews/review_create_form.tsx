@@ -30,8 +30,8 @@ import {
   hashEmailAddress,
 } from "@/lib/utils";
 import { useEffect, useState, useTransition } from "react";
-import { useSession } from "next-auth/react";
 import { Input } from "../shadcn/ui/input";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import getProfessorsByCourse from "@/lib/actions/course";
 import getCoursesByProfessor from "@/lib/actions/professor";
 import { Textarea } from "../shadcn/ui/textarea";
@@ -51,7 +51,7 @@ export default function ReviewCreateForm({
   professor,
   professors,
 }: Props) {
-  const { data: session, status } = useSession();
+  const { user } = useUser();
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
   const [filteredCourses, setFilteredCourses] = useState<Course[]>(
@@ -85,7 +85,7 @@ export default function ReviewCreateForm({
         );
       });
     }
-  }, [status, course, courses, professor, professors]);
+  }, [course, courses, professor, professors]);
 
   const FormSchema = z.object({
     course: z.string().min(1, {
@@ -186,7 +186,7 @@ export default function ReviewCreateForm({
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setSubmitting(true);
-    const userId = hashEmailAddress(session?.user?.email as string);
+    const userId = hashEmailAddress(user?.email as string);
     await createReview(data as ReviewForm, userId);
 
     toast({

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Button } from "../shadcn/ui/button";
-import { useSession } from "next-auth/react";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import { toast } from "react-toastify";
 import { CoursePage } from "@/lib/definitions/course";
 import { ProfessorPage } from "@/lib/definitions/professor";
@@ -22,11 +22,11 @@ export default function ReviewButton({
   professor,
   professors,
 }: Props) {
-  const { status } = useSession();
+  const { user } = useUser();
 
   return (
     <>
-      {status === "authenticated" ? (
+      {user ? (
         <ReviewCreateModal
           course={course}
           courses={courses}

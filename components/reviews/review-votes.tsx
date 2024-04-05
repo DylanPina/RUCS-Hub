@@ -10,9 +10,9 @@ import {
 } from "@/components/shadcn/ui/tooltip";
 import { Vote } from "@prisma/client";
 import { Review } from "@/lib/definitions/review";
-import { useSession } from "next-auth/react";
 import { hashEmailAddress } from "@/lib/utils";
 import { toast } from "react-toastify";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 interface ReviewVotesProps {
   review: Review;
@@ -20,7 +20,7 @@ interface ReviewVotesProps {
 
 export default function ReviewVotes({ review }: ReviewVotesProps) {
   const { votes } = review;
-  const { data: session, status } = useSession();
+  const { user } = useUser();
 
   const [upvotes, setUpvotes] = useState(0);
   const [downvotes, setDownvotes] = useState(0);
@@ -31,8 +31,8 @@ export default function ReviewVotes({ review }: ReviewVotesProps) {
     setUpvotes(votes.filter((vote: Vote) => vote.upvote).length);
     setDownvotes(votes.filter((vote: Vote) => !vote.upvote).length);
 
-    if (status === "authenticated") {
-      const userId = hashEmailAddress(session?.user?.email ?? "");
+    if (user) {
+      const userId = hashEmailAddress(user.email ?? "");
 
       setUpvoted(
         votes.some((vote: Vote) => vote.userId === userId && vote.upvote),
@@ -41,10 +41,10 @@ export default function ReviewVotes({ review }: ReviewVotesProps) {
         votes.some((vote: Vote) => vote.userId === userId && !vote.upvote),
       );
     }
-  }, [session, status, votes]);
+  }, [user, votes]);
 
   async function handleUpvote() {
-    if (status !== "authenticated") {
+    if (!user) {
       toast.error("Must be signed in to vote.");
       return;
     }
@@ -75,7 +75,7 @@ export default function ReviewVotes({ review }: ReviewVotesProps) {
   }
 
   async function handleDownvote() {
-    if (status !== "authenticated") {
+    if (!user) {
       toast.error("Must be signed in to vote.");
       return;
     }
