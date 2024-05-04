@@ -1,11 +1,14 @@
 import ResendEmailVerificationButton from "@/components/auth/resend_email_verification_button";
+import { getLastEmailVerification } from "@/lib/data/user";
 import { getSession } from "@auth0/nextjs-auth0";
 import { redirect } from "next/navigation";
 import React from "react";
 
 export default async function Page() {
   const session = await getSession();
-  console.log(`Session: ${JSON.stringify(session, null, 2)}`);
+  const lastEmailVerification = await getLastEmailVerification(
+    session?.user.email,
+  );
 
   if (!session || session.user.email_verified) {
     redirect("/");
@@ -23,7 +26,10 @@ export default async function Page() {
         recieved an email verification, click the button below to resend the
         verification email.
       </h4>
-      <ResendEmailVerificationButton user={session.user} />
+      <ResendEmailVerificationButton
+        user={session.user}
+        lastEmailVerification={lastEmailVerification}
+      />
     </div>
   );
 }

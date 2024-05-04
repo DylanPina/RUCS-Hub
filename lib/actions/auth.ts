@@ -1,6 +1,7 @@
 "use server";
 
 import axios from "axios";
+import { updateLastEmailVerification } from "../data/user";
 
 export async function getAuth0Token() {
   const config = {
@@ -20,7 +21,8 @@ export async function getAuth0Token() {
   return access_token;
 }
 
-export async function resendEmailVerification(userId: string) {
+export async function resendEmailVerification(user: any) {
+  const { email, sub } = user;
   const token = await getAuth0Token();
 
   const verificationEmailConfig = {
@@ -33,14 +35,15 @@ export async function resendEmailVerification(userId: string) {
       Authorization: `Bearer ${token}`,
     },
     data: {
-      user_id: userId,
+      user_id: sub,
       client_id: process.env.AUTH0_CLIENT_ID,
       identity: {
-        user_id: userId.split("|")[1],
+        user_id: sub.split("|")[1],
         provider: "auth0",
       },
     },
   };
 
   await axios.request(verificationEmailConfig);
+  await updateLastEmailVerification(email);
 }

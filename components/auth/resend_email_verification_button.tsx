@@ -7,25 +7,20 @@ import { toast } from "react-toastify";
 
 interface Props {
   user: any;
+  lastEmailVerification: any;
 }
 
-export default function ResendEmailVerificationButton({ user }: Props) {
+export default function ResendEmailVerificationButton({
+  user,
+  lastEmailVerification,
+}: Props) {
   const [alreadyClicked, setAlreadyClicked] = useState(false);
   const [timePassed, setTimePassed] = useState(false);
 
   useEffect(() => {
     const currentDate = new Date();
-    const difference =
-      currentDate.getTime() - user.last_email_verification_sent;
+    const difference = currentDate.getTime() - lastEmailVerification.getTime();
     const minutes = Math.floor(difference / 60000);
-
-    console.log(`User: ${JSON.stringify(user, null, 2)}`);
-    console.log(
-      `Last email verification sent: ${user.last_email_verification_sent}`,
-    );
-    console.log(`Current date: ${currentDate}`);
-    console.log(`Difference: ${difference}`);
-    console.log(`Minutes: ${minutes}`);
 
     if (minutes < 1) {
       setTimePassed(false);
@@ -38,10 +33,10 @@ export default function ResendEmailVerificationButton({ user }: Props) {
       return () => clearTimeout(timeout);
     }
     setTimePassed(true);
-  }, [user]);
+  }, [user, lastEmailVerification]);
 
   function handleClick() {
-    resendEmailVerification(user.sub);
+    resendEmailVerification(user);
     setAlreadyClicked(true);
     setTimeout(() => setAlreadyClicked(false), 60000);
     toast.success(`Verification email has been sent to ${user.email}.`);
