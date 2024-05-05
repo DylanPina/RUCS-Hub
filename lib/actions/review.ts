@@ -1,5 +1,6 @@
 "use server";
 
+import { downvoteReview, upvoteReview } from "../data/review";
 import { ReviewForm } from "../definitions/review";
 import { prisma } from "@/prisma/prisma";
 
@@ -43,4 +44,12 @@ export default async function createReview(
       lectureRating: Number(reviewForm.lectureRating),
     },
   });
+}
+
+export async function vote(userId: string, reviewId: number, upvote: boolean) {
+  if (upvote) {
+    return await upvoteReview(userId, reviewId);
+  }
+
+  return await downvoteReview(userId, reviewId);
 }

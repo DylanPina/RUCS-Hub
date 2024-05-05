@@ -13,6 +13,7 @@ import { Review } from "@/lib/definitions/review";
 import { hashEmailAddress } from "@/lib/utils";
 import { toast } from "react-toastify";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { vote } from "@/lib/actions/review";
 
 interface ReviewVotesProps {
   review: Review;
@@ -68,16 +69,7 @@ export default function ReviewVotes({ review }: ReviewVotesProps) {
       setUpvoted(true);
     }
 
-    await fetch("/api/vote", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        reviewId: review.id,
-        upvote: true,
-      }),
-    });
+    await vote(hashEmailAddress(user.email as string), review.id, true);
   }
 
   async function handleDownvote() {
@@ -105,16 +97,7 @@ export default function ReviewVotes({ review }: ReviewVotesProps) {
       setDownvoted(true);
     }
 
-    await fetch("/api/vote", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        reviewId: review.id,
-        upvote: false,
-      }),
-    });
+    await vote(hashEmailAddress(user.email as string), review.id, false);
   }
 
   return (

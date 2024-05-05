@@ -5,5 +5,6 @@ export const mockUsers: User[] = [
   {
     id: hashEmailAddress("dsp209@scarletmail.rutgers.edu"),
     createdAt: new Date(),
+    lastEmailVerification: new Date(),
   },
 ];

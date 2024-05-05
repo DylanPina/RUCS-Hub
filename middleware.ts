@@ -11,6 +11,7 @@ export default withMiddlewareAuthRequired(async function middleware(req) {
   if (!session?.user.email_verified) {
     return NextResponse.redirect(new URL("/verify", req.url));
   }
+
   return res;
 });
 
