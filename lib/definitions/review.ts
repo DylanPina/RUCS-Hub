@@ -6,7 +6,7 @@ import { Vote } from "./vote";
 export type Review = {
   id: number;
   user: User;
-  userId: number;
+  userId: string;
   semester: number;
   year: number;
   course: Course;

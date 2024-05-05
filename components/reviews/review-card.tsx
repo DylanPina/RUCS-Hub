@@ -8,12 +8,14 @@ import {
 } from "@/lib/utils";
 import { Review } from "@/lib/definitions/review";
 import ReviewVotes from "./review-votes";
+import ReviewEdit from "./review-edit";
 
 interface ReviewCardProps {
   review: Review;
+  userId: any;
 }
 
-export default function ReviewCard({ review }: ReviewCardProps) {
+export default function ReviewCard({ review, userId }: ReviewCardProps) {
   return (
     <div className="flex flex-col space-y-3 p-2 outline outline-1 outline-primary-white rounded">
       <div className="flex flex-col space-y-1">
@@ -116,6 +118,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
       </div>
       <div className="flex space-x-3">
         <ReviewVotes review={review} />
+        {userId === review.userId && <ReviewEdit review={review} />}
       </div>
     </div>
   );

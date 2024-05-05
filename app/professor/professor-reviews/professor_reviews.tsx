@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getTermNameByValue } from "@/lib/utils";
+import { getTermNameByValue, hashEmailAddress } from "@/lib/utils";
 import { Review } from "@/lib/definitions/review";
 import { Vote } from "@/lib/definitions/vote";
 import ReviewsSortBy from "@/components/reviews/reviews-sort-by";
@@ -18,12 +18,14 @@ import {
   SelectValue,
 } from "@/components/shadcn/ui/select";
 import { Button } from "@/components/shadcn/ui/button";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 interface ProfessorReviewProps {
   reviews: Review[];
 }
 
 export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
+  const { user } = useUser();
   const [filteredReviews, setFilteredReviews] = useState(reviews);
   const [paginatedReviews, setPaginatedReviews] = useState(reviews);
   const [searchTerm, setSearchTerm] = useState("");
@@ -34,6 +36,7 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [startIndex, setStartIndex] = useState(0);
   const [endIndex, setEndIndex] = useState(rowsPerPage);
+  const [userId, setUserId] = useState("");
 
   const courses: string[] = ["Any"].concat(
     Array.from(new Set(reviews.map((review: Review) => review.course.name))),
@@ -96,6 +99,8 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
   }
 
   useEffect(() => {
+    setUserId(hashEmailAddress(user?.email as string));
+
     let sortedReviews = [...reviews];
 
     if (sortBy === "newest") {
@@ -122,7 +127,17 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
 
     setFilteredReviews(filtered);
     setPaginatedReviews(filtered.slice(startIndex, endIndex));
-  }, [sortBy, term, reviews, year, course, searchTerm, startIndex, endIndex]);
+  }, [
+    user?.email,
+    sortBy,
+    term,
+    reviews,
+    year,
+    course,
+    searchTerm,
+    startIndex,
+    endIndex,
+  ]);
 
   function noReviewsMessage() {
     if (reviews.length > 0 && !searchTerm) {
@@ -216,7 +231,7 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
       <div className="flex flex-col space-y-3">
         {filteredReviews.length > 0
           ? paginatedReviews.map((review) => (
-              <ReviewCard key={review.id} review={review} />
+              <ReviewCard key={review.id} review={review} userId={userId} />
             ))
           : noReviewsMessage()}
       </div>

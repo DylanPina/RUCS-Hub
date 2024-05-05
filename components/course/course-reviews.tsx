@@ -1,7 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { formatProfessorName, getTermNameByValue } from "@/lib/utils";
+import {
+  formatProfessorName,
+  getTermNameByValue,
+  hashEmailAddress,
+} from "@/lib/utils";
 import { Review } from "@/lib/definitions/review";
 import { Vote } from "@/lib/definitions/vote";
 import ReviewsSortBy from "@/components/reviews/reviews-sort-by";
@@ -18,12 +22,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn/ui/select";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 interface ProfessorReviewProps {
   reviews: Review[];
 }
 
 export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
+  const { user } = useUser();
   const [filteredReviews, setFilteredReviews] = useState(reviews);
   const [paginatedReviews, setPaginatedReviews] = useState(reviews);
   const [searchTerm, setSearchTerm] = useState("");
@@ -34,6 +40,7 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [startIndex, setStartIndex] = useState(0);
   const [endIndex, setEndIndex] = useState(rowsPerPage);
+  const [userId, setUserId] = useState("");
 
   const professors: string[] = ["Any"].concat(
     Array.from(
@@ -105,6 +112,8 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
   }
 
   useEffect(() => {
+    setUserId(hashEmailAddress(user?.email as string));
+
     let sortedReviews = [...reviews];
 
     if (sortBy === "newest") {
@@ -137,6 +146,7 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
     setFilteredReviews(filtered);
     setPaginatedReviews(filtered.slice(startIndex, endIndex));
   }, [
+    user?.email,
     sortBy,
     term,
     professor,
@@ -239,7 +249,7 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
       <div className="flex flex-col space-y-3">
         {filteredReviews.length > 0
           ? paginatedReviews.map((review) => (
-              <ReviewCard key={review.id} review={review} />
+              <ReviewCard key={review.id} review={review} userId={userId} />
             ))
           : noReviewsMessage()}
       </div>
