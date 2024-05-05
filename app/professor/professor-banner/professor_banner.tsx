@@ -67,8 +67,7 @@ export default async function ProfessorBanner({ professor }: Props) {
                 </h3>
               )}
               <h3 className="text-md text-primary-white font-bold">
-                Total Reviews:{" "}
-                <span className="font-normal">{reviews.length}</span>
+                Reviews: <span className="font-normal">{reviews.length}</span>
               </h3>
               <CurrentlyTeaching currentlyTeaching={currentlyTeaching} />
             </div>

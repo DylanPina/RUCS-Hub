@@ -49,6 +49,12 @@ export default function ReviewVotes({ review }: ReviewVotesProps) {
       return;
     }
 
+    if (!user.email_verified) {
+      console.log(`User: ${JSON.stringify(user, null, 2)}`);
+      toast.error("Must verify email to vote.");
+      return;
+    }
+
     if (upvoted) {
       setUpvotes(upvotes - 1);
       setUpvoted(false);
@@ -77,6 +83,12 @@ export default function ReviewVotes({ review }: ReviewVotesProps) {
   async function handleDownvote() {
     if (!user) {
       toast.error("Must be signed in to vote.");
+      return;
+    }
+
+    if (!user.email_verified) {
+      console.log(`User: ${JSON.stringify(user, null, 2)}`);
+      toast.error("Must verify email to vote.");
       return;
     }
 

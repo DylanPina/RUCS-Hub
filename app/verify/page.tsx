@@ -22,9 +22,9 @@ export default async function Page() {
       <h4 className="max-w-4xl text-md max-sm:text-sm font-semibold text-center text-primary-white">
         You must verify your email address to add and vote reviews. An email has
         been sent to your email address at{" "}
-        <span className="underline">{session.user.email}</span>. If you have not
-        recieved an email verification, click the button below to resend the
-        verification email.
+        <span className="underline">{session.user.email}</span> with a
+        verification link. If you have not recieved an email verification, click
+        the button below to resend the verification email.
       </h4>
       <ResendEmailVerificationButton
         user={session.user}

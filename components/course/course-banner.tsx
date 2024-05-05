@@ -42,6 +42,9 @@ export default async function CourseBanner({ coursePage }: Props) {
               <h3 className="text-md text-primary-white font-bold">
                 Credits: <span className="font-normal">{credits}</span>
               </h3>
+              <h3 className="text-md text-primary-white font-bold">
+                Reviews: {reviews.length}
+              </h3>
               {reviews.length > 0 ? (
                 <h3 className="text-md text-primary-white font-bold">
                   Rating:{" "}
