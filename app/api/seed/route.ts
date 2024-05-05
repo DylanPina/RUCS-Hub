@@ -6,11 +6,10 @@ import { fetchProfessorNames } from "@/lib/data/professor";
 import { mockReviews } from "@/lib/mock-data/review-mock-data";
 import { mockUsers } from "@/lib/mock-data/user-mock-data";
 import { mockVotes } from "@/lib/mock-data/vote-mock-data";
-import { PrismaClient, Professor, Review, Vote } from "@prisma/client";
+import { Professor, Review, Vote } from "@prisma/client";
+import { prisma } from "@/prisma/prisma";
 
 export async function GET() {
-  const prisma = new PrismaClient();
-
   // Uncomment the following line to seed the database when this URL is visited
   // const seedResponse: Response = await seedDatabase(prisma);
 

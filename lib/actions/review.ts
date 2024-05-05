@@ -1,14 +1,12 @@
 "use server";
 
-import { PrismaClient } from "@prisma/client";
 import { ReviewForm } from "../definitions/review";
+import { prisma } from "@/prisma/prisma";
 
 export default async function createReview(
   reviewForm: ReviewForm,
   userId: string,
 ) {
-  const prisma = new PrismaClient();
-
   let professorFirstName, professorLastName;
   const professorNameSplit = reviewForm.professor.split(" ");
 

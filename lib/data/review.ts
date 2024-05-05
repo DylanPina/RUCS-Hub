@@ -1,4 +1,5 @@
-import { PrismaClient, Vote } from "@prisma/client";
+import { Vote } from "@prisma/client";
+import { prisma } from "@/prisma/prisma";
 
 /**
  * Upvotes a review
@@ -9,8 +10,6 @@ export async function upvoteReview(
   userId: string,
   reviewId: number,
 ): Promise<Vote | null> {
-  const prisma = new PrismaClient();
-
   const alreadyUpvoted = await prisma.vote.findFirst({
     where: {
       userId: userId,
@@ -56,8 +55,6 @@ export async function downvoteReview(
   userId: string,
   reviewId: number,
 ): Promise<Vote | null> {
-  const prisma = new PrismaClient();
-
   const alreadyDownvoted = await prisma.vote.findFirst({
     where: {
       userId: userId,

@@ -19,9 +19,10 @@ import {
   WEBREG_BASE_URL,
 } from "@/lib/constants";
 import { JSDOM } from "jsdom";
-import { Course, PrismaClient, Section } from "@prisma/client";
+import { Course, Section } from "@prisma/client";
 import { createProfessorNameIdMap } from "./professor";
 import { Review } from "../definitions/review";
+import { prisma } from "@/prisma/prisma";
 
 /**
  * Queries a course by courseId
@@ -32,7 +33,6 @@ import { Review } from "../definitions/review";
 export async function queryCourseByCode(
   courseCode: number,
 ): Promise<CoursePage> {
-  const prisma = new PrismaClient();
   const course = await prisma.course.findUnique({
     where: {
       code: courseCode,
@@ -61,7 +61,6 @@ export async function queryCourseByCode(
  *  @return - List of all courses
  */
 export async function queryAllCourses(): Promise<Course[]> {
-  const prisma = new PrismaClient();
   const courses: Course[] = await prisma.course.findMany({
     include: {
       reviews: true,
@@ -86,7 +85,6 @@ export async function queryAllCourses(): Promise<Course[]> {
 export async function queryAllCourseTableListings(): Promise<
   CourseTableColumn[]
 > {
-  const prisma = new PrismaClient();
   const courses: Course[] = await prisma.course.findMany({
     include: {
       reviews: true,
@@ -112,7 +110,6 @@ export async function queryCourseTableDataByYearTerm(
   year: number | null,
   term: Term | null,
 ): Promise<CourseTableColumn[]> {
-  const prisma = new PrismaClient();
   const courses: Course[] = await prisma.course.findMany({
     include: {
       reviews: true,
@@ -685,7 +682,6 @@ export async function fetchCourseSections(): Promise<any[]> {
  * @return - All course sections from the database
  */
 export async function queryAllCourseSections(): Promise<Section[]> {
-  const prisma = new PrismaClient();
   const courseSections: Section[] = await prisma.section.findMany();
 
   if (!courseSections) {

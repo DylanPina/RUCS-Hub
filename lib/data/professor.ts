@@ -3,7 +3,8 @@ import { ProfessorPage, ProfessorTableColumn } from "../definitions/professor";
 import { formatProfessorName, getValidYearTermMap } from "../utils";
 import { parseWebRegListingByYearTerm } from "./course";
 import { titleCase } from "../utils";
-import { PrismaClient, Professor, Review } from "@prisma/client";
+import { prisma } from "@/prisma/prisma";
+import { Professor, Review } from "@prisma/client";
 
 /**
  * Query professor by first and last name
@@ -15,7 +16,6 @@ export async function queryProfessorByName(
   firstName: string | null,
   lastName: string,
 ): Promise<ProfessorPage> {
-  const prisma = new PrismaClient();
   if (firstName === null) {
     firstName = "";
   }
@@ -45,7 +45,6 @@ export async function queryProfessorByName(
  * @return - List of all professors
  */
 export async function queryAllProfessors(): Promise<Professor[]> {
-  const prisma = new PrismaClient();
   const professors = await prisma.professor.findMany();
   return professors;
 }
@@ -58,7 +57,6 @@ export async function queryAllProfessors(): Promise<Professor[]> {
 export async function queryProfessorTableData(): Promise<
   ProfessorTableColumn[]
 > {
-  const prisma = new PrismaClient();
   const professors = await prisma.professor.findMany({
     include: {
       reviews: true,
@@ -136,7 +134,6 @@ export async function fetchProfessorNames(): Promise<[string, string][]> {
  * @return - Map of professor names to their respective IDs
  */
 export async function createProfessorNameIdMap(): Promise<Map<string, number>> {
-  const prisma = new PrismaClient();
   const professors = await prisma.professor.findMany();
   const professorNameIdMap = new Map<string, number>();
 
@@ -257,7 +254,6 @@ function getProfessorTableRatings(professor: any): any {
 export async function queryProfessorsByCourse(
   courseCode: number,
 ): Promise<Professor[]> {
-  const prisma = new PrismaClient();
   const professors = await prisma.professor.findMany({
     where: {
       sections: {
