@@ -42,3 +42,16 @@ export type ReviewForm = {
   professorDifficultyRating?: number;
   lectureRating?: number;
 };
+
+export type ReviewEditForm = {
+  year: string;
+  term: string;
+  title: string;
+  content: string;
+  courseRating: number;
+  courseDifficultyRating?: number;
+  courseWorkload?: number;
+  professorRating?: number;
+  professorDifficultyRating?: number;
+  lectureRating?: number;
+};

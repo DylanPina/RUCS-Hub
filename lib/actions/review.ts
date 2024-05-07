@@ -46,6 +46,24 @@ export default async function createReview(
   });
 }
 
+export async function updateReview(reviewId: number, reviewForm: ReviewForm) {
+  return await prisma.review.update({
+    where: {
+      id: reviewId,
+    },
+    data: {
+      title: reviewForm.title,
+      content: reviewForm.content,
+      rating: Number(reviewForm.courseRating),
+      difficultyRating: Number(reviewForm.courseDifficultyRating),
+      workload: Number(reviewForm.courseWorkload),
+      professorQualityRating: Number(reviewForm.professorRating),
+      professorDifficultyRating: Number(reviewForm.professorDifficultyRating),
+      lectureRating: Number(reviewForm.lectureRating),
+    },
+  });
+}
+
 export async function vote(userId: string, reviewId: number, upvote: boolean) {
   if (upvote) {
     return await upvoteReview(userId, reviewId);

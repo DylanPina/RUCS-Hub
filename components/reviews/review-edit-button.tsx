@@ -5,21 +5,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/shadcn/ui/tooltip";
-import { Review } from "@/lib/definitions/review";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import { BiEdit } from "react-icons/bi";
 
-interface ReviewVotesProps {
-  review: Review;
+interface Props {
+  setEditing: () => void;
 }
 
-export default function ReviewEdit({ review }: ReviewVotesProps) {
-  const { user } = useUser();
-
-  if (!user) {
-    return null;
-  }
-
+export default function ReviewEditButton({ setEditing }: Props) {
   return (
     <div className="flex space-x-2">
       <div className="flex space-x-1">
@@ -29,6 +21,7 @@ export default function ReviewEdit({ review }: ReviewVotesProps) {
               <BiEdit
                 size={18}
                 className="fill-primary-white hover:fill-primary-red transition duration-150 ease-in-out hover:ease-in"
+                onClick={setEditing}
               />
             </TooltipTrigger>
             <TooltipContent className="bg-primary-red">Edit</TooltipContent>

@@ -117,17 +117,17 @@ export default function ReviewCreateForm({
     professorRating: z
       .number()
       .min(1, "Rating must be at least 1")
-      .max(10, "Rating cannot exceed 10 hours")
+      .max(10, "Rating cannot exceed 10")
       .optional(),
     professorDifficultyRating: z
       .number()
       .min(1, "Rating must be at least 1")
-      .max(10, "Rating cannot exceed 10 hours")
+      .max(10, "Rating cannot exceed 10")
       .optional(),
     lectureRating: z
       .number()
-      .min(1, "Rating must be at least 1 hour")
-      .max(10, "Rating cannot exceed 10 hours")
+      .min(1, "Rating must be at least 1")
+      .max(10, "Rating cannot exceed 10")
       .optional(),
     title: z
       .string()
@@ -136,7 +136,7 @@ export default function ReviewCreateForm({
     content: z
       .string()
       .min(1, "Review must have content")
-      .max(1000, "Review cannot exceed 1000 characters"),
+      .max(10000, "Review cannot exceed 10000 characters"),
   });
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -562,7 +562,7 @@ export default function ReviewCreateForm({
                 <Textarea className="min-h-[150px]" {...field} />
               </FormControl>
               <FormDescription className="text-primary-white/50 text-xs">
-                Max 1000 characters
+                Max 10000 characters
               </FormDescription>
               <FormMessage />
             </FormItem>
