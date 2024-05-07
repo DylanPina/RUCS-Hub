@@ -37,6 +37,7 @@ import getCoursesByProfessor from "@/lib/actions/professor";
 import { Textarea } from "../shadcn/ui/textarea";
 import createReview from "@/lib/actions/review";
 import { ReviewForm } from "@/lib/definitions/review";
+import { LoaderButton } from "../shadcn/ui/loading-button";
 
 interface Props {
   course?: Course | null;
@@ -568,13 +569,13 @@ export default function ReviewCreateForm({
             </FormItem>
           )}
         />
-        <Button
-          disabled={submitting}
+        <LoaderButton
+          isLoading={submitting}
           className="place-self-end max-w-fit transition-all duration-150 bg-primary-red hover:bg-primary-red/90 hover:shadow-primary-red/90"
           type="submit"
         >
           Submit
-        </Button>
+        </LoaderButton>
       </form>
     </Form>
   );

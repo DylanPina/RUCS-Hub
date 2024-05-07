@@ -21,6 +21,7 @@ import {
 import { Textarea } from "../shadcn/ui/textarea";
 import { updateReview } from "@/lib/actions/review";
 import { toast } from "react-toastify";
+import { LoaderButton } from "../shadcn/ui/loading-button";
 
 interface Props {
   review: Review;
@@ -343,15 +344,20 @@ export default function ReviewCardEditing({
             />
           </div>
           <div className="flex space-x-3">
-            <Button className="text-xs bg-primary-white text-primary-black transition-all duration-150 hover:bg-primary-white hover:font-bold hover:shadow-primary-black">
+            <LoaderButton
+              type="submit"
+              className="text-xs bg-primary-white text-primary-black transition-all duration-150 hover:bg-primary-white hover:font-bold hover:shadow-primary-black"
+              isLoading={submitting}
+            >
               Save
-            </Button>
-            <Button
+            </LoaderButton>
+            <LoaderButton
               className="text-xs bg-primary-red hover:bg-primary-red transition-all duration-150 hover:font-bold hover:shadow-primary-black"
               onClick={() => setEditing(false)}
+              isLoading={submitting}
             >
               Cancel
-            </Button>
+            </LoaderButton>
           </div>
         </div>
       </form>
