@@ -10,6 +10,7 @@ import { Review } from "@/lib/definitions/review";
 import ReviewVotes from "./review-votes";
 import ReviewEditButton from "./review-edit-button";
 import ReviewCardEditing from "./review-card-editing";
+import ReviewDeleteButton from "./review-delete-button";
 
 interface ReviewCardProps {
   review: Review;
@@ -135,7 +136,10 @@ export default function ReviewCard({ review, userId }: ReviewCardProps) {
       <div className="flex space-x-3">
         <ReviewVotes review={review} />
         {userId === updatedReview.userId && (
-          <ReviewEditButton setEditing={() => setEditing(true)} />
+          <div className="flex space-x-3">
+            <ReviewEditButton setEditing={() => setEditing(true)} />
+            <ReviewDeleteButton review={review} />
+          </div>
         )}
       </div>
     </div>
