@@ -43,13 +43,13 @@ export default function NavProfile() {
                     className="rounded-full transition duration-150 ease-out hover:ease-in"
                     onClick={() => router.push("/api/auth/logout")}
                   >
-                    <Avatar className="w-8 h-8 outline outline-2 shadow-sm shadow-primary-white/20 outline-primary-white max-sm:w-6 max-sm:h-6 max-sm:outline-1 transition duration-150 ease-out hover:ease-in hover:outline-primary-red">
+                    <Avatar className="w-8 h-8 outline outline-2 shadow-sm shadow-primary-white/20 outline-primary-white max-sm:w-6 max-sm:h-6 max-sm:outline-1 transition duration-150 ease-out hover:ease-in hover:outline-primary-red hover:shadow-primary-red">
                       <AvatarImage
                         className="max-sm:w-6 max-sm:h-6 cursor-pointer"
                         width={300}
                         height={300}
                         src={user.picture || ""}
-                        alt="Google profile image"
+                        alt="Profile image"
                       />
                     </Avatar>
                   </Button>
@@ -63,7 +63,7 @@ export default function NavProfile() {
                           width={300}
                           height={300}
                           src={user.picture || ""}
-                          alt="Google profile image"
+                          alt="Profile image"
                         />
                       </Avatar>
                       <div className="flex flex-col">
@@ -75,7 +75,10 @@ export default function NavProfile() {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="cursor-pointer">
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={() => router.push("/profile")}
+                  >
                     <div className="flex items-center space-x-2">
                       <BiSolidUser />
                       <h3>Profile</h3>
