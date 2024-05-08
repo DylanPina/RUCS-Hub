@@ -31,7 +31,7 @@ export default async function Nav() {
         <NavIcon link="/professors" tooltip="Professors">
           <HiMiniAcademicCap className="w-8 h-8 fill-primary-white max-sm:w-6 max-sm:h-6 cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in" />
         </NavIcon>
-        <NavIcon link="/add-review" tooltip="Add review">
+        <NavIcon link="/add-review" tooltip="Add Review">
           <MdRateReview className="w-8 h-8 fill-primary-white max-sm:w-6 max-sm:h-6 cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in" />
         </NavIcon>
         <NavSearchBar
