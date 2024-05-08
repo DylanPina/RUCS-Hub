@@ -4,6 +4,12 @@ import { downvoteReview, upvoteReview } from "../data/review";
 import { ReviewForm } from "../definitions/review";
 import { prisma } from "@/prisma/prisma";
 
+/**
+ * Creates a new review
+ *
+ * @param reviewForm - The review form data
+ * @param userId - The ID of the user creating the review
+ */
 export default async function createReview(
   reviewForm: ReviewForm,
   userId: string,
@@ -46,6 +52,12 @@ export default async function createReview(
   });
 }
 
+/**
+ * Updates a review
+ *
+ * @param reviewId - The ID of the review to update
+ * @param reviewForm - The updated review form data
+ */
 export async function updateReview(reviewId: number, reviewForm: ReviewForm) {
   return await prisma.review.update({
     where: {
@@ -64,10 +76,30 @@ export async function updateReview(reviewId: number, reviewForm: ReviewForm) {
   });
 }
 
+/**
+ * Votes on a review
+ *
+ * @param userId - The ID of the user voting
+ * @param reviewId - The ID of the review being voted on
+ * @param upvote - Whether the user is voting up or down
+ */
 export async function vote(userId: string, reviewId: number, upvote: boolean) {
   if (upvote) {
     return await upvoteReview(userId, reviewId);
   }
 
   return await downvoteReview(userId, reviewId);
+}
+
+/**
+ * Deletes a review
+ *
+ * @param reviewId - The ID of the review to delete
+ */
+export async function deleteReview(reviewId: number) {
+  return await prisma.review.delete({
+    where: {
+      id: reviewId,
+    },
+  });
 }

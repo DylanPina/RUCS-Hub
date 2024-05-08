@@ -21,7 +21,7 @@ import {
 import { Textarea } from "../shadcn/ui/textarea";
 import { updateReview } from "@/lib/actions/review";
 import { toast } from "react-toastify";
-import { LoaderButton } from "../shadcn/ui/loading-button";
+import { LoaderButton } from "../shadcn/ui/loader-button";
 
 interface Props {
   review: Review;

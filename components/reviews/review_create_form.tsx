@@ -37,7 +37,7 @@ import getCoursesByProfessor from "@/lib/actions/professor";
 import { Textarea } from "../shadcn/ui/textarea";
 import createReview from "@/lib/actions/review";
 import { ReviewForm } from "@/lib/definitions/review";
-import { LoaderButton } from "../shadcn/ui/loading-button";
+import { LoaderButton } from "../shadcn/ui/loader-button";
 
 interface Props {
   course?: Course | null;

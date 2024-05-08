@@ -26,9 +26,9 @@ model Professor {
 
 model Section {
   sectionNumber String
-  course        Course    @relation(fields: [courseCode], references: [code])
+  course        Course    @relation(fields: [courseCode], references: [code], onDelete: Cascade)
   courseCode    Int
-  professor     Professor @relation(fields: [professorId], references: [id])
+  professor     Professor @relation(fields: [professorId], references: [id], onDelete: Cascade)
   professorId   Int
   term          Int
   year          Int
@@ -48,11 +48,11 @@ model Course {
 
 model Review {
   id                        Int        @id @default(autoincrement())
-  user                      User       @relation(fields: [userId], references: [id])
+  user                      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId                    String
   semester                  Int
   year                      Int
-  course                    Course     @relation(fields: [courseCode], references: [code])
+  course                    Course     @relation(fields: [courseCode], references: [code], onDelete: Cascade)
   courseCode                Int
   title                     String
   content                   String
@@ -61,7 +61,7 @@ model Review {
   rating                    Int?
   votes                     Vote[]
   difficultyRating          Int?
-  professor                 Professor? @relation(fields: [professorId], references: [id])
+  professor                 Professor? @relation(fields: [professorId], references: [id], onDelete: Cascade)
   professorId               Int?
   professorQualityRating    Int?
   professorDifficultyRating Int?
@@ -73,9 +73,9 @@ model Review {
 
 model Vote {
   id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
-  review    Review   @relation(fields: [reviewId], references: [id])
+  review    Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
   reviewId  Int
   upvote    Boolean
   createdAt DateTime @default(now())
