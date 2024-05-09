@@ -20,12 +20,6 @@ export default function Footer() {
               Dylan Pina
             </span>
           </Link>
-          |
-          <Link href={JACK_BOGART_GITHUB_URL}>
-            <span className="px-1 text-xs text-primary-white cursor-pointer hover:font-black transition-all duration-150 ease-out hover:ease-in">
-              Jack Bogart
-            </span>
-          </Link>
         </h2>
       </div>
     </div>

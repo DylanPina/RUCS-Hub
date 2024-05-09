@@ -6,13 +6,16 @@ import React from "react";
 
 export default async function Page() {
   const session = await getSession();
-  const lastEmailVerification = await getLastEmailVerification(
-    session?.user.email,
-  );
 
   if (!session || session.user.email_verified) {
     redirect("/");
   }
+
+
+  const lastEmailVerification = await getLastEmailVerification(
+    session?.user.email,
+  );
+
 
   return (
     <div className="flex flex-col space-y-4 place-items-center justify-center">

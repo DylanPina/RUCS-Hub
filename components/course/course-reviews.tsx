@@ -28,7 +28,7 @@ interface ProfessorReviewProps {
   reviews: Review[];
 }
 
-export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
+export default function CourseReviews({ reviews }: ProfessorReviewProps) {
   const { user } = useUser();
   const [filteredReviews, setFilteredReviews] = useState(reviews);
   const [paginatedReviews, setPaginatedReviews] = useState(reviews);

@@ -13,11 +13,19 @@ import {
 } from "@/components/shadcn/ui/tooltip";
 import { Button } from "@/components/shadcn/ui/button";
 import { Separator } from "@/components/shadcn/ui/separator";
+import { deleteUser } from "@/lib/actions/user";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 export default function Page() {
   const { user } = useUser();
+  const router = useRouter();
 
-  console.log(`User: ${JSON.stringify(user)}`);
+  function handleDeleteUser() {
+    deleteUser(user?.sub as string, user?.email as string);
+    router.push("/api/auth/logout");
+    toast.info("Your account has been deleted.");
+  }
 
   return (
     <div className="flex flex-col space-y-4 place-items-center justify-center">
@@ -71,7 +79,10 @@ export default function Page() {
             Logout
           </Button>
           <Separator orientation="vertical" />
-          <Button className="bg-primary-white text-primary-black hover:bg-primary-red hover:shadow-primary-red hover:text-primary-white transition duration-150 ease-out ">
+          <Button
+            onClick={handleDeleteUser}
+            className="bg-primary-white text-primary-black hover:bg-primary-red hover:shadow-primary-red hover:text-primary-white transition duration-150 ease-out "
+          >
             Delete Account
           </Button>
         </div>
