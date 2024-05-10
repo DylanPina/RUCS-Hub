@@ -1,13 +1,6 @@
 import React from "react";
 import { Avatar, AvatarImage } from "@/components/shadcn/ui/avatar";
 import { Input } from "@/components/shadcn/ui/input";
-import { Badge } from "@/components/shadcn/ui/badge";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/shadcn/ui/tooltip";
 import { Separator } from "@/components/shadcn/ui/separator";
 import DeleteUserButtion from "@/components/profile/delete-user-button";
 import ResetPasswordButton from "@/components/profile/reset-password-button";
@@ -17,6 +10,7 @@ import {
   getLastEmailVerification,
   getLastPasswordReset,
 } from "@/lib/data/user";
+import ResendEmailVerificationBadge from "@/components/auth/resend-email-verification-badge";
 
 export default async function Page() {
   const session = await getSession();
@@ -53,18 +47,12 @@ export default async function Page() {
             <h1 className="text-lg font-semibold text-primary-white">
               Verification Status
             </h1>
-            <TooltipProvider delayDuration={100}>
-              <Tooltip>
-                <TooltipTrigger className="focus:outline-none">
-                  <Badge className="cursor-pointer bg-primary-red hover:bg-primary-red hover:text-primary-white transition duration-150 ease-out hover:ease-in hover:shadow-primary-red">
-                    Resend
-                  </Badge>
-                </TooltipTrigger>
-                <TooltipContent className="bg-primary-red">
-                  Resend Email Verification
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            {!session?.user.email_verified && (
+              <ResendEmailVerificationBadge
+                user={session?.user}
+                lastEmailVerification={lastEmailVerification}
+              />
+            )}
           </div>
           <Input
             disabled
