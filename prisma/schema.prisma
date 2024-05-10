@@ -12,6 +12,7 @@ model User {
   id        String      @id
   createdAt DateTime @default(now())
   lastEmailVerification DateTime @default(now())
+  lastPasswordReset     DateTime @default(now())
   reviews   Review[]
   votes     Vote[]
 }

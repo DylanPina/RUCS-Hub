@@ -1,8 +1,5 @@
-"use client";
-
 import React from "react";
 import { Avatar, AvatarImage } from "@/components/shadcn/ui/avatar";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import { Input } from "@/components/shadcn/ui/input";
 import { Badge } from "@/components/shadcn/ui/badge";
 import {
@@ -11,12 +8,22 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/shadcn/ui/tooltip";
-import { Button } from "@/components/shadcn/ui/button";
 import { Separator } from "@/components/shadcn/ui/separator";
 import DeleteUserButtion from "@/components/profile/delete-user-button";
+import ResetPasswordButton from "@/components/profile/reset-password-button";
+import { getSession } from "@auth0/nextjs-auth0";
+import LogoutButton from "@/components/profile/logout-button";
+import {
+  getLastEmailVerification,
+  getLastPasswordReset,
+} from "@/lib/data/user";
 
-export default function Page() {
-  const { user } = useUser();
+export default async function Page() {
+  const session = await getSession();
+  const lastEmailVerification = await getLastEmailVerification(
+    session?.user.email,
+  );
+  const lastPasswordReset = await getLastPasswordReset(session?.user.email);
 
   return (
     <div className="flex flex-col space-y-4 place-items-center justify-center">
@@ -29,13 +36,17 @@ export default function Page() {
             className="max-sm:w-6 max-sm:h-6"
             width={300}
             height={300}
-            src={user?.picture || ""}
+            src={session?.user.picture || ""}
             alt="Profile image"
           />
         </Avatar>
         <div className="flex flex-col space-y-1 w-[500px]">
           <h1 className="text-lg font-semibold text-primary-white">Email</h1>
-          <Input disabled value={user?.email || ""} className="w-full" />
+          <Input
+            disabled
+            value={session?.user.email || ""}
+            className="w-full"
+          />
         </div>
         <div className="flex flex-col space-y-1 w-[500px]">
           <div className="flex place-content-between">
@@ -57,20 +68,22 @@ export default function Page() {
           </div>
           <Input
             disabled
-            value={user?.email_verified ? "Verified" : "Unverified"}
+            value={session?.user.email_verified ? "Verified" : "Unverified"}
             className="w-full"
           />
         </div>
         <div className="flex space-x-4 w-[500px] h-8 justify-center place-items-center !mt-8">
-          <Button className="bg-primary-white text-primary-black hover:bg-primary-white hover:shadow-primary-white transition duration-150 ease-out ">
-            Reset Password
-          </Button>
+          <LogoutButton />
           <Separator orientation="vertical" />
-          <Button className="bg-primary-white text-primary-black hover:bg-primary-white hover:shadow-primary-white transition duration-150 ease-out ">
-            Logout
-          </Button>
+          <ResetPasswordButton
+            user={session?.user}
+            lastPasswordReset={lastPasswordReset}
+          />
           <Separator orientation="vertical" />
-          <DeleteUserButtion />
+          <DeleteUserButtion
+            email={session?.user.email || ""}
+            userAuthId={session?.user.sub || ""}
+          />
         </div>
       </div>
     </div>

@@ -27,7 +27,7 @@ export async function getUserByAuth0Id(userId: string) {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `https://dev-yhko7iqcv1ss8qnt.us.auth0.com/api/v2/users/${userId}`,
+    url: `https://${process.env.AUTH0_DOMAIN}/api/v2/users/${userId}`,
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${token}`,
@@ -62,6 +62,36 @@ export async function updateLastEmailVerification(userEmail: string) {
     },
     data: {
       lastEmailVerification: new Date(),
+    },
+  });
+
+  return user;
+}
+
+export async function getLastPasswordReset(userEmail: string) {
+  const userId = hashEmailAddress(userEmail);
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      lastPasswordReset: true,
+    },
+  });
+
+  return user?.lastPasswordReset;
+}
+
+export async function updateLastPasswordReset(userEmail: string) {
+  const userId = hashEmailAddress(userEmail);
+
+  const user = await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      lastPasswordReset: new Date(),
     },
   });
 

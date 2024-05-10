@@ -11,11 +11,9 @@ export default async function Page() {
     redirect("/");
   }
 
-
   const lastEmailVerification = await getLastEmailVerification(
     session?.user.email,
   );
-
 
   return (
     <div className="flex flex-col space-y-4 place-items-center justify-center">

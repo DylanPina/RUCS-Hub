@@ -3,6 +3,9 @@
 import axios from "axios";
 import { updateLastEmailVerification } from "../data/user";
 
+/**
+ * Gets an access token for Auth0
+ */
 export async function getAuth0Token() {
   const config = {
     method: "POST",
@@ -21,6 +24,11 @@ export async function getAuth0Token() {
   return access_token;
 }
 
+/**
+ * Resends an email verification
+ *
+ * @param user - The user
+ */
 export async function resendEmailVerification(user: any) {
   const { email, sub } = user;
   const token = await getAuth0Token();
