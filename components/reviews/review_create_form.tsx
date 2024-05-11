@@ -17,7 +17,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/shadcn/ui/form";
-import { useToast } from "@/components/shadcn/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -38,6 +37,8 @@ import { Textarea } from "../shadcn/ui/textarea";
 import createReview from "@/lib/actions/review";
 import { ReviewForm } from "@/lib/definitions/review";
 import { LoaderButton } from "../shadcn/ui/loader-button";
+import { getIfUserReviewedCourse } from "@/lib/actions/user";
+import { toast } from "react-toastify";
 
 interface Props {
   course?: Course | null;
@@ -54,7 +55,6 @@ export default function ReviewCreateForm({
 }: Props) {
   const { user } = useUser();
   const [isPending, startTransition] = useTransition();
-  const { toast } = useToast();
   const [filteredCourses, setFilteredCourses] = useState<Course[]>(
     courses ?? [],
   );
@@ -188,17 +188,22 @@ export default function ReviewCreateForm({
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setSubmitting(true);
     const userId = hashEmailAddress(user?.email as string);
+
+    const courseCode = parseInt(data.course.split("(")[1].split(")")[0]);
+
+    const alreadyReviewed = await getIfUserReviewedCourse(
+      user?.email as string,
+      courseCode,
+    );
+
+    if (alreadyReviewed) {
+      toast.error(`You have already posted a review for the selected course`);
+      setSubmitting(false);
+      return;
+    }
+
     await createReview(data as ReviewForm, userId);
 
-    toast({
-      title: "Successfully submitted review:",
-      className: "bg-primary-black text-primary-white",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
     form.reset({
       year: "",
       term: "",

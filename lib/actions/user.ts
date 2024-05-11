@@ -57,3 +57,22 @@ export async function resetPassword(userEmail: string) {
   await axios(config);
   await updateLastPasswordReset(userEmail);
 }
+
+/**
+ * Checks if a user has reviewed a course
+ *
+ * @param userEmail - The email of the user
+ * @param courseCode - The code of the course
+ */
+export async function getIfUserReviewedCourse(
+  userEmail: string,
+  courseCode: number,
+) {
+  const userId = hashEmailAddress(userEmail);
+  return await prisma.review.findFirst({
+    where: {
+      userId: userId,
+      courseCode: courseCode,
+    },
+  });
+}
