@@ -2,12 +2,6 @@
 
 import React, { useState } from "react";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/shadcn/ui/tooltip";
-import {
   Dialog,
   DialogClose,
   DialogContent,
@@ -43,7 +37,7 @@ export default function DeleteUserButtion({ userAuthId, email }: Props) {
       <DialogTrigger className="flex align-items-center">
         <LoaderButton
           isLoading={loading}
-          className="bg-primary-white text-primary-black hover:bg-primary-red hover:shadow-primary-red hover:text-primary-white transition duration-150 ease-out "
+          className="bg-primary-red text-primary-white hover:bg-primary-red hover:shadow-primary-red hover:text-primary-white transition duration-150 ease-out "
         >
           Delete Account
         </LoaderButton>

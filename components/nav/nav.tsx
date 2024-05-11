@@ -1,7 +1,5 @@
 import React from "react";
 import NavSearchBar from "./nav_search_bar";
-import NavStar from "./nav_star";
-import NavNotification from "./nav_notifications";
 import NavLogo from "./nav_logo";
 import NavIcon from "./nav_icon";
 import { FaBook } from "react-icons/fa6";
@@ -39,8 +37,6 @@ export default async function Nav() {
           professors={professorTableData}
         />
         <div className="flex items-center space-x-4">
-          <NavStar />
-          <NavNotification />
           <NavProfile />
           <SignIn />
         </div>

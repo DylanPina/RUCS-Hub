@@ -5,7 +5,6 @@ import { Separator } from "@/components/shadcn/ui/separator";
 import DeleteUserButtion from "@/components/profile/delete-user-button";
 import ResetPasswordButton from "@/components/profile/reset-password-button";
 import { getSession } from "@auth0/nextjs-auth0";
-import LogoutButton from "@/components/profile/logout-button";
 import {
   getLastEmailVerification,
   getLastPasswordReset,
@@ -61,8 +60,6 @@ export default async function Page() {
           />
         </div>
         <div className="flex space-x-4 w-[500px] h-8 justify-center place-items-center !mt-8">
-          <LogoutButton />
-          <Separator orientation="vertical" />
           <ResetPasswordButton
             user={session?.user}
             lastPasswordReset={lastPasswordReset}

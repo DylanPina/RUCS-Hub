@@ -30,7 +30,6 @@ export default function NavProfile() {
   return (
     user && (
       <div className="flex items-center space-x-4 max-sm:space-x-0">
-        <Separator orientation="vertical" className="h-8 max-sm:hidden" />
         <TooltipProvider delayDuration={100}>
           <Tooltip>
             <TooltipTrigger className="focus:outline-none">
@@ -106,9 +105,7 @@ export default function NavProfile() {
                 </DropdownMenuContent>
               </DropdownMenu>
             </TooltipTrigger>
-            <TooltipContent className="bg-primary-red">
-              My Profile
-            </TooltipContent>
+            <TooltipContent className="bg-primary-red">Profile</TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </div>
