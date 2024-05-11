@@ -8,7 +8,7 @@ export default withMiddlewareAuthRequired(async function middleware(req) {
   const res = NextResponse.next();
   const session = await getSession(req, res);
 
-  if (!session?.user.email_verified) {
+  if (!session?.user.email_verified && req.nextUrl.pathname === "/add-review") {
     return NextResponse.redirect(new URL("/verify", req.url));
   }
 
@@ -16,5 +16,5 @@ export default withMiddlewareAuthRequired(async function middleware(req) {
 });
 
 export const config = {
-  matcher: "/add-review",
+  matcher: ["/add-review", "/my-reviews", "/profile"],
 };

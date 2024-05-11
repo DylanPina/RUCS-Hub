@@ -84,7 +84,10 @@ export default function NavProfile() {
                       <h3>Profile</h3>
                     </div>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer">
+                  <DropdownMenuItem
+                    onClick={() => router.push("/my-reviews")}
+                    className="cursor-pointer"
+                  >
                     <div className="flex items-center space-x-2">
                       <MdRateReview />
                       <h3>My Reviews</h3>

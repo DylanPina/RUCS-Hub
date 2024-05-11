@@ -97,3 +97,17 @@ export async function updateLastPasswordReset(userEmail: string) {
 
   return user;
 }
+
+export async function getReviewsByUser(userEmail: string) {
+  const userId = hashEmailAddress(userEmail);
+  return await prisma.review.findMany({
+    where: {
+      userId: userId,
+    },
+    include: {
+      votes: true,
+      course: true,
+      professor: true,
+    },
+  });
+}

@@ -24,8 +24,6 @@ export default function ResendEmailVerificationBadge({
   const [timePassed, setTimePassed] = useState(false);
   const disabled = alreadyClicked || !timePassed;
 
-  console.log(`User: ${JSON.stringify(user, null, 2)}`);
-
   useEffect(() => {
     const currentDate = new Date();
     const difference = currentDate.getTime() - lastEmailVerification.getTime();
