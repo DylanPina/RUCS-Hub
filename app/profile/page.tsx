@@ -1,8 +1,7 @@
 import React from "react";
 import { Avatar, AvatarImage } from "@/components/shadcn/ui/avatar";
 import { Input } from "@/components/shadcn/ui/input";
-import { Separator } from "@/components/shadcn/ui/separator";
-import DeleteUserButtion from "@/components/profile/delete-user-button";
+import DeleteUserButton from "@/components/profile/delete-user-button";
 import ResetPasswordButton from "@/components/profile/reset-password-button";
 import { getSession } from "@auth0/nextjs-auth0";
 import {
@@ -24,26 +23,27 @@ export default async function Page() {
         Profile
       </h1>
       <div className="flex flex-col items-center space-y-4">
-        <Avatar className="w-16 h-16 outline outline-2 shadow-sm shadow-primary-white/20 outline-primary-white max-sm:w-6 max-sm:h-6 max-sm:outline-1">
+        <Avatar className="w-12 h-12 outline outline-2 shadow-sm shadow-primary-white/20 outline-primary-white">
           <AvatarImage
-            className="max-sm:w-6 max-sm:h-6"
             width={300}
             height={300}
             src={session?.user.picture || ""}
             alt="Profile image"
           />
         </Avatar>
-        <div className="flex flex-col space-y-1 w-[500px]">
-          <h1 className="text-lg font-semibold text-primary-white">Email</h1>
+        <div className="flex flex-col space-y-1 w-full">
+          <h1 className="text-md max-sm:text-sm font-semibold text-primary-white">
+            Email
+          </h1>
           <Input
             disabled
             value={session?.user.email || ""}
             className="w-full"
           />
         </div>
-        <div className="flex flex-col space-y-1 w-[500px]">
+        <div className="flex flex-col space-y-1 w-full">
           <div className="flex place-content-between">
-            <h1 className="text-lg font-semibold text-primary-white">
+            <h1 className="text-md max-sm:text-sm font-semibold text-primary-white">
               Verification Status
             </h1>
             {!session?.user.email_verified && (
@@ -59,13 +59,12 @@ export default async function Page() {
             className="w-full"
           />
         </div>
-        <div className="flex space-x-4 w-[500px] h-8 justify-center place-items-center !mt-8">
+        <div className="flex justify-center w-full items-center sm:space-x-4 max-sm:flex-col max-sm:space-y-4">
           <ResetPasswordButton
             user={session?.user}
             lastPasswordReset={lastPasswordReset}
           />
-          <Separator orientation="vertical" />
-          <DeleteUserButtion
+          <DeleteUserButton
             email={session?.user.email || ""}
             userAuthId={session?.user.sub || ""}
           />

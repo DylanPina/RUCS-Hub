@@ -20,7 +20,7 @@ interface Props {
   email: string;
 }
 
-export default function DeleteUserButtion({ userAuthId, email }: Props) {
+export default function DeleteUserButton({ userAuthId, email }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 

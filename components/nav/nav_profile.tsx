@@ -34,7 +34,7 @@ export default function NavProfile() {
           <Tooltip>
             <TooltipTrigger className="focus:outline-none">
               <DropdownMenu>
-                <DropdownMenuTrigger className="outline-none">
+                <DropdownMenuTrigger className="flex align-center outline-none">
                   <Button
                     asChild
                     variant="ghost"
