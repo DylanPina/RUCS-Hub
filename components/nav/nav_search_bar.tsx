@@ -105,7 +105,7 @@ export default function NavSearchBar({ courses, professors }: Props) {
       </CommandDialog>
       <IoSearchSharp
         size={24}
-        className="md:hidden md:absolute md:left-2 md:top-1/2 md:transform md:-translate-y-1/2 w-8 h-8 fill-primary-white max-sm:w-6 max-sm:h-6"
+        className="md:hidden md:absolute md:left-2 md:top-1/2 md:transform md:-translate-y-1/2 w-8 h-8 fill-primary-white"
         onClick={() => setOpen(true)}
       />
     </div>

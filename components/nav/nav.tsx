@@ -24,13 +24,13 @@ export default async function Nav() {
       <div className="flex place-content-between align-items-center space-x-4 w-full max-w-screen-2xl p-4 max-sm:py-2">
         <NavLogo />
         <NavIcon link="/courses" tooltip="Courses">
-          <FaBook className="w-6 h-6 fill-primary-white max-sm:w-5 max-sm:h-5 cursor-pointer hover:fill-primary-red focus:border-0 transition duration-150 ease-out hover:ease-in" />
+          <FaBook className="w-6 h-6 fill-primary-white cursor-pointer hover:fill-primary-red focus:border-0 transition duration-150 ease-out hover:ease-in" />
         </NavIcon>
         <NavIcon link="/professors" tooltip="Professors">
-          <HiMiniAcademicCap className="w-8 h-8 fill-primary-white max-sm:w-6 max-sm:h-6 cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in" />
+          <HiMiniAcademicCap className="w-8 h-8 fill-primary-white cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in" />
         </NavIcon>
         <NavIcon link="/add-review" tooltip="Add Review">
-          <MdRateReview className="w-8 h-8 fill-primary-white max-sm:w-6 max-sm:h-6 cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in" />
+          <MdRateReview className="w-8 h-8 fill-primary-white cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in" />
         </NavIcon>
         <NavSearchBar
           courses={courseTableData}
