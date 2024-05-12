@@ -238,7 +238,7 @@ export function getCourseRoute(courseCode: number): string {
  * @return - Tuple containing the last name and first name of the professor
  */
 export function parseProfessorName(name: string): [string, string | null] {
-  const names: string[] = name.split(", ");
+  const names: string[] = name.replace(",", "").split(" ");
   return names.length === 2 ? [names[0], names[1]] : [names[0], null];
 }
 
@@ -251,7 +251,7 @@ export function parseProfessorName(name: string): [string, string | null] {
  */
 export function formatProfessorName(
   lastName: string,
-  firstName?: string,
+  firstName?: string | null,
 ): string {
   return firstName
     ? `${titleCase(firstName)} ${titleCase(lastName ?? "")}`

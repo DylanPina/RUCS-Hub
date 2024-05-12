@@ -11,7 +11,7 @@ import { prisma } from "@/prisma/prisma";
 
 export async function GET() {
   // Uncomment the following line to seed the database when this URL is visited
-  // const seedResponse: Response = await seedDatabase(prisma);
+  // await seedDatabase(prisma);
 
   prisma.$disconnect();
   return Response.json({ message: `Seeding complete!` });

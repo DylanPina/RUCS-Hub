@@ -7,6 +7,7 @@ import {
   CoursePage,
 } from "@/lib/definitions/course";
 import {
+  formatProfessorName,
   getTerms,
   getValidYearTermMap,
   getYears,
@@ -651,7 +652,7 @@ export async function fetchCourseSections(): Promise<any[]> {
 
         if (professorLastName) {
           const professorId = professorNameIdMap.get(
-            `${professorLastName}, ${professorFirstName}`,
+            formatProfessorName(professorLastName, professorFirstName),
           );
 
           if (!professorId) {
