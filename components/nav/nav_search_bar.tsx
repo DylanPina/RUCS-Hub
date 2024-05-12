@@ -82,7 +82,7 @@ export default function NavSearchBar({ courses, professors }: Props) {
                   className="aria-selected:bg-primary-red/50 aria-selected:text-primary-white rounded cursor-pointer"
                   onSelect={() => handleCourseSelect(course)}
                 >
-                  ({course.courseCode}) {course.courseName}
+                  {course.courseCode} - {course.courseName}
                 </CommandItem>
               ))}
             </CommandGroup>

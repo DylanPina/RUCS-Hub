@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/shadcn/ui/button";
 import {
   Select,
   SelectTrigger,
@@ -157,7 +156,7 @@ export default function ReviewCreateForm({
       return;
     }
 
-    const courseCode = parseInt(course.split("(")[1].split(")")[0]);
+    const courseCode = parseInt(course.split(" ")[0]);
     startTransition(async () => {
       setFilteredProfessors(await getProfessorsByCourse(courseCode));
     });
@@ -199,7 +198,7 @@ export default function ReviewCreateForm({
     setSubmitting(true);
     const userId = hashEmailAddress(user?.email as string);
 
-    const courseCode = parseInt(data.course.split("(")[1].split(")")[0]);
+    const courseCode = parseInt(data.course.split(" ")[0]);
 
     const alreadyReviewed = await getIfUserReviewedCourse(
       user?.email as string,
@@ -207,12 +206,14 @@ export default function ReviewCreateForm({
     );
 
     if (alreadyReviewed) {
-      toast.error(`You have already posted a review for the selected course`);
+      toast.error("You have already posted a review for the selected course");
       setSubmitting(false);
       return;
     }
 
     await createReview(data as ReviewForm, userId);
+
+    toast.success("Your review has been submitted");
 
     form.reset({
       year: "",
@@ -220,6 +221,8 @@ export default function ReviewCreateForm({
       title: "",
       content: "",
     });
+    clearCourseSelection();
+    clearProfessorSelection();
     setSubmitting(false);
   }
 
@@ -246,7 +249,7 @@ export default function ReviewCreateForm({
                     <SelectValue className="placeholder-primary-white" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent>
+                <SelectContent className="bg-primary-black text-primary-white">
                   <SelectItem
                     key="reset-course"
                     value="reset"
@@ -257,9 +260,9 @@ export default function ReviewCreateForm({
                   {filteredCourses?.map((course: Course) => (
                     <SelectItem
                       key={course.code}
-                      value={`(${course.code}) ${course.name}`}
+                      value={`${course.code} ${course.name}`}
                     >
-                      {`(${course.code}) ${course.name}`}
+                      {`${course.code} - ${course.name}`}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -286,7 +289,7 @@ export default function ReviewCreateForm({
                   </SelectTrigger>
                 </FormControl>
 
-                <SelectContent>
+                <SelectContent className="bg-primary-black text-primary-white">
                   <SelectItem
                     key="reset-professor"
                     value="reset"
@@ -332,7 +335,7 @@ export default function ReviewCreateForm({
                         <SelectValue />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="bg-primary-black text-primary-white">
                       {years?.map((year: number) => (
                         <SelectItem key={year} value={year.toString()}>
                           {year.toString()}
@@ -358,7 +361,7 @@ export default function ReviewCreateForm({
                         <SelectValue />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="bg-primary-black text-primary-white">
                       {terms?.map((term: number) => (
                         <SelectItem key={term} value={term.toString()}>
                           {getTermNameByValue(term)}

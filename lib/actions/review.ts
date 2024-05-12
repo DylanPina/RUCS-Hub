@@ -36,7 +36,7 @@ export default async function createReview(
   await prisma.review.create({
     data: {
       userId,
-      courseCode: Number(reviewForm.course.split("(")[1].split(")")[0]),
+      courseCode: Number(reviewForm.course.split(" ")[0]),
       professorId: professorId,
       year: Number(reviewForm.year),
       semester: Number(reviewForm.term),
