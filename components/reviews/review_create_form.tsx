@@ -152,6 +152,11 @@ export default function ReviewCreateForm({
   });
 
   function onCourseChange(course: any) {
+    if (course === "reset") {
+      clearCourseSelection();
+      return;
+    }
+
     const courseCode = parseInt(course.split("(")[1].split(")")[0]);
     startTransition(async () => {
       setFilteredProfessors(await getProfessorsByCourse(courseCode));
@@ -160,6 +165,11 @@ export default function ReviewCreateForm({
   }
 
   function onProfessorChange(professor: string) {
+    if (professor === "reset") {
+      clearProfessorSelection();
+      return;
+    }
+
     const professorId = filteredProfessors?.find(
       (p) => formatProfessorName(p.lastName, p.firstName) === professor,
     )?.id;
@@ -225,37 +235,35 @@ export default function ReviewCreateForm({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Course *</FormLabel>
-              <div className="flex items-center space-x-2">
-                <Select
-                  onValueChange={(value) => {
-                    onCourseChange(value);
-                  }}
-                  value={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue className="placeholder-primary-white" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {filteredCourses?.map((course: Course) => (
-                      <SelectItem
-                        key={course.code}
-                        value={`(${course.code}) ${course.name}`}
-                      >
-                        {`(${course.code}) ${course.name}`}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Button
-                  type="button"
-                  onClick={clearCourseSelection}
-                  className="transition-all duration-150 bg-primary-white text-primary-black hover:bg-primary-white hover:shadow-primary-white/90"
-                >
-                  Reset
-                </Button>
-              </div>
+              <Select
+                onValueChange={(value) => {
+                  onCourseChange(value);
+                }}
+                value={field.value}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue className="placeholder-primary-white" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem
+                    key="reset-course"
+                    value="reset"
+                    onClick={clearCourseSelection}
+                  >
+                    None
+                  </SelectItem>
+                  {filteredCourses?.map((course: Course) => (
+                    <SelectItem
+                      key={course.code}
+                      value={`(${course.code}) ${course.name}`}
+                    >
+                      {`(${course.code}) ${course.name}`}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
@@ -266,46 +274,46 @@ export default function ReviewCreateForm({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Professor *</FormLabel>
-              <div className="flex items-center space-x-2">
-                <Select
-                  onValueChange={(value) => {
-                    onProfessorChange(value);
-                  }}
-                  value={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger className="placeholder-primary-white/50">
-                      <SelectValue />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {filteredProfessors?.map((professor: any) => (
-                      <SelectItem
-                        key={formatProfessorName(
-                          professor.lastName,
-                          professor.firstName,
-                        )}
-                        value={formatProfessorName(
-                          professor.lastName,
-                          professor.firstName,
-                        )}
-                      >
-                        {formatProfessorName(
-                          professor.lastName,
-                          professor.firstName,
-                        )}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Button
-                  type="button"
-                  onClick={clearProfessorSelection}
-                  className="transition-all duration-150 bg-primary-white text-primary-black hover:bg-primary-white hover:shadow-primary-white/90"
-                >
-                  Reset
-                </Button>
-              </div>
+              <Select
+                onValueChange={(value) => {
+                  onProfessorChange(value);
+                }}
+                value={field.value}
+              >
+                <FormControl>
+                  <SelectTrigger className="placeholder-primary-white/50">
+                    <SelectValue />
+                  </SelectTrigger>
+                </FormControl>
+
+                <SelectContent>
+                  <SelectItem
+                    key="reset-professor"
+                    value="reset"
+                    onClick={clearProfessorSelection}
+                  >
+                    None
+                  </SelectItem>
+                  {filteredProfessors?.map((professor: any) => (
+                    <SelectItem
+                      key={formatProfessorName(
+                        professor.lastName,
+                        professor.firstName,
+                      )}
+                      value={formatProfessorName(
+                        professor.lastName,
+                        professor.firstName,
+                      )}
+                    >
+                      {formatProfessorName(
+                        professor.lastName,
+                        professor.firstName,
+                      )}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
               <FormMessage />
             </FormItem>
           )}
@@ -364,8 +372,8 @@ export default function ReviewCreateForm({
             />
           </div>
         </div>
-        <div className="flex space-x-3">
-          <div className="w-1/3">
+        <div className="flex max-sm:flex-col sm:space-x-3 max-sm:justify-center max-sm:align-center max-sm:space-y-2">
+          <div className="w-1/3 max-sm:w-full">
             <FormField
               control={form.control}
               name="courseRating"
@@ -394,7 +402,7 @@ export default function ReviewCreateForm({
               )}
             />
           </div>
-          <div className="w-1/3">
+          <div className="w-1/3 max-sm:w-full">
             <FormField
               control={form.control}
               name="courseDifficultyRating"
@@ -423,7 +431,7 @@ export default function ReviewCreateForm({
               )}
             />
           </div>
-          <div className="w-1/3">
+          <div className="w-1/3 max-sm:w-full">
             <FormField
               control={form.control}
               name="courseWorkload"
@@ -453,8 +461,8 @@ export default function ReviewCreateForm({
             />
           </div>
         </div>
-        <div className="flex space-x-3">
-          <div className="w-1/3">
+        <div className="flex max-sm:flex-col sm:space-x-3 max-sm:justify-center max-sm:align-center max-sm:space-y-2">
+          <div className="w-1/3 max-sm:w-full">
             <FormField
               control={form.control}
               name="professorRating"
@@ -483,7 +491,7 @@ export default function ReviewCreateForm({
               )}
             />
           </div>
-          <div className="w-1/3">
+          <div className="w-1/3 max-sm:w-full">
             <FormField
               control={form.control}
               name="professorDifficultyRating"
@@ -512,7 +520,7 @@ export default function ReviewCreateForm({
               )}
             />
           </div>
-          <div className="w-1/3">
+          <div className="w-1/3 max-sm:w-full">
             <FormField
               control={form.control}
               name="lectureRating"

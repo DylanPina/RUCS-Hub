@@ -18,11 +18,11 @@ export default async function Page() {
   const lastPasswordReset = await getLastPasswordReset(session?.user.email);
 
   return (
-    <div className="flex flex-col space-y-4 place-items-center justify-center">
+    <div className="flex flex-col space-y-4 place-items-center justify-center w-full">
       <h1 className="text-4xl max-sm:text-2xl font-bold text-primary-white">
         Profile
       </h1>
-      <div className="flex flex-col items-center space-y-4">
+      <div className="flex flex-col items-center space-y-4 w-[325px] max-sm:max-w-full">
         <Avatar className="w-12 h-12 outline outline-2 shadow-sm shadow-primary-white/20 outline-primary-white">
           <AvatarImage
             width={300}
