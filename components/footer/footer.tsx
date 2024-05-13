@@ -1,11 +1,11 @@
 import {
+  DISCORD_URL,
   DYLAN_PINA_GITHUB_URL,
-  JACK_BOGART_GITHUB_URL,
   GITHUB_URL,
 } from "@/lib/constants";
 import Link from "next/link";
 import React from "react";
-import { FaGithub } from "react-icons/fa";
+import { FaGithub, FaDiscord } from "react-icons/fa";
 
 export default function Footer() {
   return (
@@ -14,14 +14,19 @@ export default function Footer() {
         <Link href={GITHUB_URL}>
           <FaGithub className="w-5 h-5 drop-shadow-xl cursor-pointer transition duration-150 ease-out hover:ease-in" />
         </Link>
-        <h2>
+        <Link href={DISCORD_URL}>
+          <FaDiscord className="w-5 h-5 drop-shadow-xl cursor-pointer transition duration-150 ease-out hover:ease-in" />
+        </Link>
+        <span className="px-1 text-xs text-primary-white">
+          Developed by{" "}
           <Link href={DYLAN_PINA_GITHUB_URL}>
-            <span className="px-1 text-xs text-primary-white cursor-pointer hover:font-black transition-all duration-150 ease-out hover:ease-in">
+            <span className="cursor-pointer hover:font-black transition-all duration-150 ease-out hover:ease-in underline">
               Dylan Pina
             </span>
           </Link>
-        </h2>
+        </span>
       </div>
+      <span className="px-1 text-xs text-primary-white">1.0.0-beta.1</span>
     </div>
   );
 }

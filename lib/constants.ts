@@ -11,3 +11,4 @@ export const DYLAN_PINA_GITHUB_URL = "https://github.com/DylanPina";
 export const JACK_BOGART_GITHUB_URL = "https://github.com/JackBogart";
 export const ALEX_LAUDINO_GITHUB_URL = "https://github.com/alexander-laudino";
 export const AARON_NEWLAND_GITHUB_URL = "https://github.com/aaronnewland";
+export const DISCORD_URL = "https://discord.gg/ueWFwgrv";
