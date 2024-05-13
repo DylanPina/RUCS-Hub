@@ -246,7 +246,7 @@ export default function ReviewCreateForm({
                     <SelectValue className="placeholder-primary-white" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent>
+                <SelectContent className="bg-primary-black text-primary-white">
                   <SelectItem
                     key="reset-course"
                     value="reset"
@@ -259,7 +259,7 @@ export default function ReviewCreateForm({
                       key={course.code}
                       value={`(${course.code}) ${course.name}`}
                     >
-                      {`(${course.code}) ${course.name}`}
+                      {`${course.code} - ${course.name}`}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -285,8 +285,7 @@ export default function ReviewCreateForm({
                     <SelectValue />
                   </SelectTrigger>
                 </FormControl>
-
-                <SelectContent>
+                <SelectContent className="bg-primary-black text-primary-white">
                   <SelectItem
                     key="reset-professor"
                     value="reset"
@@ -332,7 +331,7 @@ export default function ReviewCreateForm({
                         <SelectValue />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="bg-primary-black text-primary-white">
                       {years?.map((year: number) => (
                         <SelectItem key={year} value={year.toString()}>
                           {year.toString()}
@@ -358,7 +357,7 @@ export default function ReviewCreateForm({
                         <SelectValue />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="bg-primary-black text-primary-white">
                       {terms?.map((term: number) => (
                         <SelectItem key={term} value={term.toString()}>
                           {getTermNameByValue(term)}
