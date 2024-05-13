@@ -41,7 +41,7 @@ export default function NavProfile() {
                     className="rounded-full transition duration-150 ease-out hover:ease-in"
                     onClick={() => router.push("/api/auth/logout")}
                   >
-                    <Avatar className="w-8 h-8 outline outline-2 shadow-sm shadow-primary-white/20 outline-primary-white transition duration-150 ease-out hover:ease-in hover:outline-primary-red hover:shadow-primary-red">
+                    <Avatar className="w-8 h-8 outline outline-2 rounded-full shadow-sm shadow-primary-white/20 outline-primary-white transition duration-150 ease-out hover:ease-in hover:outline-primary-red hover:shadow-primary-red">
                       <AvatarImage
                         className="cursor-pointer"
                         width={300}
@@ -55,7 +55,7 @@ export default function NavProfile() {
                 <DropdownMenuContent className="bg-primary-black text-primary-white">
                   <DropdownMenuLabel>
                     <div className="flex items-center space-x-2">
-                      <Avatar className="w-8 h-8 outline outline-2 shadow-sm shadow-primary-white/20 outline-primary-white max-sm:w-6 max-sm:h-6 max-sm:outline-1">
+                      <Avatar className="w-8 h-8 outline outline-2 rounded-full shadow-sm shadow-primary-white/20 outline-primary-white max-sm:w-6 max-sm:h-6 max-sm:outline-1">
                         <AvatarImage
                           className="max-sm:w-6 max-sm:h-6"
                           width={300}
@@ -104,7 +104,9 @@ export default function NavProfile() {
                 </DropdownMenuContent>
               </DropdownMenu>
             </TooltipTrigger>
-            <TooltipContent className="bg-primary-red">Profile</TooltipContent>
+            <TooltipContent align="end" className="bg-primary-red">
+              Profile
+            </TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </div>

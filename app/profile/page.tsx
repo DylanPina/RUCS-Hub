@@ -23,7 +23,7 @@ export default async function Page() {
         Profile
       </h1>
       <div className="flex flex-col items-center space-y-4 w-[325px] max-sm:max-w-full">
-        <Avatar className="w-12 h-12 outline outline-2 shadow-sm shadow-primary-white/20 outline-primary-white">
+        <Avatar className="w-12 h-12 outline outline-2 rounded-full shadow-sm shadow-primary-white/20 outline-primary-white">
           <AvatarImage
             width={300}
             height={300}

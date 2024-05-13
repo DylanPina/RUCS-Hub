@@ -288,7 +288,6 @@ export default function ReviewCreateForm({
                     <SelectValue />
                   </SelectTrigger>
                 </FormControl>
-
                 <SelectContent className="bg-primary-black text-primary-white">
                   <SelectItem
                     key="reset-professor"
