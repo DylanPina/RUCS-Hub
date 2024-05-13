@@ -104,7 +104,9 @@ export default function NavProfile() {
                 </DropdownMenuContent>
               </DropdownMenu>
             </TooltipTrigger>
-            <TooltipContent className="bg-primary-red">Profile</TooltipContent>
+            <TooltipContent align="end" className="bg-primary-red">
+              Profile
+            </TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </div>
