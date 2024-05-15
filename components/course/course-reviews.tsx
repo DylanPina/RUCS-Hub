@@ -221,8 +221,8 @@ export default function CourseReviews({ reviews }: ProfessorReviewProps) {
   return (
     <div className="flex flex-col space-y-3">
       <div className="flex flex-col max-sm:space-y-3">
-        <div className="flex max-sm:flex-col max-sm:space-y-3 place-content-between w-full space-y-1">
-          <div className="flex-col space-y-3 max-sm:w-full sm:max-w-[300px] self-end">
+        <div className="flex max-lg:flex-col max-lg:space-y-3 place-content-between w-full space-y-1">
+          <div className="flex-col space-y-3 w-full lg:max-w-[300px] self-end">
             <h3 className="text-lg text-primary-white font-bold mt-auto">
               Course Reviews:
             </h3>
@@ -231,18 +231,22 @@ export default function CourseReviews({ reviews }: ProfessorReviewProps) {
               placeHolder="Filter reviews..."
             />
           </div>
-          <div className="flex max-sm:place-self-start self-end space-x-2">
-            <ReviewsFilterProfessor
-              professors={professors}
-              selectedProfessor={professor}
-              onProfessorChange={setProfessor}
-            />
-            <ReviewsFilterYear selectedYear={year} onYearChange={setYear} />
-            <ReviewsFilterTerm selectedTerm={term} onTermChange={setTerm} />
-            <ReviewsSortBy
-              selectedValue={sortBy}
-              onSelectChange={(value) => setSortBy(value)}
-            />
+          <div className="flex lg:self-end max-lg:flex-col lg:space-x-2 max-lg:space-y-3">
+            <div className="lg:w-full">
+              <ReviewsFilterProfessor
+                professors={professors}
+                selectedProfessor={professor}
+                onProfessorChange={setProfessor}
+              />
+            </div>
+            <div className="flex space-x-2">
+              <ReviewsFilterYear selectedYear={year} onYearChange={setYear} />
+              <ReviewsFilterTerm selectedTerm={term} onTermChange={setTerm} />
+              <ReviewsSortBy
+                selectedValue={sortBy}
+                onSelectChange={(value) => setSortBy(value)}
+              />
+            </div>
           </div>
         </div>
       </div>

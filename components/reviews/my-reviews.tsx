@@ -201,25 +201,29 @@ export default function MyReviews({ reviews, user }: Props) {
   return (
     <div className="flex flex-col space-y-3 w-full">
       <div className="flex flex-col max-sm:space-y-3">
-        <div className="flex max-sm:flex-col max-sm:space-y-3 place-content-between w-full space-y-1">
-          <div className="flex-col space-y-3 max-sm:w-full sm:max-w-[300px] self-end">
+        <div className="flex max-lg:flex-col max-lg:space-y-3 place-content-between w-full space-y-1">
+          <div className="flex-col space-y-3 max-lg:w-full lg:max-w-[300px] self-end">
             <ReviewsFilterSearch
               onFilterChange={handleSearchTermChange}
               placeHolder="Filter reviews..."
             />
           </div>
-          <div className="flex max-sm:place-self-start self-end space-x-2">
-            <ReviewsFilterCourse
-              courses={courses}
-              selectedCourse={course}
-              onCourseChange={setCourse}
-            />
-            <ReviewsFilterYear selectedYear={year} onYearChange={setYear} />
-            <ReviewsFilterTerm selectedTerm={term} onTermChange={setTerm} />
-            <ReviewsSortBy
-              selectedValue={sortBy}
-              onSelectChange={(value) => setSortBy(value)}
-            />
+          <div className="flex lg:self-end max-lg:flex-col lg:space-x-2 max-lg:space-y-3">
+            <div className="lg:w-full">
+              <ReviewsFilterCourse
+                courses={courses}
+                selectedCourse={course}
+                onCourseChange={setCourse}
+              />
+            </div>
+            <div className="flex space-x-2">
+              <ReviewsFilterYear selectedYear={year} onYearChange={setYear} />
+              <ReviewsFilterTerm selectedTerm={term} onTermChange={setTerm} />
+              <ReviewsSortBy
+                selectedValue={sortBy}
+                onSelectChange={(value) => setSortBy(value)}
+              />
+            </div>
           </div>
         </div>
       </div>
