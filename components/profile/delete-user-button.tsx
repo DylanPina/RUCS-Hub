@@ -42,7 +42,7 @@ export default function DeleteUserButton({ userAuthId, email }: Props) {
           Delete Account
         </LoaderButton>
       </DialogTrigger>
-      <DialogContent className="bg-primary-black max-sm:rounded">
+      <DialogContent className="bg-primary-black max-sm:rounded overflow-hidden">
         <DialogHeader className="flex align-items-center">
           <DialogTitle className="text-center">Deleting Account</DialogTitle>
           <DialogDescription className="text-center">

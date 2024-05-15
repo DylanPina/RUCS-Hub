@@ -81,7 +81,7 @@ export default function ProfessorTable({ data }: ProfessorTableProps) {
           placeHolder="Filter professors..."
         />
       </div>
-      <div className="rounded-md border">
+      <div className="rounded overflow-hidden-md border">
         <Table className="p-10">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

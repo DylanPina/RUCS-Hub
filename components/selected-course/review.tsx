@@ -18,7 +18,7 @@ interface ReviewProps {
 
 export default function Review({ title, semester, dateTime, ratings, description }: ReviewProps) {
   return (
-    <div className="p-4 border rounded-lg shadow w-9/12">
+    <div className="p-4 border rounded overflow-hidden-lg shadow w-9/12">
       <h2 className="text-lg font-bold">{title}</h2>
       <p className="text-sm text-gray-600">
         {semester} • {new Date(dateTime).toLocaleString()}

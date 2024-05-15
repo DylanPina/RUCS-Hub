@@ -107,7 +107,7 @@ export default function ReviewCreateModal({
       title: "Successfully submitted review:",
       className: "bg-primary-black text-primary-white",
       description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+        <pre className="mt-2 w-[340px] rounded overflow-hidden-md bg-slate-950 p-4">
           <code className="text-white">{JSON.stringify(data, null, 2)}</code>
         </pre>
       ),

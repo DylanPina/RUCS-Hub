@@ -50,7 +50,7 @@ export default function ReviewDeleteButton({ review }: Props) {
                 className="fill-primary-white hover:fill-primary-red transition duration-150 ease-in-out hover:ease-in"
               />
             </DialogTrigger>
-            <DialogContent className="bg-primary-black max-sm:rounded">
+            <DialogContent className="bg-primary-black max-sm:rounded overflow-hidden">
               <DialogHeader className="flex align-items-center">
                 <DialogTitle className="text-center">
                   Deleting Review

@@ -21,7 +21,7 @@ export default async function Nav() {
 
   return (
     <div className="flex place-items-center backdrop-blur justify-center w-full transition-colors duration-500 border-b border-primary-white bg-primary-black supports-backdrop-blur:bg-white/60 dark:bg-transparent">
-      <div className="flex place-content-between align-items-center space-x-4 w-full max-w-screen-2xl p-4">
+      <div className="flex place-content-between align-items-center space-x-4 w-full max-w-screen-2xl p-4 max-sm:py-3">
         <NavLogo />
         <NavIcon link="/courses" tooltip="Courses">
           <FaBook className="w-6 h-6 fill-primary-white cursor-pointer hover:fill-primary-red focus:border-0 transition duration-150 ease-out hover:ease-in" />

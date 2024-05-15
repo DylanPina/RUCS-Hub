@@ -59,19 +59,19 @@ export default function NavSearchBar({ courses, professors }: Props) {
           className="md:absolute md:left-2 md:top-1/2 md:transform md:-translate-y-1/2"
         />
         <Button
-          className="max-w-md max-md:hidden pl-10 pr-2 focus:border-2 focus:border-primary-red text-zinc-500 font-normal transition-all duration-150 ease-out hover:ease-in outline outline-1 outline-primary-white hover:outline-primary-red hover:shadow-primary-red"
+          className="max-w-md max-md:hidden pl-10 pr-2 focus:border-2 focus:border-primary-red text-zinc-500 font-normal transition-all duration-150 ease-out hover:ease-in border border-primary-white hover:border-primary-red hover:shadow-primary-red"
           onClick={() => setOpen(true)}
         >
           Search courses & professors...
           <p className="text-xs text-muted-foreground">
-            <kbd className="pointer-events-none inline-flex ml-3 select-none items-center gap-1 rounded bg-primary-white/10 px-1 text-muted-foreground opacity-100">
+            <kbd className="pointer-events-none inline-flex ml-3 select-none items-center gap-1 rounded overflow-hidden bg-primary-white/10 px-1 text-muted-foreground opacity-100">
               <span className="text-sm">⌘</span>K
             </kbd>
           </p>
         </Button>
       </div>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <Command className="bg-primary-black max-sm:rounded">
+        <Command className="bg-primary-black max-sm:rounded overflow-hidden">
           <CommandInput placeholder="Search courses & professors..." />
           <CommandList className="text-primary-white">
             <CommandEmpty>No results found</CommandEmpty>
@@ -79,7 +79,7 @@ export default function NavSearchBar({ courses, professors }: Props) {
               {courses.map((course: CourseTableColumn) => (
                 <CommandItem
                   key={course.courseCode}
-                  className="aria-selected:bg-primary-red/50 aria-selected:text-primary-white rounded cursor-pointer"
+                  className="aria-selected:bg-primary-red/50 aria-selected:text-primary-white rounded overflow-hidden cursor-pointer"
                   onSelect={() => handleCourseSelect(course)}
                 >
                   {course.courseCode} - {course.courseName}
@@ -93,7 +93,7 @@ export default function NavSearchBar({ courses, professors }: Props) {
                     professor.lastName,
                     professor.firstName,
                   )}
-                  className="aria-selected:bg-primary-red/50 aria-selected:text-primary-white rounded cursor-pointer"
+                  className="aria-selected:bg-primary-red/50 aria-selected:text-primary-white rounded overflow-hidden cursor-pointer"
                   onSelect={() => handleProfessorSelect(professor)}
                 >
                   {formatProfessorName(professor.lastName, professor.firstName)}

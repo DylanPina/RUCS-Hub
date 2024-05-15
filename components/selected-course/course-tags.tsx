@@ -11,10 +11,10 @@ export default function CourseTags() {
       {tags.map((tag, index) => (
         <div
           key={index}
-          className="relative group cursor-pointer bg-stone-800 text-white rounded-full px-4 py-1 flex items-center"
+          className="relative group cursor-pointer bg-stone-800 text-white rounded-full overflow-hidden px-4 py-1 flex items-center"
         >
           <span className="text-sm font-medium">{tag.name}</span>
-          <div className="absolute top-full mb-2 hidden group-hover:block bg-black text-white text-xs rounded p-2 mt-1">
+          <div className="absolute top-full mb-2 hidden group-hover:block bg-black text-white text-xs rounded overflow-hidden p-2 mt-1">
             {tag.info}
           </div>
         </div>

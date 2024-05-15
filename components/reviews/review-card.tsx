@@ -32,7 +32,7 @@ export default function ReviewCard({ review, userId }: ReviewCardProps) {
   }
 
   return (
-    <div className="flex flex-col space-y-3 p-2 outline outline-1 outline-primary-white rounded">
+    <div className="flex flex-col space-y-3 p-2 border border-primary-white rounded overflow-hidden">
       <div className="flex flex-col space-y-1">
         <h3 className="text-sm text-primary-white font-semibold">
           {updatedReview.title}

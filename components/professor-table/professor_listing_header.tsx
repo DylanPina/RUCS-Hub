@@ -7,11 +7,7 @@ export default function ProfessorListingHeader() {
         RUCS <span className="text-primary-white">Professors</span>
       </h1>
       <h4 className="max-w-4xl text-md max-sm:text-sm font-semibold text-center text-primary-white">
-        Welcome to the unofficial hub for Rutgers University Computer Science.
-        <br className="max-md:hidden" />
-        <span className="md:hidden"> </span>
-        Here you can find reviews for professors and classes, as well as add
-        your own.
+        Unofficial hub for Rutgers University Computer Science
       </h4>
     </div>
   );

@@ -27,7 +27,7 @@ export default async function ProfessorBanner({ professor }: Props) {
 
   return (
     <div className="flex flex-col lg:flex-row justify-start lg:justify-between max-lg:space-y-3">
-      <div className="flex w-full lg:w-1/2 bg-primary-red outline outline-1 outline-primary-white rounded py-3 px-4">
+      <div className="flex w-full lg:w-1/2 bg-primary-red border border-primary-white rounded overflow-hidden py-3 px-4">
         <div className="flex flex-col place-content-between min-w-fit space-y-3">
           <div className="flex flex-col space-y-1">
             <h1 className="text-2xl text-primary-black font-black">{name}</h1>

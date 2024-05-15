@@ -43,7 +43,7 @@ export default function ReviewsFilterSearch({
         className="pl-8 pr-8 focus:border-2 focus:border-primary-red hover:border-primary-red transition-all duration-150 ease-out hover:ease-in"
       />
       <p className="max-sm:hidden absolute text-xs text-zinc-400 right-2 top-1/2 transform -translate-y-1/2">
-        <kbd className="inline-flex ml-3 select-none items-center gap-1 rounded bg-primary-white/10 px-2 py-1 text-muted-foreground">
+        <kbd className="inline-flex ml-3 select-none items-center gap-1 rounded overflow-hidden bg-primary-white/10 px-2 py-1 text-muted-foreground">
           /
         </kbd>
       </p>

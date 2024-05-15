@@ -90,7 +90,7 @@ export default function CourseTable({ data }: CourseTableProps) {
           </div>
         </div>
       </div>
-      <div className="rounded-md border">
+      <div className="rounded overflow-hidden-md border">
         <Table className="p-10">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
