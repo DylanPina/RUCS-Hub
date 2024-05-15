@@ -6,7 +6,11 @@ import ReviewsFilterSearch from "@/components/reviews/reviews-filter-search";
 import ReviewsFilterTerm from "@/components/reviews/reviews-filter-term";
 import ReviewsFilterYear from "@/components/reviews/reviews-filter-year";
 import ReviewsSortBy from "@/components/reviews/reviews-sort-by";
-import { getTermNameByValue, hashEmailAddress } from "@/lib/utils";
+import {
+  formatProfessorName,
+  getTermNameByValue,
+  hashEmailAddress,
+} from "@/lib/utils";
 import { Review } from "@prisma/client";
 import {
   Select,
@@ -17,6 +21,7 @@ import {
 } from "@/components/shadcn/ui/select";
 import { Button } from "@/components/shadcn/ui/button";
 import ReviewCard from "./review-card";
+import ReviewsFilterProfessor from "./reviews_filter_professor";
 
 interface Props {
   reviews: Review[];
@@ -31,14 +36,13 @@ export default function MyReviews({ reviews, user }: Props) {
   const [year, setYear] = useState("Any");
   const [term, setTerm] = useState("Any");
   const [course, setCourse] = useState("Any");
+  const [courses, setCourses] = useState(["Any"]);
+  const [professor, setProfessor] = useState("Any");
+  const [professors, setProfessors] = useState(["Any"]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [startIndex, setStartIndex] = useState(0);
   const [endIndex, setEndIndex] = useState(rowsPerPage);
   const [userId, setUserId] = useState("");
-
-  const courses: string[] = ["Any"].concat(
-    Array.from(new Set(reviews.map((review: any) => review.course.name))),
-  );
 
   function sortReviewsByNewest(reviews: Review[]) {
     return reviews.sort((a, b) => {
@@ -117,10 +121,22 @@ export default function MyReviews({ reviews, user }: Props) {
       const termMatches =
         term === "Any" || getTermNameByValue(review.semester) === term;
       const courseMatches = course === "Any" || review.course.name === course;
+      const professorMatches =
+        professor === "Any" ||
+        formatProfessorName(
+          review.professor.lastName,
+          review.professor.firstName,
+        ) === professor;
       const searchMatches =
         review.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         review.content.toLowerCase().includes(searchTerm.toLowerCase());
-      return yearMatches && termMatches && courseMatches && searchMatches;
+      return (
+        yearMatches &&
+        termMatches &&
+        courseMatches &&
+        professorMatches &&
+        searchMatches
+      );
     });
 
     setFilteredReviews(filtered);
@@ -132,10 +148,71 @@ export default function MyReviews({ reviews, user }: Props) {
     reviews,
     year,
     course,
+    professor,
     searchTerm,
     startIndex,
     endIndex,
   ]);
+
+  useEffect(() => {
+    if (course !== "Any") {
+      const filteredProfessors = Array.from(
+        new Set(
+          reviews
+            .filter((review: any) => review.course.name === course)
+            .map((review: any) =>
+              formatProfessorName(
+                review.professor.lastName,
+                review.professor.firstName,
+              ),
+            ),
+        ),
+      );
+      setProfessors(["Any"].concat(filteredProfessors));
+      if (!filteredProfessors.includes(professor)) {
+        setProfessor("Any");
+      }
+    } else {
+      const uniqueProfessors = Array.from(
+        new Set(
+          reviews.map((review: any) =>
+            formatProfessorName(
+              review.professor.lastName,
+              review.professor.firstName,
+            ),
+          ),
+        ),
+      );
+      setProfessors(["Any"].concat(uniqueProfessors));
+    }
+  }, [course, reviews, professor]);
+
+  useEffect(() => {
+    if (professor !== "Any") {
+      const filteredCourses = Array.from(
+        new Set(
+          reviews
+            .filter(
+              (review: any) =>
+                formatProfessorName(
+                  review.professor.lastName,
+                  review.professor.firstName,
+                ) === professor,
+            )
+            .map((review: any) => review.course.name),
+        ),
+      );
+      setCourses(["Any"].concat(filteredCourses));
+      if (!filteredCourses.includes(course)) {
+        setCourse("Any");
+      }
+    } else {
+      const uniqueCourses = Array.from(
+        new Set(reviews.map((review: any) => review.course.name)),
+      );
+      setCourses(["Any"].concat(uniqueCourses));
+    }
+  }, [professor, reviews, course]);
 
   function noReviewsMessage() {
     if (reviews.length > 0 && !searchTerm) {
@@ -201,7 +278,7 @@ export default function MyReviews({ reviews, user }: Props) {
   return (
     <div className="flex flex-col space-y-3 w-full">
       <div className="flex flex-col max-sm:space-y-3">
-        <div className="flex max-lg:flex-col max-lg:space-y-3 place-content-between w-full space-y-1">
+        <div className="flex max-lg:flex-col lg:space-x-2 max-lg:space-y-3 place-content-between w-full space-y-1">
           <div className="flex-col space-y-3 max-lg:w-full lg:max-w-[300px] self-end">
             <ReviewsFilterSearch
               onFilterChange={handleSearchTermChange}
@@ -209,11 +286,16 @@ export default function MyReviews({ reviews, user }: Props) {
             />
           </div>
           <div className="flex lg:self-end max-lg:flex-col lg:space-x-2 max-lg:space-y-3">
-            <div className="lg:w-full">
+            <div className="flex lg:space-x-2 max-lg:space-y-3 max-lg:flex-col max-lg:w-full">
               <ReviewsFilterCourse
                 courses={courses}
                 selectedCourse={course}
                 onCourseChange={setCourse}
+              />
+              <ReviewsFilterProfessor
+                professors={professors}
+                selectedProfessor={professor}
+                onProfessorChange={setProfessor}
               />
             </div>
             <div className="flex space-x-2">
