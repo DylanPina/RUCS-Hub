@@ -32,16 +32,16 @@ export default async function ProfessorBanner({ professor }: Props) {
           <div className="flex flex-col space-y-1">
             <h1 className="text-2xl text-primary-black font-black">{name}</h1>
             <div className="flex flex-col space-y-1">
+              <h3 className="text-md text-primary-white font-bold">
+                Reviews: <span className="font-normal">{reviews.length}</span>
+              </h3>
               {totalOverallRatings > 0 ? (
                 <h3 className="text-md text-primary-white font-bold">
                   Overall:{" "}
                   <span className="font-normal">{overall.toFixed(1)}</span>
                   <span className="font-normal">/10</span>{" "}
-                  <span className="text-xs italic text-primary-white/50">
-                    based on{" "}
-                    <span className="underline">
-                      {totalOverallRatings} reviews
-                    </span>
+                  <span className="text-xs text-primary-white/50">
+                    based on {totalOverallRatings} reviews
                   </span>
                 </h3>
               ) : (
@@ -54,11 +54,8 @@ export default async function ProfessorBanner({ professor }: Props) {
                   Difficulty:{" "}
                   <span className="font-normal">{difficulty.toFixed(1)}</span>
                   <span className="font-normal">/10</span>{" "}
-                  <span className="text-xs italic text-primary-white/50">
-                    based on{" "}
-                    <span className="underline">
-                      {totalDifficultyRatings} reviews
-                    </span>
+                  <span className="text-xs text-primary-white/50">
+                    based on {totalDifficultyRatings} reviews
                   </span>
                 </h3>
               ) : (
@@ -66,9 +63,6 @@ export default async function ProfessorBanner({ professor }: Props) {
                   Difficulty: <span className="font-normal">?</span>
                 </h3>
               )}
-              <h3 className="text-md text-primary-white font-bold">
-                Reviews: <span className="font-normal">{reviews.length}</span>
-              </h3>
               <CurrentlyTeaching currentlyTeaching={currentlyTeaching} />
             </div>
           </div>

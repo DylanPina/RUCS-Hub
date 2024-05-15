@@ -23,7 +23,7 @@ export default function CourseCharts({ reviews }: Props) {
     <div className="flex flex-col w-full lg:w-1/2 space-y-3">
       <div className="w-fit">
         <Select value={ratingChart} onValueChange={setRatingChart}>
-          <SelectTrigger className="ml-0 lg:ml-7 border-2 border-primary-white text-primary-white font-semibold">
+          <SelectTrigger className="ml-0 lg:ml-7 border border-primary-white text-primary-white font-semibold">
             <SelectValue className="text-primary-black">
               {ratingChart}
             </SelectValue>

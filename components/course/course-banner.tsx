@@ -37,13 +37,13 @@ export default async function CourseBanner({ coursePage }: Props) {
             </h1>
             <div className="flex flex-col space-y-1">
               <h3 className="text-md text-primary-white font-bold">
+                Reviews: {reviews.length}
+              </h3>
+              <h3 className="text-md text-primary-white font-bold">
                 Course Code: <span className="font-normal">{courseCode}</span>
               </h3>
               <h3 className="text-md text-primary-white font-bold">
                 Credits: <span className="font-normal">{credits}</span>
-              </h3>
-              <h3 className="text-md text-primary-white font-bold">
-                Reviews: {reviews.length}
               </h3>
               {reviews.length > 0 ? (
                 <h3 className="text-md text-primary-white font-bold">
@@ -52,9 +52,8 @@ export default async function CourseBanner({ coursePage }: Props) {
                   <span className="text-xs text-primary-white/50 font-normal">
                     /10
                   </span>{" "}
-                  <span className="text-xs italic text-primary-white/50 font-normal">
-                    based on{" "}
-                    <span className="underline">{reviews.length} reviews</span>
+                  <span className="text-xs text-primary-white/50 font-normal">
+                    based on {reviews.length} reviews
                   </span>
                 </h3>
               ) : (
@@ -69,11 +68,8 @@ export default async function CourseBanner({ coursePage }: Props) {
                   <span className="text-xs text-primary-white/50 font-normal">
                     /10
                   </span>{" "}
-                  <span className="text-xs italic text-primary-white/50 font-normal">
-                    based on{" "}
-                    <span className="underline font-normal">
-                      {totalDifficultyRatings} reviews
-                    </span>
+                  <span className="text-xs text-primary-white/50 font-normal">
+                    based on {totalDifficultyRatings} reviews
                   </span>
                 </h3>
               ) : (
@@ -87,12 +83,9 @@ export default async function CourseBanner({ coursePage }: Props) {
                   <span className="font-normal">
                     {workload.toFixed(1)} hours per week
                   </span>
-                  <span className="text-xs italic text-primary-white/50 font-normal">
+                  <span className="text-xs text-primary-white/50 font-normal">
                     {" "}
-                    based on{" "}
-                    <span className="underline font-normal">
-                      {totalWorkloadRatings} reviews
-                    </span>
+                    based on {totalWorkloadRatings} reviews
                   </span>
                 </h3>
               ) : (
