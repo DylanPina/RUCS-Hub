@@ -7,7 +7,7 @@ export default function CourseListingHeader() {
         RUCS <span className="text-primary-white">Courses</span>
       </h1>
       <h4 className="max-w-4xl text-md max-sm:text-sm font-semibold text-center text-primary-white">
-        Welcome to the unofficial site for Rutgers University Computer Science.
+        Welcome to the unofficial hub for Rutgers University Computer Science.
         <br className="max-md:hidden" />
         <span className="md:hidden"> </span>
         Here you can find reviews for professors and classes, as well as add

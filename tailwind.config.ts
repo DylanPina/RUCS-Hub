@@ -31,7 +31,7 @@ const config = {
       },
       colors: {
         "primary-black": "#18181b",
-        "primary-red": "#E11D48",
+        "primary-red": "#DA2F47",
         "primary-white": "#fafafa",
       },
       animation: {

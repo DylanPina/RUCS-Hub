@@ -1,9 +1,7 @@
 import React from "react";
+import Image from "next/image";
+import Logo from "../../public/rucshub-logo.png";
 
 export default function NavLogo() {
-  return (
-    <h2 className="flex flex-column font-bold text-3xl max-sm:text-2xl max-sm:leading-9 text-primary-white whitespace-nowrap">
-      <span className="text-primary-red">RUCS</span>Hub
-    </h2>
-  );
+  return <Image src={Logo} width={37.5} height={15} alt="RUCS Hub Logo" />;
 }

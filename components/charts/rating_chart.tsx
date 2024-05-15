@@ -59,7 +59,7 @@ export default function ProfessorDifficultyRatingChart({
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="rating" tick={{ stroke: "#fafafa" }} />
         <YAxis dataKey="count" tick={{ stroke: "#fafafa" }} />
-        <Bar dataKey="count" fill="#E11D48">
+        <Bar dataKey="count" fill="#DA2F47">
           <LabelList dataKey="count" content={renderCustomLabel} />
         </Bar>
       </BarChart>
