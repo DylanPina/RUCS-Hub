@@ -357,6 +357,7 @@ export default function ReviewCardEditing({
             <LoaderButton
               type="submit"
               className="text-sm max-sm:text-xs bg-primary-white text-primary-black transition-all duration-150 hover:bg-primary-white hover:font-bold hover:shadow-primary-black"
+              disabled={!form.formState.isDirty}
               isLoading={submitting}
             >
               Save
