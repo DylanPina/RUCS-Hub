@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Review, ReviewForm } from "@/lib/definitions/review";
-import { Button } from "../shadcn/ui/button";
 import { Input } from "../shadcn/ui/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -114,49 +113,51 @@ export default function ReviewCardEditing({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col space-y-3 p-2 border border-primary-white rounded overflow-hidden">
-          <div className="flex flex-col w-full space-y-1">
-            <h3 className="flex w-full text-sm text-primary-white font-semibold">
-              Title:
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <Input
-                      {...field}
-                      className="ml-2 text-xs max-w-[400px] h-5 focus-visible:ring-0"
-                    />
-                  </FormItem>
-                )}
-              ></FormField>
-            </h3>
-            <p className="text-xs text-primary-white/50">
-              Course: {review.course.name}
+        <div className="flex flex-col space-y-2 p-3 border border-primary-white rounded overflow-hidden">
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem className="w-full flex align-center !space-y-0">
+                <Input
+                  {...field}
+                  className="w-full h-[28px] max-w-[600px] text-sm focus-visible:ring-0"
+                />
+              </FormItem>
+            )}
+          ></FormField>
+          <div className="flex flex-col space-y-1">
+            <p className="text-sm max-sm:text-xs text-primary-white/50">
+              <span className="font-semibold">Course:</span>{" "}
+              {review.course.name}
             </p>
-            <p className="text-xs text-primary-white/50">
-              Professor:{" "}
+            <p className="text-sm max-sm:text-xs text-primary-white/50">
+              <span className="font-semibold">Professor: </span>
               {formatProfessorName(
                 review.professor.lastName,
                 review.professor.firstName,
               )}
             </p>
-            <p className="text-xs text-primary-white/50">
-              Term: {getTermNameByValue(review.semester)} {review.year}
+            <p className="text-sm max-sm:text-xs text-primary-white/50">
+              <span className="font-semibold">Term:</span>{" "}
+              {getTermNameByValue(review.semester)} {review.year}
             </p>
-            <p className="text-xs text-primary-white/50">
-              Created at: {formatReviewDate(review.createdAt)}
+            <p className="text-sm max-sm:text-xs text-primary-white/50">
+              <span className="font-semibold">Created at:</span>{" "}
+              {formatReviewDate(review.createdAt)}
             </p>
             {review.createdAt.toString() !== review.lastModified.toString() && (
-              <p className="text-xs text-primary-white/50">
+              <p className="text-sm max-sm:text-xs text-primary-white/50">
                 Last modifed at: {formatReviewDate(review.lastModified)}
               </p>
             )}
           </div>
           <div className="flex space-x-10">
-            <ul className="flex flex-col space-y-1 text-xs">
-              <li className="flex flex-col space-y-1 text-xs">
-                <span className="text-primary-white">Course Rating:</span>
+            <ul className="flex flex-col space-y-1 text-sm max-sm:text-xs">
+              <li className="flex flex-col space-y-1 text-sm max-sm:text-xs">
+                <span className="text-primary-white font-semibold">
+                  Course Rating:
+                </span>
                 <FormField
                   control={form.control}
                   name="courseRating"
@@ -167,7 +168,7 @@ export default function ReviewCardEditing({
                           {...field}
                           type="number"
                           value={field.value || ""}
-                          className="text-xs h-5 w-[100px] focus-visible:ring-0"
+                          className="text-sm max-sm:text-xs h-5 w-[100px] focus-visible:ring-0"
                           onChange={(e) =>
                             field.onChange(
                               e.target.value === ""
@@ -182,8 +183,10 @@ export default function ReviewCardEditing({
                   )}
                 />
               </li>
-              <li className="flex flex-col space-y-1 text-xs">
-                <span className="text-primary-white">Course Difficulty:</span>
+              <li className="flex flex-col space-y-1 text-sm max-sm:text-xs">
+                <span className="text-primary-white font-semibold">
+                  Course Difficulty:
+                </span>
                 <FormField
                   control={form.control}
                   name="courseDifficultyRating"
@@ -194,7 +197,7 @@ export default function ReviewCardEditing({
                           {...field}
                           type="number"
                           value={field.value || ""}
-                          className="text-xs h-5 w-[100px] focus-visible:ring-0"
+                          className="text-sm max-sm:text-xs h-5 w-[100px] focus-visible:ring-0"
                           onChange={(e) =>
                             field.onChange(
                               e.target.value === ""
@@ -209,8 +212,10 @@ export default function ReviewCardEditing({
                   )}
                 />
               </li>
-              <li className="flex flex-col space-y-1 text-xs">
-                <span className="text-primary-white">Course Workload:</span>
+              <li className="flex flex-col space-y-1 text-sm max-sm:text-xs">
+                <span className="text-primary-white font-semibold">
+                  Course Workload:
+                </span>
                 <FormField
                   control={form.control}
                   name="courseWorkload"
@@ -221,7 +226,7 @@ export default function ReviewCardEditing({
                           {...field}
                           type="number"
                           value={field.value || ""}
-                          className="text-xs h-5 w-[100px] focus-visible:ring-0"
+                          className="text-sm max-sm:text-xs h-5 w-[100px] focus-visible:ring-0"
                           onChange={(e) =>
                             field.onChange(
                               e.target.value === ""
@@ -237,9 +242,11 @@ export default function ReviewCardEditing({
                 />
               </li>
             </ul>
-            <ul className="flex flex-col space-y-1 text-xs">
-              <li className="flex flex-col space-y-1 text-xs">
-                <span className="text-primary-white">Professor:</span>
+            <ul className="flex flex-col space-y-1 text-sm max-sm:text-xs ">
+              <li className="flex flex-col space-y-1">
+                <span className="text-primary-white font-semibold">
+                  Professor Rating:
+                </span>{" "}
                 <FormField
                   control={form.control}
                   name="professorRating"
@@ -250,7 +257,7 @@ export default function ReviewCardEditing({
                           {...field}
                           type="number"
                           value={field.value || ""}
-                          className="text-xs h-5 w-[100px] focus-visible:ring-0"
+                          className="text-sm max-sm:text-xs h-5 w-[100px] focus-visible:ring-0"
                           onChange={(e) =>
                             field.onChange(
                               e.target.value === ""
@@ -265,8 +272,8 @@ export default function ReviewCardEditing({
                   )}
                 />
               </li>
-              <li className="flex flex-col space-y-1 text-xs">
-                <span className="text-primary-white">
+              <li className="flex flex-col space-y-1">
+                <span className="text-primary-white font-semibold">
                   Professor Difficulty:
                 </span>
                 <FormField
@@ -279,7 +286,7 @@ export default function ReviewCardEditing({
                           {...field}
                           type="number"
                           value={field.value || ""}
-                          className="text-xs h-5 w-[100px] focus-visible:ring-0"
+                          className="text-sm max-sm:text-xs h-5 w-[100px] focus-visible:ring-0"
                           onChange={(e) =>
                             field.onChange(
                               e.target.value === ""
@@ -294,8 +301,10 @@ export default function ReviewCardEditing({
                   )}
                 />
               </li>
-              <li className="flex flex-col space-y-1 text-xs">
-                <span className="text-primary-white">Lectures:</span>
+              <li className="flex flex-col space-y-1">
+                <span className="text-primary-white font-semibold">
+                  Lectures:
+                </span>
                 <FormField
                   control={form.control}
                   name="lectureRating"
@@ -306,7 +315,7 @@ export default function ReviewCardEditing({
                           {...field}
                           type="number"
                           value={field.value || ""}
-                          className="text-xs h-5 w-[100px] focus-visible:ring-0"
+                          className="text-sm max-sm:text-xs h-5 w-[100px] focus-visible:ring-0"
                           onChange={(e) =>
                             field.onChange(
                               e.target.value === ""
@@ -324,18 +333,19 @@ export default function ReviewCardEditing({
             </ul>
           </div>
           <div className="flex flex-col space-y-1">
-            <h3 className="text-sm text-primary-white font-semibold">
-              Review:
-            </h3>
+            <h3 className="text-lg text-primary-white font-bold">Review:</h3>
             <FormField
               control={form.control}
               name="content"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Textarea className="min-h-[150px] text-xs " {...field} />
+                    <Textarea
+                      className="text-sm min-h-[150px] max-sm:text-xs text-primary-white whitespace-pre-wrap !leading-5"
+                      {...field}
+                    />
                   </FormControl>
-                  <FormDescription className="text-primary-white/50 text-xs">
+                  <FormDescription className="text-primary-white/50 text-sm max-sm:text-xs">
                     Max 10000 characters
                   </FormDescription>
                   <FormMessage />
@@ -343,16 +353,16 @@ export default function ReviewCardEditing({
               )}
             />
           </div>
-          <div className="flex space-x-3">
+          <div className="flex space-x-3 !mt-4">
             <LoaderButton
               type="submit"
-              className="text-xs bg-primary-white text-primary-black transition-all duration-150 hover:bg-primary-white hover:font-bold hover:shadow-primary-black"
+              className="text-sm max-sm:text-xs bg-primary-white text-primary-black transition-all duration-150 hover:bg-primary-white hover:font-bold hover:shadow-primary-black"
               isLoading={submitting}
             >
               Save
             </LoaderButton>
             <LoaderButton
-              className="text-xs bg-primary-red hover:bg-primary-red transition-all duration-150 hover:font-bold hover:shadow-primary-black"
+              className="text-sm max-sm:text-xs bg-primary-red hover:bg-primary-red transition-all duration-150 hover:font-bold hover:shadow-primary-black"
               onClick={() => setEditing(false)}
               isLoading={submitting}
             >
