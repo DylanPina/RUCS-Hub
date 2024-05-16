@@ -215,15 +215,24 @@ export default function ReviewCreateForm({
 
     toast.success("Your review has been submitted");
 
-    form.reset({
-      year: "",
-      term: "",
-      title: "",
-      content: "",
-    });
+    clearForm();
+    setSubmitting(false);
+  }
+
+  function clearForm() {
+    form.reset(
+      {
+        year: "",
+        term: "",
+        title: "",
+        content: "",
+      },
+      {
+        keepErrors: false,
+      },
+    );
     clearCourseSelection();
     clearProfessorSelection();
-    setSubmitting(false);
   }
 
   return (
@@ -584,13 +593,23 @@ export default function ReviewCreateForm({
             </FormItem>
           )}
         />
-        <LoaderButton
-          isLoading={submitting}
-          className="place-self-end max-w-fit transition-all duration-150 bg-primary-red hover:bg-primary-red/90 hover:shadow-primary-red/90"
-          type="submit"
-        >
-          Submit
-        </LoaderButton>
+        <div className="flex align-center space-x-2 ml-auto">
+          <LoaderButton
+            isLoading={submitting}
+            className="place-self-end max-w-fit transition-all duration-150 bg-primary-white text-primary-black hover:bg-primary-white hover:shadow-primary-white"
+            onClick={() => clearForm()}
+            type="reset"
+          >
+            Reset
+          </LoaderButton>
+          <LoaderButton
+            isLoading={submitting}
+            className="max-w-fit transition-all duration-150 bg-primary-red hover:bg-primary-red hover:shadow-primary-red"
+            type="submit"
+          >
+            Submit
+          </LoaderButton>
+        </div>
       </form>
     </Form>
   );
