@@ -1,8 +1,13 @@
 import ResendEmailVerificationButton from "@/components/auth/resend_email_verification_button";
 import { getLastEmailVerification } from "@/lib/data/user";
 import { getSession } from "@auth0/nextjs-auth0";
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: "Verify",
+};
 
 export default async function Page() {
   const session = await getSession();

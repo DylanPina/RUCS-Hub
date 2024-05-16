@@ -4,6 +4,11 @@ import { queryAllCourses } from "@/lib/data/course";
 import { queryAllProfessors } from "@/lib/data/professor";
 import { Course, Professor } from "@prisma/client";
 import React from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Add Review",
+};
 
 export default async function Page({
   searchParams,

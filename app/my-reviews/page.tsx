@@ -2,6 +2,11 @@ import React from "react";
 import MyReviews from "@/components/reviews/my-reviews";
 import { getSession } from "@auth0/nextjs-auth0";
 import { getReviewsByUser } from "@/lib/data/user";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "My Reviews",
+};
 
 export default async function Page() {
   const session = await getSession();

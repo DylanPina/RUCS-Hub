@@ -9,6 +9,11 @@ import {
   getLastPasswordReset,
 } from "@/lib/data/user";
 import ResendEmailVerificationBadge from "@/components/auth/resend-email-verification-badge";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Profile",
+};
 
 export default async function Page() {
   const session = await getSession();
