@@ -32,44 +32,50 @@ export default function ReviewCard({ review, userId }: ReviewCardProps) {
   }
 
   return (
-    <div className="flex flex-col space-y-3 p-2 border border-primary-white rounded overflow-hidden">
+    <div className="flex flex-col space-y-2 p-2 border border-primary-white rounded overflow-hidden">
+      <h3 className="text-lg max-sm:text-base text-primary-white font-bold">
+        {updatedReview.title}
+      </h3>
       <div className="flex flex-col space-y-1">
-        <h3 className="text-sm text-primary-white font-semibold">
-          {updatedReview.title}
-        </h3>
-        <p className="text-xs text-primary-white/50">
-          Course: {updatedReview.course.name}
+        <p className="text-sm max-sm:text-xs  text-primary-white/50">
+          <span className="font-semibold">Course:</span>{" "}
+          {updatedReview.course.name}
         </p>
-        <p className="text-xs text-primary-white/50">
-          Professor:{" "}
+        <p className="text-sm max-sm:text-xs text-primary-white/50">
+          <span className="font-semibold">Professor:</span>{" "}
           {formatProfessorName(
             updatedReview.professor.lastName,
             updatedReview.professor.firstName,
           )}
         </p>
-        <p className="text-xs text-primary-white/50">
-          Term: {getTermNameByValue(updatedReview.semester)}{" "}
-          {updatedReview.year}
+        <p className="text-sm max-sm:text-xs text-primary-white/50">
+          <span className="font-semibold">Term:</span>{" "}
+          {getTermNameByValue(updatedReview.semester)} {updatedReview.year}
         </p>
-        <p className="text-xs text-primary-white/50">
-          Created at: {formatReviewDate(updatedReview.createdAt)}
+        <p className="text-sm  max-sm:text-xs text-primary-white/50">
+          <span className="font-semibold">Created at:</span>{" "}
+          {formatReviewDate(updatedReview.createdAt)}
         </p>
         {updatedReview.createdAt.toString() !==
           updatedReview.lastModified.toString() && (
-          <p className="text-xs text-primary-white/50">
+          <p className="text-sm  max-sm:text-xs text-primary-white/50">
             Last modifed at: {formatReviewDate(updatedReview.lastModified)}
           </p>
         )}
       </div>
-      <div className="flex space-x-10">
-        <ul className="flex flex-col space-y-1 text-xs">
-          <li className="text-xs">
-            <span className="text-primary-white">Course Rating:</span>{" "}
+      <div className="flex max-sm:flex-col space-y-1 sm:space-x-10">
+        <ul className="flex flex-col space-y-1 text-sm max-sm:text-xs ">
+          <li>
+            <span className="text-primary-white font-semibold">
+              Course Rating:
+            </span>{" "}
             {updatedReview.rating}
             <span className="not-italic text-primary-white/50">/10</span>
           </li>
-          <li className="text-xs">
-            <span className="text-primary-white">Course Difficulty:</span>{" "}
+          <li>
+            <span className="text-primary-white font-semibold">
+              Course Difficulty:
+            </span>{" "}
             {updatedReview.difficultyRating ? (
               <>
                 {updatedReview.difficultyRating}
@@ -79,8 +85,10 @@ export default function ReviewCard({ review, userId }: ReviewCardProps) {
               <span className="not-italic text-primary-white/50">N/A</span>
             )}
           </li>
-          <li className="text-xs">
-            <span className="text-primary-white">Course Workload:</span>{" "}
+          <li>
+            <span className="text-primary-white font-semibold">
+              Course Workload:
+            </span>{" "}
             {updatedReview.workload ? (
               <>
                 {updatedReview.workload}{" "}
@@ -93,9 +101,11 @@ export default function ReviewCard({ review, userId }: ReviewCardProps) {
             )}
           </li>
         </ul>
-        <ul className="flex flex-col space-y-1 text-xs">
-          <li className="text-xs">
-            <span className="text-primary-white">Professor:</span>{" "}
+        <ul className="flex flex-col space-y-1 text-sm max-sm:text-xs ">
+          <li>
+            <span className="text-primary-white font-semibold">
+              Professor Rating:
+            </span>{" "}
             {updatedReview.professorQualityRating ? (
               <>
                 {updatedReview.professorQualityRating}
@@ -105,8 +115,10 @@ export default function ReviewCard({ review, userId }: ReviewCardProps) {
               <span className="not-italic text-primary-white/50">N/A</span>
             )}
           </li>
-          <li className="text-xs">
-            <span className="text-primary-white">Professor Difficulty:</span>{" "}
+          <li>
+            <span className="text-primary-white font-semibold">
+              Professor Difficulty:
+            </span>{" "}
             {updatedReview.professorDifficultyRating ? (
               <>
                 {updatedReview.professorDifficultyRating}
@@ -116,8 +128,10 @@ export default function ReviewCard({ review, userId }: ReviewCardProps) {
               <span className="not-italic text-primary-white/50">N/A</span>
             )}
           </li>
-          <li className="text-xs">
-            <span className="text-primary-white">Lectures:</span>{" "}
+          <li>
+            <span className="text-primary-white font-semibold">
+              Lecture Quality:
+            </span>{" "}
             {updatedReview.lectureRating ? (
               <>
                 {updatedReview.lectureRating}
@@ -129,11 +143,13 @@ export default function ReviewCard({ review, userId }: ReviewCardProps) {
           </li>
         </ul>
       </div>
-      <div className="flex flex-col space-y-1">
-        <h3 className="text-sm text-primary-white font-semibold">Review:</h3>
-        <p className="text-xs text-primary-white/50">{updatedReview.content}</p>
+      <div className="flex flex-col space-y-2">
+        <h3 className="text-lg text-primary-white font-bold">Review:</h3>
+        <p className="text-sm max-sm:text-xs text-primary-white whitespace-pre-wrap !leading-5">
+          {updatedReview.content}
+        </p>
       </div>
-      <div className="flex space-x-3">
+      <div className="flex space-x-3 !mt-4">
         <ReviewVotes review={review} />
         {userId === updatedReview.userId && (
           <div className="flex space-x-3">
