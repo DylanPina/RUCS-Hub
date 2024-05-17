@@ -9,15 +9,8 @@ interface Props {
 }
 
 export default async function CourseBanner({ coursePage }: Props) {
-  const {
-    courseCode,
-    courseName,
-    rating,
-    difficulty,
-    workload,
-    credits,
-    reviews,
-  } = coursePage;
+  const { courseCode, courseName, rating, difficulty, workload, reviews } =
+    coursePage;
 
   const totalDifficultyRatings = reviews.filter((review) => {
     return review.difficultyRating !== null;
@@ -29,67 +22,64 @@ export default async function CourseBanner({ coursePage }: Props) {
 
   return (
     <div className="flex flex-col lg:flex-row justify-start lg:justify-between max-lg:space-y-3">
-      <div className="flex w-full lg:w-1/2 bg-primary-red border rounded overflow-hidden py-3 px-4">
+      <div className="flex w-full lg:w-1/2 bg-primary-red border border-primary-white rounded overflow-hidden py-3 px-4">
         <div className="flex flex-col place-content-between min-w-fit space-y-3">
           <div className="flex flex-col space-y-1">
-            <h1 className="text-2xl text-primary-black font-black">
-              {courseName}
+            <h1 className="text-2xl max-md:text-xl text-primary-black font-black">
+              {courseCode} - {courseName}
             </h1>
             <div className="flex flex-col space-y-1">
-              <h3 className="text-md text-primary-white font-bold">
-                Reviews: {reviews.length}
-              </h3>
-              <h3 className="text-md text-primary-white font-bold">
-                Course Code: <span className="font-normal">{courseCode}</span>
-              </h3>
-              <h3 className="text-md text-primary-white font-bold">
-                Credits: <span className="font-normal">{credits}</span>
+              <h3 className="text-md max-md:text-sm text-primary-white font-bold">
+                Reviews: <span className="font-normal">{reviews.length}</span>
               </h3>
               {reviews.length > 0 ? (
-                <h3 className="text-md text-primary-white font-bold">
+                <h3 className="text-md max-md:text-sm text-primary-white font-bold">
                   Rating:{" "}
                   <span className="font-normal">{rating.toFixed(1)}</span>
                   <span className="text-xs text-primary-white/50 font-normal">
                     /10
                   </span>{" "}
                   <span className="text-xs text-primary-white/50 font-normal">
-                    based on {reviews.length} reviews
+                    based on {reviews.length}{" "}
+                    {reviews.length === 1 ? "review" : "reviews"}
                   </span>
                 </h3>
               ) : (
-                <h3 className="text-md text-primary-white font-bold">
+                <h3 className="text-md max-md:text-sm text-primary-white font-bold">
                   Rating: <span className="font-normal">?</span>
                 </h3>
               )}
               {totalDifficultyRatings > 0 ? (
-                <h3 className="text-md text-primary-white font-bold">
+                <h3 className="text-md max-md:text-sm text-primary-white font-bold">
                   Difficulty:{" "}
                   <span className="font-normal">{difficulty.toFixed(1)}</span>
                   <span className="text-xs text-primary-white/50 font-normal">
                     /10
                   </span>{" "}
                   <span className="text-xs text-primary-white/50 font-normal">
-                    based on {totalDifficultyRatings} reviews
+                    based on {totalDifficultyRatings}{" "}
+                    {reviews.length === 1 ? "review" : "reviews"}
                   </span>
                 </h3>
               ) : (
-                <h3 className="text-md text-primary-white font-bold">
+                <h3 className="text-md max-md:text-sm text-primary-white font-bold">
                   Difficulty: <span className="font-normal">?</span>
                 </h3>
               )}
               {totalWorkloadRatings > 0 ? (
-                <h3 className="text-md text-primary-white font-bold">
+                <h3 className="text-md max-md:text-sm text-primary-white font-bold">
                   Workload:{" "}
                   <span className="font-normal">
                     {workload.toFixed(1)} hours per week
                   </span>
                   <span className="text-xs text-primary-white/50 font-normal">
                     {" "}
-                    based on {totalWorkloadRatings} reviews
+                    based on {totalWorkloadRatings}{" "}
+                    {reviews.length === 1 ? "review" : "reviews"}
                   </span>
                 </h3>
               ) : (
-                <h3 className="text-md text-primary-white font-bold">
+                <h3 className="text-md max-md:text-sm text-primary-white font-bold">
                   Workload: <span className="font-normal">?</span>
                 </h3>
               )}

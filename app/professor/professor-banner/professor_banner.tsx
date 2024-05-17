@@ -30,36 +30,40 @@ export default async function ProfessorBanner({ professor }: Props) {
       <div className="flex w-full lg:w-1/2 bg-primary-red border border-primary-white rounded overflow-hidden py-3 px-4">
         <div className="flex flex-col place-content-between min-w-fit space-y-3">
           <div className="flex flex-col space-y-1">
-            <h1 className="text-2xl text-primary-black font-black">{name}</h1>
+            <h1 className="text-2xl max-md:text-xl text-primary-black font-black">
+              {name}
+            </h1>
             <div className="flex flex-col space-y-1">
-              <h3 className="text-md text-primary-white font-bold">
+              <h3 className="text-md max-md:text-sm text-primary-white font-bold">
                 Reviews: <span className="font-normal">{reviews.length}</span>
               </h3>
               {totalOverallRatings > 0 ? (
-                <h3 className="text-md text-primary-white font-bold">
+                <h3 className="text-md max-md:text-sm text-primary-white font-bold">
                   Overall:{" "}
                   <span className="font-normal">{overall.toFixed(1)}</span>
                   <span className="font-normal">/10</span>{" "}
                   <span className="text-xs text-primary-white/50">
-                    based on {totalOverallRatings} reviews
+                    based on {totalOverallRatings}{" "}
+                    {reviews.length === 1 ? "review" : "reviews"}
                   </span>
                 </h3>
               ) : (
-                <h3 className="text-md text-primary-white font-bold">
+                <h3 className="text-md max-md:text-sm text-primary-white font-bold">
                   Overall: <span className="not-italic">?</span>
                 </h3>
               )}
               {totalDifficultyRatings > 0 ? (
-                <h3 className="text-md text-primary-white font-bold">
+                <h3 className="text-md max-md:text-sm text-primary-white font-bold">
                   Difficulty:{" "}
                   <span className="font-normal">{difficulty.toFixed(1)}</span>
                   <span className="font-normal">/10</span>{" "}
                   <span className="text-xs text-primary-white/50">
-                    based on {totalDifficultyRatings} reviews
+                    based on {totalDifficultyRatings}{" "}
+                    {reviews.length === 1 ? "review" : "reviews"}
                   </span>
                 </h3>
               ) : (
-                <h3 className="text-md text-primary-white font-bold">
+                <h3 className="text-md max-md:text-sm text-primary-white font-bold">
                   Difficulty: <span className="font-normal">?</span>
                 </h3>
               )}

@@ -12,7 +12,7 @@ export default function CurrentlyTeaching({ currentlyTeaching }: Props) {
   const router = useRouter();
 
   return (
-    <h3 className="text-md text-primary-white font-bold">
+    <h3 className="text-md max-md:text-sm text-primary-white font-bold">
       Currently Teaching:{" "}
       <span className="font-normal">
         {currentlyTeaching.map(
