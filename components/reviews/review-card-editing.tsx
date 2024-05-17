@@ -103,6 +103,7 @@ export default function ReviewCardEditing({
       professorDifficultyRating: Number(data.professorDifficultyRating),
       lectureRating: Number(data.lectureRating),
       content: data.content,
+      lastModified: new Date(),
     };
     setUpdatedReview(updatedReview);
     toast.success("Successfully updated review!");
@@ -143,12 +144,13 @@ export default function ReviewCardEditing({
               {getTermNameByValue(review.semester)} {review.year}
             </p>
             <p className="text-sm max-sm:text-xs text-primary-white/50">
-              <span className="font-semibold">Created at:</span>{" "}
+              <span className="font-semibold">Created At:</span>{" "}
               {formatReviewDate(review.createdAt)}
             </p>
             {review.createdAt.toString() !== review.lastModified.toString() && (
-              <p className="text-sm max-sm:text-xs text-primary-white/50">
-                Last modifed at: {formatReviewDate(review.lastModified)}
+              <p className="text-sm  max-sm:text-xs text-primary-white/50">
+                <span className="font-semibold"> Last Modified At:</span>{" "}
+                {formatReviewDate(review.lastModified)}
               </p>
             )}
           </div>

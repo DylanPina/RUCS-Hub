@@ -59,7 +59,7 @@ export default async function createReview(
  * @param reviewForm - The updated review form data
  */
 export async function updateReview(reviewId: number, reviewForm: ReviewForm) {
-  return await prisma.review.update({
+  await prisma.review.update({
     where: {
       id: reviewId,
     },
@@ -72,6 +72,15 @@ export async function updateReview(reviewId: number, reviewForm: ReviewForm) {
       professorQualityRating: Number(reviewForm.professorRating),
       professorDifficultyRating: Number(reviewForm.professorDifficultyRating),
       lectureRating: Number(reviewForm.lectureRating),
+    },
+  });
+
+  await prisma.review.update({
+    where: {
+      id: reviewId,
+    },
+    data: {
+      lastModified: new Date(),
     },
   });
 }

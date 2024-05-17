@@ -53,13 +53,14 @@ export default function ReviewCard({ review, userId }: ReviewCardProps) {
           {getTermNameByValue(updatedReview.semester)} {updatedReview.year}
         </p>
         <p className="text-sm  max-sm:text-xs text-primary-white/50">
-          <span className="font-semibold">Created at:</span>{" "}
+          <span className="font-semibold">Created At:</span>{" "}
           {formatReviewDate(updatedReview.createdAt)}
         </p>
         {updatedReview.createdAt.toString() !==
           updatedReview.lastModified.toString() && (
           <p className="text-sm  max-sm:text-xs text-primary-white/50">
-            Last modifed at: {formatReviewDate(updatedReview.lastModified)}
+            <span className="font-semibold"> Last Modified At:</span>{" "}
+            {formatReviewDate(updatedReview.lastModified)}
           </p>
         )}
       </div>
