@@ -55,7 +55,7 @@ export default function DeleteUserButton({ userAuthId, email }: Props) {
             <LoaderButton
               type="button"
               isLoading={loading}
-              className="text-xs bg-primary-white text-primary-black transition-all duration-150 hover:bg-primary-white hover:font-bold hover:shadow-primary-white"
+              className="bg-primary-white text-primary-black transition-all duration-150 hover:bg-primary-white hover:shadow-primary-white"
             >
               Cancel
             </LoaderButton>
@@ -63,7 +63,7 @@ export default function DeleteUserButton({ userAuthId, email }: Props) {
           <LoaderButton
             isLoading={loading}
             onClick={handleDeleteUser}
-            className="bg-primary-white text-primary-black hover:bg-primary-red hover:shadow-primary-red hover:text-primary-white transition duration-150 ease-out "
+            className="bg-primary-red text-primary-white hover:bg-primary-red hover:shadow-primary-red hover:text-primary-white transition duration-150 ease-out "
           >
             Delete
           </LoaderButton>

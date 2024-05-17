@@ -143,7 +143,7 @@ export default function ReviewCreateForm({
     resolver: zodResolver(FormSchema),
     mode: "onChange",
     defaultValues: {
-      course: course ? `(${course.code}) ${course.name}` : "",
+      course: course ? `${course.code} - ${course.name}` : "",
       professor: professor
         ? formatProfessorName(professor.lastName, professor.firstName)
         : "",
@@ -269,7 +269,7 @@ export default function ReviewCreateForm({
                   {filteredCourses?.map((course: Course) => (
                     <SelectItem
                       key={course.code}
-                      value={`${course.code} ${course.name}`}
+                      value={`${course.code} - ${course.name}`}
                     >
                       {`${course.code} - ${course.name}`}
                     </SelectItem>

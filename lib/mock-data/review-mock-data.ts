@@ -7,8 +7,16 @@ export const mockReviews: any[] = [
     semester: Term.Spring,
     year: 2024,
     courseCode: 462,
-    title: "Both fair and reasonable",
-    content: "Machine learning is all about punishment",
+    title: "Great class but suffers from too much material and lack of preq",
+    content: `
+This was a great class for those who are interested in machine learning and deep learning. We covered a wide range of topics such as linear regression all the way to generative adversarial networks (GANs). However we really didn't go in depth in any particular topic, it was more like a crash course on a bunch of high level ideas in machine learning and deep learning.
+
+One of the biggest things holding this course back is the lack of prerequisite courses. The only prerequisites for this course are linear algebra and discrete 1 & 2. Because of this, we spend a great deal of time going over the basics of machine learning which really takes away from the deep learning topics and is why we aren't able to that much time going deeper on deep learning topics.
+
+There are no exams in this course. The homeworks were pretty straight forward but can be fairly time consuming so it is best if you start them as early as possible. There are 3 homework assignments which are mostly along the lines of "code a CNN to classify X", "code an RNN to accomplish Y", "explain X in your write up".
+
+For the final project we coded up a neural network which learned how to play minesweeper.
+    `,
     professorId: 18,
     rating: 10,
     difficultyRating: 4,
@@ -17,51 +25,5 @@ export const mockReviews: any[] = [
     bookRating: 4,
     piazzaRating: 2,
     workload: 12,
-  },
-  {
-    userId: hashEmailAddress("dsp209@scarletmail.rutgers.edu"),
-    semester: Term.Spring,
-    year: 2024,
-    courseCode: 462,
-    title: "Where the fuck is bagel bot?",
-    content: "No bagel?",
-    professorId: 18,
-    rating: 2,
-    difficultyRating: 8,
-    professorQualityRating: 7,
-    lectureRating: 9,
-    bookRating: 8,
-    piazzaRating: 5,
-    workload: 20,
-  },
-  {
-    userId: hashEmailAddress("dsp209@scarletmail.rutgers.edu"),
-    semester: Term.Fall,
-    year: 2023,
-    courseCode: 440,
-    title: "Best course I've ever taken",
-    content: "Introductory to florida man theory",
-    professorId: 18,
-    rating: 10,
-  },
-  {
-    userId: hashEmailAddress("dsp209@scarletmail.rutgers.edu"),
-    semester: Term.Spring,
-    year: 2023,
-    courseCode: 206,
-    title: "A's were handed out like candy",
-    content: "Dr. Cowan is truly a menance to society",
-    professorId: 18,
-    rating: 8,
-  },
-  {
-    userId: hashEmailAddress("dsp209@scarletmail.rutgers.edu"),
-    semester: Term.Summer,
-    year: 2022,
-    courseCode: 205,
-    title: "Homework made me cry",
-    content: "Homework was incredibly but ended up with an A",
-    professorId: 18,
-    rating: 9,
   },
 ];

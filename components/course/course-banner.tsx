@@ -70,7 +70,7 @@ export default async function CourseBanner({ coursePage }: Props) {
                 <h3 className="text-md max-md:text-sm text-primary-white font-bold">
                   Workload:{" "}
                   <span className="font-normal">
-                    {workload.toFixed(1)} hours per week
+                    {workload.toFixed(1)} {workload > 1 ? "hrs" : "hr"} per week
                   </span>
                   <span className="text-xs text-primary-white/50 font-normal">
                     {" "}
