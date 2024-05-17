@@ -5,7 +5,7 @@ export const COURSE_SYNOPSES_URL =
 export const RUTGERS_CS_URL = "https://www.cs.rutgers.edu/";
 export const MAX_YEAR = 2024;
 export const MIN_YEAR = 2023;
-
 export const GITHUB_URL = "https://github.com/DylanPina/RUCS-Hub";
 export const DISCORD_URL = "https://discord.gg/SbH8MaFd";
+export const GITHUB_ISSUES_URL = "https://github.com/DylanPina/RUCS-Hub/issues";
 export const DYLAN_PINA_GITHUB_URL = "https://github.com/DylanPina";
