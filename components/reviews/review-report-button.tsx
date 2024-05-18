@@ -41,6 +41,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Textarea } from "../shadcn/ui/textarea";
+import { submitReport } from "@/lib/actions/report";
 
 interface Props {
   review: Review;
@@ -48,6 +49,7 @@ interface Props {
 
 export default function ReviewReportButton({ review }: Props) {
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const FormSchema = z.object({
     reason: z.string().min(1, { message: "Required" }),
@@ -63,18 +65,27 @@ export default function ReviewReportButton({ review }: Props) {
     },
   });
 
-  function onSubmit() {
+  async function onSubmit() {
     setLoading(true);
+    const { reason, description } = form.getValues();
+    const submittedReport = await submitReport(review.id, reason, description);
+
+    if (!submittedReport) {
+      setLoading(false);
+      toast.error("You have already submited a report for this review");
+      return;
+    }
+
     setLoading(false);
-    toast.info("Review reported");
-    console.log(`Form: ${JSON.stringify(form.getValues())}`);
+    setOpen(false);
+    toast.info("Report submitted");
   }
 
   return (
     <TooltipProvider delayDuration={100}>
       <Tooltip>
         <TooltipTrigger>
-          <Dialog>
+          <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger className="flex align-items-center">
               <FaRegFlag
                 size={15}
