@@ -37,14 +37,14 @@ export default function DeleteUserButton({ userAuthId, email }: Props) {
       <DialogTrigger className="flex align-items-center">
         <LoaderButton
           isLoading={loading}
-          className="bg-primary-red text-primary-white hover:bg-primary-red hover:shadow-primary-red hover:text-primary-white transition duration-150 ease-out "
+          className="bg-primary-red text-primary-white hover:bg-primary-red hover:shadow-primary-red hover:text-primary-white transition duration-150 ease-out"
         >
           Delete Account
         </LoaderButton>
       </DialogTrigger>
       <DialogContent className="bg-primary-black max-sm:rounded overflow-hidden">
         <DialogHeader className="flex align-items-center">
-          <DialogTitle className="text-center">Deleting Account</DialogTitle>
+          <DialogTitle className="text-center mb-2">Delete Account</DialogTitle>
           <DialogDescription className="text-center">
             This action cannot be undone. Your account as well as all your
             reviews and votes will be permanently deleted. Are you sure?

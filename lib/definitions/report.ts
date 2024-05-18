@@ -11,3 +11,14 @@ export type Report = {
   content: string;
   createdAt: Date;
 };
+
+export const reportReasons = [
+  "Inappropriate Content",
+  "Offensive Language",
+  "Personal Attack",
+  "Spam or Advertising",
+  "Irrelevant Review",
+  "False Information",
+  "Confidential Information",
+  "Duplicate Review",
+];

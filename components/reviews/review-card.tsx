@@ -11,6 +11,7 @@ import ReviewVotes from "./review-votes";
 import ReviewEditButton from "./review-edit-button";
 import ReviewCardEditing from "./review-card-editing";
 import ReviewDeleteButton from "./review-delete-button";
+import ReviewReportButton from "./review-report-button";
 
 interface ReviewCardProps {
   review: Review;
@@ -152,11 +153,13 @@ export default function ReviewCard({ review, userId }: ReviewCardProps) {
       </div>
       <div className="flex space-x-3 !mt-4">
         <ReviewVotes review={review} />
-        {userId === updatedReview.userId && (
+        {userId === updatedReview.userId ? (
           <div className="flex space-x-3">
             <ReviewEditButton setEditing={() => setEditing(true)} />
             <ReviewDeleteButton review={review} />
           </div>
+        ) : (
+          <ReviewReportButton review={review} />
         )}
       </div>
     </div>
