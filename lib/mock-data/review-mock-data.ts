@@ -26,4 +26,58 @@ For the final project we coded up a neural network which learned how to play min
     piazzaRating: 2,
     workload: 12,
   },
+  {
+    userId: hashEmailAddress("dsp209@scarletmail.rutgers.edu"),
+    semester: Term.Spring,
+    year: 2024,
+    courseCode: 419,
+    title:
+      "A lot of topics, easy projects, rote memory based multiple choice exams",
+    content: `
+As the title sugguests, the class covers a whole lot of pretty interesting computer security topics. 
+
+The lectures can be a bit stale as he is just reading off slides for 3 hours. 
+
+The reading for this class can be a bit annoying (there is typically about 50-70 pages of reading for a given week).
+
+There are weekly quizes which are your standard timed canvas quizes. These were fairly straight forward and easy to do well on if you took your time and did the reading but sometimes the wording of the questions could be a bit confusing.
+
+The projects were pretty easy and most students did fairly well. Project 1 was implementing some basic cryptography algorithms. Project 2 we built a small application which mimicked the blockchain algorithm. Project 3 we worked on to small programs for function interposition.
+
+There were 4 exams and they were all multiple choice. Some questions were set up to confuse you but overall most students did fairly well. The lowest exam was dropped and if you had an A before the final exam you didn't have to take it which was really cool.
+0
+0
+    `,
+    professorId: 34,
+    rating: 6,
+    difficultyRating: 5,
+    professorQualityRating: 7,
+    lectureRating: 3,
+    bookRating: 4,
+    piazzaRating: 2,
+    workload: 10,
+  },
+  {
+    userId: hashEmailAddress("dsp209@scarletmail.rutgers.edu"),
+    semester: Term.Fall,
+    year: 2023,
+    courseCode: 440,
+    title:
+      "A lot of topics, easy projects, rote memory based multiple choice exams",
+    content: `
+This course is outstanding for those who are interested in the more classical and fundemental aspects of AI and agency. The course goes really in depth in areas such as planning and search. Torwards the end we also got to cover some basic machine learning concepts.
+
+This course was mostly project focused with lots of coding involved. There was 3 projects in total. The first project and second project we had to design a logic bot which was capable of traversing a dynamic environment. The final project involved machine learning classification.
+
+The final exam was cumulative and overall pretty fair and simple. Dr. Cowan is an outstanding professor who always goes above and beyond for his students and is very generous with his grading.
+`,
+    professorId: 18,
+    rating: 9,
+    difficultyRating: 6,
+    professorQualityRating: 10,
+    lectureRating: 9,
+    bookRating: 4,
+    piazzaRating: 2,
+    workload: 15,
+  },
 ];

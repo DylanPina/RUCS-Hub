@@ -94,7 +94,7 @@ export default function ReviewCard({ review, userId }: ReviewCardProps) {
               <>
                 {updatedReview.workload}{" "}
                 <span className="not-italic text-primary-white/50">
-                  hours per week
+                  hrs per week
                 </span>
               </>
             ) : (
