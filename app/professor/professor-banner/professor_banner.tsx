@@ -6,6 +6,12 @@ import ProfessorCharts from "@/components/charts/professor_charts";
 import CurrentlyTeaching from "@/components/professor/currently_teaching";
 import { getCoursesBeingTaughtByProfessor } from "@/lib/data/course";
 import AddReviewBannerButton from "@/components/reviews/add_review_banner_button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/shadcn/ui/tooltip";
 
 interface Props {
   professor: ProfessorPage;
@@ -71,10 +77,17 @@ export default async function ProfessorBanner({ professor }: Props) {
             </div>
           </div>
           <div className="flex space-x-2">
-            <Button className="max-w-fit text-xs transition-all duration-150 hover:bg-primary-black hover:shadow-primary-black">
-              Compare professors
-            </Button>
             <AddReviewBannerButton professorId={professor.id} />
+            <TooltipProvider>
+              <Tooltip delayDuration={100}>
+                <TooltipTrigger>
+                  <Button className="max-w-fit text-xs cursor-not-allowed transition-all duration-150 bg-primary-black/80 text-primary-white/80 hover:bg-primary-black/80">
+                    Compare Professors
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Coming soon...</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         </div>
       </div>

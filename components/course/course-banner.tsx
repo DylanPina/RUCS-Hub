@@ -3,6 +3,12 @@ import React from "react";
 import { CoursePage } from "@/lib/definitions/course";
 import CourseCharts from "../charts/course_charts";
 import AddReviewBannerButton from "../reviews/add_review_banner_button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/shadcn/ui/tooltip";
 
 interface Props {
   coursePage: CoursePage;
@@ -86,10 +92,17 @@ export default async function CourseBanner({ coursePage }: Props) {
             </div>
           </div>
           <div className="flex space-x-2">
-            <Button className="max-w-fit text-xs transition-all duration-150 hover:bg-primary-black hover:shadow-primary-black">
-              Compare Courses
-            </Button>
             <AddReviewBannerButton courseCode={courseCode} />
+            <TooltipProvider>
+              <Tooltip delayDuration={100}>
+                <TooltipTrigger>
+                  <Button className="max-w-fit text-xs cursor-not-allowed transition-all duration-150 bg-primary-black/80 text-primary-white/80 hover:bg-primary-black/80">
+                    Compare Courses
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Coming soon...</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         </div>
       </div>
