@@ -12,16 +12,15 @@ import { Vote } from "@prisma/client";
 import { Review } from "@/lib/definitions/review";
 import { hashEmailAddress } from "@/lib/utils";
 import { toast } from "react-toastify";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import { vote } from "@/lib/actions/review";
 
 interface ReviewVotesProps {
   review: Review;
+  user?: any;
 }
 
-export default function ReviewVotes({ review }: ReviewVotesProps) {
+export default function ReviewVotes({ review, user }: ReviewVotesProps) {
   const { votes } = review;
-  const { user } = useUser();
 
   const [upvotes, setUpvotes] = useState(0);
   const [downvotes, setDownvotes] = useState(0);

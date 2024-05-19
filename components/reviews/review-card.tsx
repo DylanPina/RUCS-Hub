@@ -5,6 +5,7 @@ import {
   formatProfessorName,
   formatReviewDate,
   getTermNameByValue,
+  hashEmailAddress,
 } from "@/lib/utils";
 import { Review } from "@/lib/definitions/review";
 import ReviewVotes from "./review-votes";
@@ -15,10 +16,10 @@ import ReviewReportButton from "./review-report-button";
 
 interface ReviewCardProps {
   review: Review;
-  userId: any;
+  user: any;
 }
 
-export default function ReviewCard({ review, userId }: ReviewCardProps) {
+export default function ReviewCard({ review, user }: ReviewCardProps) {
   const [editing, setEditing] = useState(false);
   const [updatedReview, setUpdatedReview] = useState(review);
 
@@ -152,14 +153,14 @@ export default function ReviewCard({ review, userId }: ReviewCardProps) {
         </p>
       </div>
       <div className="flex space-x-3 !mt-4">
-        <ReviewVotes review={review} />
-        {userId === updatedReview.userId ? (
+        <ReviewVotes review={review} user={user || null} />
+        {user && hashEmailAddress(user.email) === updatedReview.userId ? (
           <div className="flex space-x-3">
             <ReviewEditButton setEditing={() => setEditing(true)} />
             <ReviewDeleteButton review={review} />
           </div>
         ) : (
-          <ReviewReportButton review={review} />
+          user && user.email_verified && <ReviewReportButton review={review} />
         )}
       </div>
     </div>

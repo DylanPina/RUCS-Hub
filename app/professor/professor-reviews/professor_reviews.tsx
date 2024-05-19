@@ -36,7 +36,6 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [startIndex, setStartIndex] = useState(0);
   const [endIndex, setEndIndex] = useState(rowsPerPage);
-  const [userId, setUserId] = useState("");
 
   const courses: string[] = ["Any"].concat(
     Array.from(new Set(reviews.map((review: Review) => review.course.name))),
@@ -99,8 +98,6 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
   }
 
   useEffect(() => {
-    setUserId(hashEmailAddress(user?.email as string));
-
     let sortedReviews = [...reviews];
 
     if (sortBy === "newest") {
@@ -235,7 +232,7 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
       <div className="flex flex-col space-y-3">
         {filteredReviews.length > 0
           ? paginatedReviews.map((review) => (
-              <ReviewCard key={review.id} review={review} userId={userId} />
+              <ReviewCard key={review.id} review={review} user={user || null} />
             ))
           : noReviewsMessage()}
       </div>
