@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import {
   formatProfessorName,
   formatReviewDate,
+  getProfessorRoute,
   getTermNameByValue,
   hashEmailAddress,
 } from "@/lib/utils";
@@ -13,6 +14,7 @@ import ReviewEditButton from "./review-edit-button";
 import ReviewCardEditing from "./review-card-editing";
 import ReviewDeleteButton from "./review-delete-button";
 import ReviewReportButton from "./review-report-button";
+import Link from "next/link";
 
 interface ReviewCardProps {
   review: Review;
@@ -41,14 +43,27 @@ export default function ReviewCard({ review, user }: ReviewCardProps) {
       <div className="flex flex-col space-y-1">
         <p className="text-sm max-sm:text-xs  text-primary-white/50">
           <span className="font-semibold">Course:</span>{" "}
-          {updatedReview.course.name}
+          <Link
+            className="hover:underline"
+            href={`/course/${updatedReview.course.code}`}
+          >
+            {updatedReview.course.code} - {updatedReview.course.name}
+          </Link>
         </p>
         <p className="text-sm max-sm:text-xs text-primary-white/50">
           <span className="font-semibold">Professor:</span>{" "}
-          {formatProfessorName(
-            updatedReview.professor.lastName,
-            updatedReview.professor.firstName,
-          )}
+          <Link
+            className="hover:underline"
+            href={getProfessorRoute(
+              updatedReview.professor.lastName,
+              updatedReview.professor.firstName,
+            )}
+          >
+            {formatProfessorName(
+              updatedReview.professor.lastName,
+              updatedReview.professor.firstName,
+            )}
+          </Link>
         </p>
         <p className="text-sm max-sm:text-xs text-primary-white/50">
           <span className="font-semibold">Term:</span>{" "}
