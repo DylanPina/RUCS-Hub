@@ -8,4 +8,10 @@ export const mockUsers: User[] = [
     lastEmailVerification: new Date(),
     lastPasswordReset: new Date(),
   },
+  {
+    id: hashEmailAddress("kv347@scarletmail.rutgers.edu"),
+    createdAt: new Date(),
+    lastEmailVerification: new Date(),
+    lastPasswordReset: new Date(),
+  },
 ];

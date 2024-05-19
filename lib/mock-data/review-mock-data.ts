@@ -80,4 +80,40 @@ The final exam was cumulative and overall pretty fair and simple. Dr. Cowan is a
     piazzaRating: 2,
     workload: 15,
   },
+  {
+    userId: hashEmailAddress("kv347@scarletmail.rutgers.edu"),
+    semester: Term.Spring,
+    year: 2024,
+    courseCode: 112,
+    title: "Solid Structured Course",
+    content: `
+Course was structured well, good assignments and fair expectations… except for the spiderman assignment. Spiderman was horrible and we couldnt save bro.
+`,
+    professorId: 7,
+    rating: 8,
+    difficultyRating: 8,
+    professorQualityRating: 8,
+    lectureRating: 8,
+    bookRating: 4,
+    piazzaRating: 2,
+    workload: 20,
+  },
+  {
+    userId: hashEmailAddress("kv347@scarletmail.rutgers.edu"),
+    semester: Term.Fall,
+    year: 2023,
+    courseCode: 111,
+    title: "Solid Intro Course",
+    content: `
+Great structure for an intro cs course. All assignments were well structured, DNA assignment was a little too much, otherwise great course.
+`,
+    professorId: 6,
+    rating: 8,
+    difficultyRating: 6,
+    professorQualityRating: 10,
+    lectureRating: 10,
+    bookRating: 4,
+    piazzaRating: 2,
+    workload: 6,
+  },
 ];
