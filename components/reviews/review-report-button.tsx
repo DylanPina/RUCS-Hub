@@ -45,9 +45,10 @@ import { submitReport } from "@/lib/actions/report";
 
 interface Props {
   review: Review;
+  user: any;
 }
 
-export default function ReviewReportButton({ review }: Props) {
+export default function ReviewReportButton({ review, user }: Props) {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -79,6 +80,27 @@ export default function ReviewReportButton({ review }: Props) {
     setLoading(false);
     setOpen(false);
     toast.info("Report submitted");
+  }
+
+  if (!user || !user.email_verified) {
+    return (
+      <TooltipProvider delayDuration={100}>
+        <Tooltip>
+          <TooltipTrigger>
+            <FaRegFlag
+              size={15}
+              className="fill-primary-white hover:fill-primary-red transition duration-150 ease-in-out hover:ease-in"
+              onClick={() =>
+                !user
+                  ? toast.error("Must be signed in to submit a report")
+                  : toast.error("Must verify email to submit a report")
+              }
+            />
+          </TooltipTrigger>
+          <TooltipContent className="bg-primary-red">Report</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
   }
 
   return (

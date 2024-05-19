@@ -154,14 +154,14 @@ export default function ReviewCard({ review, user }: ReviewCardProps) {
       </div>
       <div className="flex space-x-3 !mt-4">
         <ReviewVotes review={review} user={user || null} />
-        {user && hashEmailAddress(user.email) === updatedReview.userId ? (
+        {user && hashEmailAddress(user.email) === updatedReview.userId && (
           <div className="flex space-x-3">
             <ReviewEditButton setEditing={() => setEditing(true)} />
             <ReviewDeleteButton review={review} />
           </div>
-        ) : (
-          user && user.email_verified && <ReviewReportButton review={review} />
         )}
+        {((user && hashEmailAddress(user.email) !== updatedReview.userId) ||
+          !user) && <ReviewReportButton review={review} user={user} />}
       </div>
     </div>
   );
