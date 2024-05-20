@@ -1,7 +1,12 @@
-import { DISCORD_URL, GITHUB_ISSUES_URL, GITHUB_URL } from "@/lib/constants";
+import {
+  DISCORD_URL,
+  DONATION_LINK,
+  GITHUB_ISSUES_URL,
+  GITHUB_URL,
+} from "@/lib/constants";
 import Link from "next/link";
 import React from "react";
-import { FaGithub, FaDiscord, FaBug } from "react-icons/fa";
+import { FaGithub, FaDiscord, FaBug, FaHeart } from "react-icons/fa";
 import { Badge } from "../shadcn/ui/badge";
 
 export default function Footer() {
@@ -15,6 +20,8 @@ export default function Footer() {
           <Link href={DISCORD_URL}>
             <FaDiscord className="w-6 h-6 cursor-pointer transition duration-150 ease-out hover:ease-in" />
           </Link>
+        </div>
+        <div className="flex align-center space-x-4">
           <Link href={GITHUB_ISSUES_URL}>
             <Badge
               variant="outline"
@@ -25,10 +32,16 @@ export default function Footer() {
               </div>
             </Badge>
           </Link>
+          <Link href={DONATION_LINK}>
+            <Badge
+              variant="outline"
+              className="text-primary-white cursor-pointer"
+            >
+              <FaHeart className="w-3 h-3 mr-1.5" />
+              <span>Donate</span>
+            </Badge>
+          </Link>
         </div>
-        <span className="w-fit px-1 text-sm text-primary-white mt-0.5">
-          1.0.0-beta.1
-        </span>
       </div>
     </div>
   );
