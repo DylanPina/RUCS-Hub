@@ -1,36 +1,108 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# RUCS Hub - [www.rucshub.com](https://www.rucshub.com)
 
-## Getting Started
+![GitHub repo size](https://img.shields.io/github/repo-size/DylanPina/RUCS-Hub)
+![GitHub contributors](https://img.shields.io/github/contributors/DylanPina/RUCS-Hub)
+![Github Issues](https://img.shields.io/github/issues/DylanPina/RUCS-Hub)
+![GitHub stars](https://img.shields.io/github/stars/DylanPina/RUCS-Hub)
+![GitHub forks](https://img.shields.io/github/forks/DylanPina/RUCS-Hub)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-First, run the development server:
+<p align="center">
+    <img src="./public/rucshub-logo.png" alt="drawing" width="125"/>
+</p>
+
+RUCS Hub is a platform designed for Rutgers computer science students to anonymously review and rate computer science courses and professors.
+
+This project aims to empower students by providing them with valuable insights into the courses and professors within the computer science department. RUCS Hub helps students make informed decisions about their course selections and academic paths.
+
+**RUCS Hub is an independent project and is not directly affiliated with Rutgers University.**
+
+## Table of Contents
+
+- [Features](#features)
+- [Usage](#usage)
+- [Installation](#installation)
+- [Contributing](#contributing)
+- [Contact](#contact)
+- [License](#license)
+
+## Features
+
+- **Anonymous Reviews**: Students can review and rate courses and professors anonymously.
+- **Student Authentication**: Uses student emails for authentication to ensure that only Rutgers students can post reviews.
+- **Course and Professor Ratings**: View aggregated ratings and reviews for courses and professors.
+- **Search and Filter**: Easily search for and filter courses and professors based on various criteria.
+- **Upvote/Downvote Reviews**: Users can upvote or downvote reviews to highlight the most helpful ones.
+- **Report Reviews**: Users can report inappropriate or offensive reviews for moderation.
+
+## Usage
+
+1. Sign up or log in using your Rutgers student email.
+2. Browse courses and professors to read reviews and ratings.
+3. Submit your own reviews for courses and professors you’ve taken.
+4. Upvote or downvote reviews to indicate their helpfulness.
+5. Report reviews that violate the terms of use.
+
+## Installation
+
+To get started with the project, follow these steps:
+
+1. **Clone the repository**:
+
+```bash
+git clone https://github.com/DylanPina/RUCS-Hub.git
+cd rucs-hub
+```
+
+2. **Install the dependencies**
+
+```bash
+npm install
+```
+
+3. **Run the development server**
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. **Open your browser and navigate to `http://localhost:3000`**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Contributing
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+To contribute to RUCS Hub, follow these steps:
 
-## Learn More
+1. Create an issue on the repo: https://github.com/DylanPina/RUCS-Hub/issues.
+2. Assign yourself (or someone else) to the new issue.
+3. Copy the repo.
+4. On your local machine, first git pull then switch to the new branch:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+git pull
+git checkout -b feature/your-feature
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. Make your changes and commit them:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```bash
+git add .
+git commit -m "Your commit message"
+```
 
-## Deploy on Vercel
+6. Push your changes to the RUCS Hub repo:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+git push
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+7. Create a PR on the repo: https://github.com/DylanPina/RUCS-Hub/pulls.
+8. Get signoff from the required reviewers and merge the changes.
+9. The repo owner will deploy the changes once the PR is merged.
+
+## Contact
+
+For questions or to reach out, join our Discord server: https://discord.gg/m3cxbcxx, or email us at rucshub@gmail.com.
+
+## License
+
+This project is licensed under the Apache License 2.0. See the LICENSE file for details.
