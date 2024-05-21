@@ -24,8 +24,6 @@ import { Button } from "@/components/shadcn/ui/button";
 import { useState } from "react";
 import { columns } from "./course_table_column";
 import { rankItem } from "@tanstack/match-sorter-utils";
-import CourseFilterTerm from "./course_table_filter_term";
-import CourseFilterYear from "./course_table_filter_year";
 import TableFilterSearch from "../table/table_filter_search";
 import TableSelectPageSize from "../table/table_select_page_size";
 import { useRouter } from "next/navigation";
@@ -75,20 +73,12 @@ export default function CourseTable({ data }: CourseTableProps) {
 
   return (
     <div className="min-w-[75%] max-lg:w-screen max-lg:px-4">
-      <div className="flex place-items-center py-4">
-        <div className="flex w-full sm:content-center md:space-x-4 max-md:flex-col-reverse">
-          <div className="max-sm:w-full sm:max-w-[300px] max-md:pt-4">
-            <TableFilterSearch
-              globalFilter={globalFilter}
-              setGlobalFilter={setGlobalFilter}
-              placeHolder="Filter courses..."
-            />
-          </div>
-          <div className="flex content-center items-center space-x-4 h-fit">
-            <CourseFilterTerm />
-            <CourseFilterYear />
-          </div>
-        </div>
+      <div className="max-sm:w-full sm:max-w-[300px] py-4">
+        <TableFilterSearch
+          globalFilter={globalFilter}
+          setGlobalFilter={setGlobalFilter}
+          placeHolder="Filter courses..."
+        />
       </div>
       <div className="rounded overflow-hidden-md border">
         <Table className="p-10">
