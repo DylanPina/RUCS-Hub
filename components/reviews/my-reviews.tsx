@@ -6,11 +6,7 @@ import ReviewsFilterSearch from "@/components/reviews/reviews-filter-search";
 import ReviewsFilterTerm from "@/components/reviews/reviews-filter-term";
 import ReviewsFilterYear from "@/components/reviews/reviews-filter-year";
 import ReviewsSortBy from "@/components/reviews/reviews-sort-by";
-import {
-  formatProfessorName,
-  getTermNameByValue,
-  hashEmailAddress,
-} from "@/lib/utils";
+import { formatProfessorName, getTermNameByValue } from "@/lib/utils";
 import { Review } from "@prisma/client";
 import {
   Select,
@@ -34,7 +30,9 @@ export default function MyReviews({ reviews, user }: Props) {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("newest");
   const [year, setYear] = useState("Any");
+  const [years, setYears] = useState<any>([]);
   const [term, setTerm] = useState("Any");
+  const [terms, setTerms] = useState<any>([]);
   const [course, setCourse] = useState("Any");
   const [courses, setCourses] = useState(["Any"]);
   const [professor, setProfessor] = useState("Any");
@@ -98,6 +96,11 @@ export default function MyReviews({ reviews, user }: Props) {
       return 0;
     });
   }
+
+  useEffect(() => {
+    setTerms(reviews.map((review: any) => getTermNameByValue(review.semester)));
+    setYears(reviews.map((review: any) => review.year));
+  }, [reviews]);
 
   useEffect(() => {
     let sortedReviews = [...reviews];
@@ -296,8 +299,16 @@ export default function MyReviews({ reviews, user }: Props) {
               />
             </div>
             <div className="flex space-x-2">
-              <ReviewsFilterYear selectedYear={year} onYearChange={setYear} />
-              <ReviewsFilterTerm selectedTerm={term} onTermChange={setTerm} />
+              <ReviewsFilterYear
+                selectedYear={year}
+                onYearChange={setYear}
+                years={years}
+              />
+              <ReviewsFilterTerm
+                selectedTerm={term}
+                onTermChange={setTerm}
+                terms={terms}
+              />
               <ReviewsSortBy
                 selectedValue={sortBy}
                 onSelectChange={(value) => setSortBy(value)}
