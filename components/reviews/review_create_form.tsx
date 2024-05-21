@@ -16,6 +16,18 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/shadcn/ui/form";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/shadcn/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/shadcn/ui/popover";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -36,6 +48,9 @@ import { ReviewForm } from "@/lib/definitions/review";
 import { LoaderButton } from "../shadcn/ui/loader-button";
 import { getIfUserReviewedCourse } from "@/lib/actions/user";
 import { toast } from "react-toastify";
+import { Button } from "../shadcn/ui/button";
+import { cn } from "@/lib/shadcn/utils";
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 
 interface Props {
   course?: Course | null;
@@ -58,6 +73,8 @@ export default function ReviewCreateForm({
     professors ?? [],
   );
   const [submitting, setSubmitting] = useState(false);
+  const [openCourses, setOpenCourses] = useState(false);
+  const [openProfessors, setOpenProfessors] = useState(false);
   const terms = getTerms();
   const years = getYears();
 
@@ -205,94 +222,148 @@ export default function ReviewCreateForm({
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col space-y-3 w-full max-w-screen-lg"
       >
-        <FormField
-          control={form.control}
-          name="course"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Course *</FormLabel>
-              <Select
-                onValueChange={(value) => {
-                  onCourseChange(value);
-                }}
-                value={field.value}
-              >
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue className="placeholder-primary-white" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent className="bg-primary-black text-primary-white">
-                  <SelectItem
-                    key="reset-course"
-                    value="reset"
-                    onClick={clearCourseSelection}
-                  >
-                    None
-                  </SelectItem>
-                  {filteredCourses?.map((course: Course) => (
-                    <SelectItem
-                      key={course.code}
-                      value={`${course.code} - ${course.name}`}
-                    >
-                      {`${course.code} - ${course.name}`}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="professor"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Professor *</FormLabel>
-              <Select
-                onValueChange={(value) => {
-                  onProfessorChange(value);
-                }}
-                value={field.value}
-              >
-                <FormControl>
-                  <SelectTrigger className="placeholder-primary-white/50">
-                    <SelectValue />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent className="bg-primary-black text-primary-white">
-                  <SelectItem
-                    key="reset-professor"
-                    value="reset"
-                    onClick={clearProfessorSelection}
-                  >
-                    None
-                  </SelectItem>
-                  {filteredProfessors?.map((professor: any) => (
-                    <SelectItem
-                      key={formatProfessorName(
-                        professor.lastName,
-                        professor.firstName,
-                      )}
-                      value={formatProfessorName(
-                        professor.lastName,
-                        professor.firstName,
-                      )}
-                    >
-                      {formatProfessorName(
-                        professor.lastName,
-                        professor.firstName,
-                      )}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="flex max-sm:flex-col sm:space-x-3 max-sm:justify-center max-sm:align-center max-sm:space-y-2 mt-3">
+          <FormField
+            control={form.control}
+            name="course"
+            render={({ field }) => (
+              <FormItem className="flex flex-col w-full">
+                <FormLabel>Course *</FormLabel>
+                <Popover open={openCourses} onOpenChange={setOpenCourses}>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "flex w-full justify-between bg-primary-black",
+                          !field.value && "text-muted-foreground",
+                          "hover:text-primary-white hover:bg-primary-black",
+                        )}
+                      >
+                        {field.value || ""}
+                        <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="bg-primary-black text-primary-white w-full max-h-[400px] overflow-y-auto">
+                    <Command className="bg-primary-black text-primary-white">
+                      <CommandInput
+                        placeholder="Search framework..."
+                        className="h-9"
+                      />
+                      <CommandEmpty>No framework found.</CommandEmpty>
+                      <CommandGroup className="bg-primary-black text-primary-white">
+                        {filteredCourses.map((course) => (
+                          <CommandItem
+                            value={`${course.code} - ${course.name}`}
+                            key={course.name}
+                            onSelect={() => {
+                              form.setValue(
+                                "course",
+                                `${course.code} - ${course.name}`,
+                              );
+                              setOpenCourses(false);
+                            }}
+                          >
+                            {course.code} - {course.name}
+                            <CheckIcon
+                              className={cn(
+                                "ml-auto h-4 w-4",
+                                course.name === field.value
+                                  ? "opacity-100"
+                                  : "opacity-0",
+                              )}
+                            />
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="professor"
+            render={({ field }) => (
+              <FormItem className="flex flex-col w-full">
+                <FormLabel>Professor *</FormLabel>
+                <Popover open={openProfessors} onOpenChange={setOpenProfessors}>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "flex w-full justify-between bg-primary-black",
+                          !field.value && "text-muted-foreground",
+                          "hover:text-primary-white hover:bg-primary-black",
+                        )}
+                      >
+                        {field.value}
+                        <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="bg-primary-black text-primary-white w-full">
+                    <Command className="bg-primary-black text-primary-white">
+                      <CommandInput
+                        placeholder="Search Professors"
+                        className="h-9"
+                      />
+                      <CommandEmpty>No framework found.</CommandEmpty>
+                      <CommandGroup className="bg-primary-black text-primary-white">
+                        {filteredProfessors.map((professor) => (
+                          <CommandItem
+                            value={formatProfessorName(
+                              professor.lastName,
+                              professor.firstName,
+                            )}
+                            key={formatProfessorName(
+                              professor.lastName,
+                              professor.firstName,
+                            )}
+                            onSelect={() => {
+                              form.setValue(
+                                "professor",
+                                formatProfessorName(
+                                  professor.lastName,
+                                  professor.firstName,
+                                ),
+                              );
+                              setOpenProfessors(false);
+                            }}
+                            className="cursor-pointer"
+                          >
+                            {formatProfessorName(
+                              professor.lastName,
+                              professor.firstName,
+                            )}
+                            <CheckIcon
+                              className={cn(
+                                "ml-auto h-4 w-4",
+                                formatProfessorName(
+                                  professor.lastName,
+                                  professor.firstName,
+                                ) === field.value
+                                  ? "opacity-100"
+                                  : "opacity-0",
+                              )}
+                            />
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <div className="flex space-x-3">
           <div className="w-1/2">
             <FormField
