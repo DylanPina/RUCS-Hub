@@ -11,7 +11,7 @@ export const columns: ColumnDef<CourseTableColumn>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="text-primary-white p-0 hover:bg-transparent hover:font-black hover:text-primary-white"
+          className="flex justify-start text-primary-white p-0 hover:bg-transparent hover:font-black hover:text-primary-white"
         >
           Code
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -26,7 +26,7 @@ export const columns: ColumnDef<CourseTableColumn>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="text-primary-white p-0 hover:bg-transparent hover:font-black hover:text-primary-white"
+          className="flex justify-start text-primary-white p-0 text-start min-w-[200px] hover:bg-transparent hover:font-black hover:text-primary-white"
         >
           Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -34,25 +34,25 @@ export const columns: ColumnDef<CourseTableColumn>[] = [
       );
     },
   },
-  {
-    accessorKey: "credits",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="text-primary-white p-0 hover:bg-transparent hover:font-black hover:text-primary-white"
-        >
-          Credits
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: (props: any) => <span>{props.getValue() ?? "?"}</span>,
-    // meta: {
-    //   align: "right",
-    // },
-  },
+  // {
+  //   accessorKey: "credits",
+  //   header: ({ column }) => {
+  //     return (
+  //       <Button
+  //         variant="ghost"
+  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+  //         className="text-primary-white p-0 hover:bg-transparent hover:font-black hover:text-primary-white"
+  //       >
+  //         Credits
+  //         <ArrowUpDown className="ml-2 h-4 w-4" />
+  //       </Button>
+  //     );
+  //   },
+  //   cell: (props: any) => <span>{props.getValue() ?? "?"}</span>,
+  //   // meta: {
+  //   //   align: "right",
+  //   // },
+  // },
   {
     accessorKey: "difficulty",
     header: ({ column }) => {
