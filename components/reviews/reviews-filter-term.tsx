@@ -8,19 +8,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn/ui/select";
-import { getValidTerms } from "@/lib/utils";
 
-interface ProfessorReviewsFilterTermProps {
+interface Props {
+  terms: any[];
   selectedTerm: string;
   onTermChange: (value: string) => void;
 }
 
 export default function ReviewsFilterTerm({
+  terms,
   selectedTerm,
   onTermChange,
-}: ProfessorReviewsFilterTermProps) {
-  const terms = getValidTerms(null);
-  terms.unshift("Any");
+}: Props) {
+  const termsSet = Array.from(new Set(terms));
 
   return (
     <div className="flex flex-col space-y-2">
@@ -30,7 +30,10 @@ export default function ReviewsFilterTerm({
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          {terms.map((term) => (
+          <SelectItem key="Any" value="Any">
+            Any
+          </SelectItem>
+          {termsSet.map((term: any) => (
             <SelectItem key={term} value={term}>
               {term}
             </SelectItem>

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getTermNameByValue, hashEmailAddress } from "@/lib/utils";
+import { getTermNameByValue } from "@/lib/utils";
 import { Review } from "@/lib/definitions/review";
 import { Vote } from "@/lib/definitions/vote";
 import ReviewsSortBy from "@/components/reviews/reviews-sort-by";
@@ -31,7 +31,9 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("newest");
   const [year, setYear] = useState("Any");
+  const [years, setYears] = useState<any>([]);
   const [term, setTerm] = useState("Any");
+  const [terms, setTerms] = useState<any>([]);
   const [course, setCourse] = useState("Any");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [startIndex, setStartIndex] = useState(0);
@@ -96,6 +98,11 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
       return 0;
     });
   }
+
+  useEffect(() => {
+    setTerms(reviews.map((review: any) => getTermNameByValue(review.semester)));
+    setYears(reviews.map((review: any) => review.year));
+  }, [reviews]);
 
   useEffect(() => {
     let sortedReviews = [...reviews];
@@ -219,8 +226,16 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
               />
             </div>
             <div className="flex space-x-2">
-              <ReviewsFilterYear selectedYear={year} onYearChange={setYear} />
-              <ReviewsFilterTerm selectedTerm={term} onTermChange={setTerm} />
+              <ReviewsFilterYear
+                selectedYear={year}
+                onYearChange={setYear}
+                years={years}
+              />
+              <ReviewsFilterTerm
+                selectedTerm={term}
+                onTermChange={setTerm}
+                terms={terms}
+              />
               <ReviewsSortBy
                 selectedValue={sortBy}
                 onSelectChange={(value) => setSortBy(value)}

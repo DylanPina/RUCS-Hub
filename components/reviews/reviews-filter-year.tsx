@@ -8,19 +8,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn/ui/select";
-import { getYears } from "@/lib/utils";
 
-interface ProfessorReviewsFilterYearProps {
+interface Props {
+  years: any[];
   selectedYear: string;
   onYearChange: (value: string) => void;
 }
 
 export default function ReviewsFilterYear({
+  years,
   selectedYear,
   onYearChange,
-}: ProfessorReviewsFilterYearProps) {
-  const years = getYears().map((year) => year.toString());
-  years.unshift("Any");
+}: Props) {
+  const yearsSet = Array.from(new Set(years));
 
   return (
     <div className="flex flex-col space-y-2">
@@ -33,7 +33,10 @@ export default function ReviewsFilterYear({
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          {years.map((year: string) => (
+          <SelectItem key="Any" value="Any">
+            Any
+          </SelectItem>
+          {yearsSet.map((year: string) => (
             <SelectItem key={year} value={year}>
               {year}
             </SelectItem>

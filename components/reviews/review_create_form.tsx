@@ -27,11 +27,9 @@ import {
   getYears,
   hashEmailAddress,
 } from "@/lib/utils";
-import { useEffect, useState, useTransition } from "react";
+import { useState } from "react";
 import { Input } from "../shadcn/ui/input";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import getProfessorsByCourse from "@/lib/actions/course";
-import getCoursesByProfessor from "@/lib/actions/professor";
 import { Textarea } from "../shadcn/ui/textarea";
 import createReview from "@/lib/actions/review";
 import { ReviewForm } from "@/lib/definitions/review";
@@ -53,7 +51,6 @@ export default function ReviewCreateForm({
   professors,
 }: Props) {
   const { user } = useUser();
-  const [isPending, startTransition] = useTransition();
   const [filteredCourses, setFilteredCourses] = useState<Course[]>(
     courses ?? [],
   );
@@ -63,29 +60,6 @@ export default function ReviewCreateForm({
   const [submitting, setSubmitting] = useState(false);
   const terms = getTerms();
   const years = getYears();
-
-  useEffect(() => {
-    if (course && professor) {
-      startTransition(async () => {
-        setFilteredProfessors(await getProfessorsByCourse(course.code));
-        const filteredCourseCodes = await getCoursesByProfessor(professor.id);
-        setFilteredCourses(
-          courses?.filter((c) => filteredCourseCodes.includes(c.code)) ?? [],
-        );
-      });
-    } else if (course) {
-      startTransition(async () => {
-        setFilteredProfessors(await getProfessorsByCourse(course.code));
-      });
-    } else if (professor) {
-      startTransition(async () => {
-        const filteredCourseCodes = await getCoursesByProfessor(professor.id);
-        setFilteredCourses(
-          courses?.filter((c) => filteredCourseCodes.includes(c.code)) ?? [],
-        );
-      });
-    }
-  }, [course, courses, professor, professors]);
 
   const FormSchema = z.object({
     course: z.string().min(1, {
@@ -156,10 +130,6 @@ export default function ReviewCreateForm({
       return;
     }
 
-    const courseCode = parseInt(course.split(" ")[0]);
-    startTransition(async () => {
-      setFilteredProfessors(await getProfessorsByCourse(courseCode));
-    });
     form.setValue("course", course);
   }
 
@@ -175,12 +145,6 @@ export default function ReviewCreateForm({
 
     if (!professorId) return;
 
-    startTransition(async () => {
-      const filteredCourseCodes = await getCoursesByProfessor(professorId);
-      setFilteredCourses(
-        courses?.filter((c) => filteredCourseCodes.includes(c.code)) ?? [],
-      );
-    });
     form.setValue("professor", professor);
   }
 
