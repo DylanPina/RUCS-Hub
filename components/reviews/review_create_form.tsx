@@ -141,30 +141,6 @@ export default function ReviewCreateForm({
     },
   });
 
-  function onCourseChange(course: any) {
-    if (course === "reset") {
-      clearCourseSelection();
-      return;
-    }
-
-    form.setValue("course", course);
-  }
-
-  function onProfessorChange(professor: string) {
-    if (professor === "reset") {
-      clearProfessorSelection();
-      return;
-    }
-
-    const professorId = filteredProfessors?.find(
-      (p) => formatProfessorName(p.lastName, p.firstName) === professor,
-    )?.id;
-
-    if (!professorId) return;
-
-    form.setValue("professor", professor);
-  }
-
   function clearCourseSelection() {
     setFilteredProfessors(professors ?? []);
     form.setValue("course", "");
@@ -222,7 +198,7 @@ export default function ReviewCreateForm({
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col space-y-3 w-full max-w-screen-lg"
       >
-        <div className="flex max-sm:flex-col sm:space-x-3 max-sm:justify-center max-sm:align-center max-sm:space-y-2 mt-3">
+        <div className="flex max-sm:flex-col sm:space-x-3 max-sm:justify-center max-sm:align-center max-sm:space-y-4 mt-3">
           <FormField
             control={form.control}
             name="course"
@@ -246,7 +222,7 @@ export default function ReviewCreateForm({
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className="bg-primary-black text-primary-white w-full max-h-[400px] overflow-y-auto">
+                  <PopoverContent className="bg-primary-black text-primary-white w-full max-sm:max-w-[375px] max-h-[400px] overflow-auto">
                     <Command className="bg-primary-black text-primary-white">
                       <CommandInput
                         placeholder="Search framework..."
@@ -308,7 +284,7 @@ export default function ReviewCreateForm({
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className="bg-primary-black text-primary-white w-full">
+                  <PopoverContent className="bg-primary-black text-primary-white max-w-[400px] w-full max-h-[400px] overflow-auto">
                     <Command className="bg-primary-black text-primary-white">
                       <CommandInput
                         placeholder="Search Professors"
@@ -418,7 +394,7 @@ export default function ReviewCreateForm({
             />
           </div>
         </div>
-        <div className="flex max-sm:flex-col sm:space-x-3 max-sm:justify-center max-sm:align-center max-sm:space-y-2">
+        <div className="flex max-sm:flex-col sm:space-x-3 max-sm:justify-center max-sm:align-center max-sm:space-y-3">
           <div className="w-1/3 max-sm:w-full">
             <FormField
               control={form.control}
@@ -507,7 +483,7 @@ export default function ReviewCreateForm({
             />
           </div>
         </div>
-        <div className="flex max-sm:flex-col sm:space-x-3 max-sm:justify-center max-sm:align-center max-sm:space-y-2">
+        <div className="flex max-sm:flex-col sm:space-x-3 max-sm:justify-center max-sm:align-center max-sm:space-y-3">
           <div className="w-1/3 max-sm:w-full">
             <FormField
               control={form.control}

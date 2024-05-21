@@ -45,7 +45,9 @@ export async function queryProfessorByName(
  * @return - List of all professors
  */
 export async function queryAllProfessors(): Promise<Professor[]> {
-  const professors = await prisma.professor.findMany();
+  const professors = await prisma.professor.findMany({
+    orderBy: [{ lastName: "asc" }, { firstName: "asc" }],
+  });
   return professors;
 }
 

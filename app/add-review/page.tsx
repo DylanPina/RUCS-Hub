@@ -1,5 +1,4 @@
 import ReviewCreateForm from "@/components/reviews/review_create_form";
-import getProfessorsByCourse from "@/lib/actions/course";
 import { queryAllCourses } from "@/lib/data/course";
 import { queryAllProfessors } from "@/lib/data/professor";
 import { Course, Professor } from "@prisma/client";
@@ -18,28 +17,14 @@ export default async function Page({
   const professors = await queryAllProfessors();
   const courses = await queryAllCourses();
   const { professorId, courseCode } = searchParams;
-
-  let professor = professorId
+  const professor = professorId
     ? professors.find(
         (p: Professor) => p.id == parseInt(professorId.toString()),
       )
     : null;
-  let course = courseCode
+  const course = courseCode
     ? courses.find((c: Course) => c.code == parseInt(courseCode.toString()))
     : null;
-
-  if (professor && course) {
-    const professorsByCourse = await getProfessorsByCourse(course.code);
-
-    const professorExistsInCourse = professorsByCourse.some(
-      (p: Professor) => p.id === professor?.id,
-    );
-
-    if (!professorExistsInCourse) {
-      professor = null;
-      course = null;
-    }
-  }
 
   return (
     <div className="flex flex-col justify-center items-center">
