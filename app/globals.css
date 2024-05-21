@@ -4,10 +4,41 @@
 
 :root {
   --foreground-rgb: 250, 250, 250;
+  --red: #da2f47;
+  --black: #18181b;
+  --white: #fafafa;
+  --white-faded: rgba(250, 250, 250, 0.5);
 }
 
 body {
   color: rgb(var(--foreground-rgb));
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--white-faded) var(--black);
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  scrollbar-width: thin;
+  width: 7px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--black);
+  border-radius: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--white);
+  border-radius: 14px;
+  border: 3px solid var(--white);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--white);
 }
 
 .Toastify__toast {
