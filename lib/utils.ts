@@ -37,7 +37,7 @@ export function getTerms(): Term[] {
  */
 export function getYears(): number[] {
   const years: number[] = [];
-  for (let year = MIN_YEAR; year <= MAX_YEAR; year++) {
+  for (let year = MAX_YEAR; year >= MIN_YEAR; year--) {
     years.push(year);
   }
   return years;
