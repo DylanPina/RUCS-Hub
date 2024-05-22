@@ -101,7 +101,7 @@ git push
 
 ## Contact
 
-For questions or to reach out, join our Discord server: https://discord.gg/m3cxbcxx, or email us at rucshub@gmail.com.
+For questions or to reach out, join our Discord server: https://discord.gg/bc2yDRVs, or email us at rucshub@gmail.com.
 
 ## License
 
