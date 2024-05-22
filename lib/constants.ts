@@ -11,3 +11,4 @@ export const GITHUB_ISSUES_URL = "https://github.com/DylanPina/RUCS-Hub/issues";
 export const DYLAN_PINA_GITHUB_URL = "https://github.com/DylanPina";
 export const DONATION_LINK =
   "https://www.paypal.com/donate/?hosted_button_id=Q686GMQ5U73CS";
+export const PUBLIC_BASE_URL = "https://www.rucshub.com";
