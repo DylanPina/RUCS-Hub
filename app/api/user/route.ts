@@ -2,6 +2,7 @@ import { createUser, getUserByAuth0Id } from "@/lib/data/user";
 
 export async function POST(request: Request) {
   const formData = await request.formData();
+  console.log(JSON.stringify(formData, null, 2));
   const userId = formData.get("userId");
 
   const authUser = await getUserByAuth0Id(userId as string);

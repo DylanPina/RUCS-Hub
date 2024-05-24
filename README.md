@@ -68,6 +68,20 @@ npm run dev
 
 4. **Open your browser and navigate to `http://localhost:3000`**
 
+## Setting Up the Development Environment
+
+1. **Set up the development environment variables:** Copy the `.env.example` to `.env`. This will set up the development database and auth0 connection. _Note that this is completely separate from the production environment and database._
+
+```bash
+cp .env.example .env
+```
+
+2. **Generate the Prisma client:**
+
+```bash
+npx prisma generate
+```
+
 ## Contributing
 
 To contribute to RUCS Hub, follow these steps:
