@@ -11,6 +11,7 @@ import { queryProfessorTableData } from "@/lib/data/professor";
 import { ProfessorTableColumn } from "@/lib/definitions/professor";
 import { CourseTableColumn } from "@/lib/definitions/course";
 import { MdRateReview } from "react-icons/md";
+import NavNotification from "./nav_notifications";
 
 export default async function Nav() {
   const courseTableData: CourseTableColumn[] =
@@ -37,6 +38,7 @@ export default async function Nav() {
           professors={professorTableData}
         />
         <div className="flex items-center space-x-4">
+          <NavNotification />
           <NavProfile />
           <SignIn />
         </div>

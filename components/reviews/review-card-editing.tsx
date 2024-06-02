@@ -80,12 +80,12 @@ export default function ReviewCardEditing({
     mode: "onChange",
     defaultValues: {
       title: review.title,
-      courseRating: review.rating,
-      courseDifficultyRating: review.difficultyRating,
-      courseWorkload: review.workload,
-      professorRating: review.professorQualityRating,
-      professorDifficultyRating: review.professorDifficultyRating,
-      lectureRating: review.lectureRating,
+      courseRating: review.rating ?? undefined,
+      courseDifficultyRating: review.difficultyRating ?? undefined,
+      courseWorkload: review.workload ?? undefined,
+      professorRating: review.professorQualityRating ?? undefined,
+      professorDifficultyRating: review.professorDifficultyRating ?? undefined,
+      lectureRating: review.lectureRating ?? undefined,
       content: review.content,
     },
   });
@@ -135,8 +135,8 @@ export default function ReviewCardEditing({
             <p className="text-sm max-sm:text-xs text-primary-white/50">
               <span className="font-semibold">Professor: </span>
               {formatProfessorName(
-                review.professor.lastName,
-                review.professor.firstName,
+                review.professor?.lastName ?? "",
+                review.professor?.firstName,
               )}
             </p>
             <p className="text-sm max-sm:text-xs text-primary-white/50">

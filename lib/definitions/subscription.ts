@@ -1,9 +1,10 @@
 import { Prisma } from "@prisma/client";
 
-export type Vote = Prisma.VoteGetPayload<{
+export type Subscription = Prisma.SubscriptionGetPayload<{
   include: {
     user: true;
+    course: true;
+    professor: true;
     review: true;
-    notifications: true;
   };
 }>;

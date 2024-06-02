@@ -1,10 +1,13 @@
+import { Prisma } from "@prisma/client";
 import { Review } from "./review";
 
-export interface Professor {
-  id: number;
-  firstName: string;
-  lastName: string;
-}
+export type Professor = Prisma.ProfessorGetPayload<{
+  include: {
+    reviews: true;
+    sections: true;
+    subscribers: true;
+  };
+}>;
 
 export interface ProfessorPage {
   id: number;

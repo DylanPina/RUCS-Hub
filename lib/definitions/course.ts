@@ -1,14 +1,13 @@
+import { Prisma } from "@prisma/client";
 import { Review } from "./review";
 
-export type Course = {
-  code: number;
-  name: string;
-  prereqs: string[];
-  synopsisUrl: string;
-  credits: number;
-  reviews?: Review[];
-  sections: CourseSection[];
-};
+export type Course = Prisma.CourseGetPayload<{
+  include: {
+    reviews: true;
+    sections: true;
+    subscribers: true;
+  };
+}>;
 
 export type CoursePage = {
   courseCode: number;

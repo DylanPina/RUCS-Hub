@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { getTermNameByValue } from "@/lib/utils";
 import { Review } from "@/lib/definitions/review";
-import { Vote } from "@/lib/definitions/vote";
 import ReviewsSortBy from "@/components/reviews/reviews-sort-by";
 import ReviewsFilterCourse from "@/components/reviews/reviews-filter-course";
 import ReviewsFilterTerm from "@/components/reviews/reviews-filter-term";
@@ -68,9 +67,9 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
   }
 
   function sortReviewsByUpvotes(reviews: Review[]) {
-    return reviews.sort((a, b) => {
-      const upvotesA = a.votes.filter((vote: Vote) => vote.upvote).length ?? 0;
-      const upvotesB = b.votes.filter((vote: Vote) => vote.upvote).length ?? 0;
+    return reviews.sort((a: Review, b: Review) => {
+      const upvotesA = a.votes.filter((vote: any) => vote.upvote).length ?? 0;
+      const upvotesB = b.votes.filter((vote: any) => vote.upvote).length ?? 0;
 
       if (upvotesA > upvotesB) {
         return -1;
@@ -85,9 +84,9 @@ export default function ProfessorReviews({ reviews }: ProfessorReviewProps) {
   function sortReviewsByDownvotes(reviews: Review[]) {
     return reviews.sort((a, b) => {
       const downvotesA =
-        a.votes.filter((vote: Vote) => !vote.upvote).length ?? 0;
+        a.votes.filter((vote: any) => !vote.upvote).length ?? 0;
       const downvotesB =
-        b.votes.filter((vote: Vote) => !vote.upvote).length ?? 0;
+        b.votes.filter((vote: any) => !vote.upvote).length ?? 0;
 
       if (downvotesA > downvotesB) {
         return -1;

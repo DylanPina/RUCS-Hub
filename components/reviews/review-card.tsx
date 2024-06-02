@@ -55,13 +55,13 @@ export default function ReviewCard({ review, user }: ReviewCardProps) {
           <Link
             className="hover:underline"
             href={getProfessorRoute(
-              updatedReview.professor.lastName,
-              updatedReview.professor.firstName,
+              updatedReview.professor?.lastName ?? "",
+              updatedReview.professor?.firstName ?? "",
             )}
           >
             {formatProfessorName(
-              updatedReview.professor.lastName,
-              updatedReview.professor.firstName,
+              updatedReview.professor?.lastName ?? "",
+              updatedReview.professor?.firstName ?? "",
             )}
           </Link>
         </p>

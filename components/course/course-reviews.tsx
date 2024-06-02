@@ -1,13 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  formatProfessorName,
-  getTermNameByValue,
-  hashEmailAddress,
-} from "@/lib/utils";
+import { formatProfessorName, getTermNameByValue } from "@/lib/utils";
 import { Review } from "@/lib/definitions/review";
-import { Vote } from "@/lib/definitions/vote";
 import ReviewsSortBy from "@/components/reviews/reviews-sort-by";
 import ReviewsFilterTerm from "@/components/reviews/reviews-filter-term";
 import ReviewsFilterYear from "@/components/reviews/reviews-filter-year";
@@ -48,8 +43,8 @@ export default function CourseReviews({ reviews }: ProfessorReviewProps) {
       new Set(
         reviews.map((review: Review) =>
           formatProfessorName(
-            review.professor.lastName,
-            review.professor.firstName,
+            review.professor?.lastName ?? "",
+            review.professor?.firstName ?? "",
           ),
         ),
       ),
@@ -81,9 +76,9 @@ export default function CourseReviews({ reviews }: ProfessorReviewProps) {
   }
 
   function sortReviewsByUpvotes(reviews: Review[]) {
-    return reviews.sort((a, b) => {
-      const upvotesA = a.votes.filter((vote: Vote) => vote.upvote).length ?? 0;
-      const upvotesB = b.votes.filter((vote: Vote) => vote.upvote).length ?? 0;
+    return reviews.sort((a: Review, b: Review) => {
+      const upvotesA = a.votes.filter((vote: any) => vote.upvote).length ?? 0;
+      const upvotesB = b.votes.filter((vote: any) => vote.upvote).length ?? 0;
 
       if (upvotesA > upvotesB) {
         return -1;
@@ -98,9 +93,9 @@ export default function CourseReviews({ reviews }: ProfessorReviewProps) {
   function sortReviewsByDownvotes(reviews: Review[]) {
     return reviews.sort((a, b) => {
       const downvotesA =
-        a.votes.filter((vote: Vote) => !vote.upvote).length ?? 0;
+        a.votes.filter((vote: any) => !vote.upvote).length ?? 0;
       const downvotesB =
-        b.votes.filter((vote: Vote) => !vote.upvote).length ?? 0;
+        b.votes.filter((vote: any) => !vote.upvote).length ?? 0;
 
       if (downvotesA > downvotesB) {
         return -1;
@@ -138,8 +133,8 @@ export default function CourseReviews({ reviews }: ProfessorReviewProps) {
       const professorMatches =
         professor === "Any" ||
         formatProfessorName(
-          review.professor.lastName,
-          review.professor.firstName,
+          review.professor?.lastName ?? "",
+          review.professor?.firstName ?? "",
         ) === professor;
       const searchMatches =
         review.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
