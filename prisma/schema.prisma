@@ -20,12 +20,12 @@ model User {
 }
 
 model Professor {
-  id           Int            @id @default(autoincrement())
-  firstName    String
-  lastName     String
-  reviews      Review[]
-  sections     Section[]
-  subscribers  Subscription[]
+  id          Int            @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  reviews     Review[]
+  sections    Section[]
+  subscribers Subscription[]
 }
 
 model Section {
@@ -41,14 +41,14 @@ model Section {
 }
 
 model Course {
-  code         Int            @id
-  name         String
-  prereqs      String[]
-  synopsis     String?
-  credits      Int?
-  reviews      Review[]
-  sections     Section[]
-  subscribers  Subscription[]
+  code        Int            @id
+  name        String
+  prereqs     String[]
+  synopsis    String?
+  credits     Int?
+  reviews     Review[]
+  sections    Section[]
+  subscribers Subscription[]
 }
 
 model Review {
@@ -114,14 +114,14 @@ model Notification {
 }
 
 model Subscription {
-  id          Int       @id @default(autoincrement())
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          Int        @id @default(autoincrement())
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
-  course      Course    @relation(fields: [courseCode], references: [code], onDelete: Cascade)
-  courseCode  Int
-  professor   Professor @relation(fields: [professorId], references: [id], onDelete: Cascade)
-  professorId Int
-  review      Review    @relation(fields: [reviewId], references: [id], onDelete: Cascade)
-  reviewId    Int
-  createdAt   DateTime  @default(now())
+  course      Course?    @relation(fields: [courseCode], references: [code], onDelete: Cascade)
+  courseCode  Int?
+  professor   Professor? @relation(fields: [professorId], references: [id], onDelete: Cascade)
+  professorId Int?
+  review      Review?    @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  reviewId    Int?
+  createdAt   DateTime   @default(now())
 }

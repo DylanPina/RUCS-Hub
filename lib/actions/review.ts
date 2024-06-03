@@ -1,11 +1,12 @@
 "use server";
 
 import { downvoteReview, upvoteReview } from "../data/review";
+import { createSubscription } from "../data/subscription";
 import { ReviewForm } from "../definitions/review";
 import { prisma } from "@/prisma/prisma";
 
 /**
- * Creates a new review
+ * Creates a new review and subscribes the user to updates on the review
  *
  * @param reviewForm - The review form data
  * @param userId - The ID of the user creating the review
@@ -33,7 +34,7 @@ export default async function createReview(
 
   const professorId = professor?.id;
 
-  await prisma.review.create({
+  const review = await prisma.review.create({
     data: {
       userId,
       courseCode: Number(reviewForm.course.split(" ")[0]),
@@ -50,6 +51,7 @@ export default async function createReview(
       lectureRating: Number(reviewForm.lectureRating),
     },
   });
+  await createSubscription(userId, undefined, undefined, review.id);
 }
 
 /**
