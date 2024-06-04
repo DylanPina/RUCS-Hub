@@ -1,5 +1,9 @@
 import { Vote } from "@prisma/client";
 import { prisma } from "@/prisma/prisma";
+import {
+  notifySubscribersReviewVote,
+  notifySubscribersReviewVoteDeleted,
+} from "./notification";
 
 /**
  * Upvotes a review
@@ -26,29 +30,44 @@ export async function upvoteReview(
         upvote: true,
       },
     });
+    await notifySubscribersReviewVoteDeleted(reviewId, alreadyUpvoted.id);
     return null;
   }
 
-  await prisma.vote.deleteMany({
+  const downvote = await prisma.vote.findFirst({
     where: {
-      userId: userId,
-      reviewId: reviewId,
+      userId,
+      reviewId,
       upvote: false,
     },
   });
 
-  return await prisma.vote.create({
+  if (downvote) {
+    await prisma.vote.deleteMany({
+      where: {
+        userId,
+        reviewId,
+        upvote: false,
+      },
+    });
+    await notifySubscribersReviewVoteDeleted(reviewId, downvote.id);
+  }
+
+  const newVote = await prisma.vote.create({
     data: {
       userId: userId,
       reviewId: reviewId,
       upvote: true,
     },
   });
+  await notifySubscribersReviewVote(reviewId, newVote.id);
+  return newVote;
 }
 
 /**
  * Downvotes a review
  *
+ * @param userId - ID of the user
  * @param reviewId - ID of the review
  */
 export async function downvoteReview(
@@ -57,8 +76,8 @@ export async function downvoteReview(
 ): Promise<Vote | null> {
   const alreadyDownvoted = await prisma.vote.findFirst({
     where: {
-      userId: userId,
-      reviewId: reviewId,
+      userId,
+      reviewId,
       upvote: false,
     },
   });
@@ -66,27 +85,42 @@ export async function downvoteReview(
   if (alreadyDownvoted) {
     await prisma.vote.deleteMany({
       where: {
-        userId: userId,
-        reviewId: reviewId,
+        userId,
+        reviewId,
         upvote: false,
       },
     });
+    await notifySubscribersReviewVoteDeleted(reviewId, alreadyDownvoted.id);
     return null;
   }
 
-  await prisma.vote.deleteMany({
+  const upvote = await prisma.vote.findFirst({
     where: {
-      userId: userId,
-      reviewId: reviewId,
+      userId,
+      reviewId,
       upvote: true,
     },
   });
 
-  return await prisma.vote.create({
+  if (upvote) {
+    await prisma.vote.deleteMany({
+      where: {
+        userId,
+        reviewId,
+        upvote: true,
+      },
+    });
+    await notifySubscribersReviewVoteDeleted(reviewId, upvote.id);
+  }
+
+  const newVote = await prisma.vote.create({
     data: {
-      userId: userId,
-      reviewId: reviewId,
+      userId,
+      reviewId,
       upvote: false,
     },
   });
+
+  await notifySubscribersReviewVote(reviewId, newVote.id);
+  return newVote;
 }

@@ -1,5 +1,6 @@
 "use server";
 
+import { notifySubscribersReviewVote } from "../data/notification";
 import { downvoteReview, upvoteReview } from "../data/review";
 import { createSubscription } from "../data/subscription";
 import { ReviewForm } from "../definitions/review";
@@ -95,11 +96,9 @@ export async function updateReview(reviewId: number, reviewForm: ReviewForm) {
  * @param upvote - Whether the user is voting up or down
  */
 export async function vote(userId: string, reviewId: number, upvote: boolean) {
-  if (upvote) {
-    return await upvoteReview(userId, reviewId);
-  }
-
-  return await downvoteReview(userId, reviewId);
+  return upvote
+    ? await upvoteReview(userId, reviewId)
+    : await downvoteReview(userId, reviewId);
 }
 
 /**

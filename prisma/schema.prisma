@@ -26,6 +26,7 @@ model Professor {
   reviews     Review[]
   sections    Section[]
   subscribers Subscription[]
+  notifications Notification[]
 }
 
 model Section {
@@ -49,6 +50,7 @@ model Course {
   reviews     Review[]
   sections    Section[]
   subscribers Subscription[]
+  notifications Notification[]
 }
 
 model Review {
@@ -105,10 +107,14 @@ model Notification {
   id          Int      @id @default(autoincrement())
   recipient   User     @relation(fields: [recipientId], references: [id], onDelete: Cascade)
   recipientId String
-  vote        Vote     @relation(fields: [voteId], references: [id], onDelete: Cascade)
-  voteId      Int
-  review      Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
-  reviewId    Int
+  vote        Vote?     @relation(fields: [voteId], references: [id], onDelete: Cascade)
+  voteId      Int?
+  review      Review?   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  reviewId    Int?
+  professor   Professor? @relation(fields: [professorId], references: [id], onDelete: Cascade)
+  professorId Int?
+  course      Course?    @relation(fields: [courseCode], references: [code], onDelete: Cascade)
+  courseCode  Int?
   createdAt   DateTime @default(now())
   read        Boolean  @default(false)
 }

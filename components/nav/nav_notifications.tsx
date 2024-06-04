@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../shadcn/ui/button";
 import {
   Tooltip,
@@ -10,6 +10,7 @@ import {
 } from "@/components/shadcn/ui/tooltip";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { MdNotifications } from "react-icons/md";
+import { Notification } from "@/lib/definitions/notification";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,11 +18,29 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/shadcn/ui/dropdown-menu";
-import { LoaderButton } from "../shadcn/ui/loader-button";
+import NotificationVote from "../notification/notification_vote";
+import {
+  deleteNotifications,
+  readNotifications,
+} from "@/lib/actions/notification";
 
-export default function NavNotification() {
+interface Props {
+  notifications: any[];
+}
+
+export default function NavNotification({ notifications }: Props) {
   const { user } = useUser();
-  const [loading, setLoading] = useState(false);
+  const [filteredNotifications, setFilteredNotifications] =
+    useState(notifications);
+
+  useEffect(() => {
+    readNotifications(notifications.map((notification) => notification.id));
+  }, [notifications]);
+
+  function clearNotifications() {
+    deleteNotifications(notifications.map((notification) => notification.id));
+    setFilteredNotifications([]);
+  }
 
   return (
     user && (
@@ -43,16 +62,33 @@ export default function NavNotification() {
                     Notifications
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuLabel>No notifications...</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <div className="flex justify-center h-6">
-                    <LoaderButton
-                      isLoading={loading}
-                      className="bg-transparent py-0 h-6 w-full text-primary-white hover:bg-primary-red hover:shadow-primary-red hover:text-primary-white hover:font-bold transition duration-150 ease-out"
-                    >
-                      Clear all
-                    </LoaderButton>
-                  </div>
+                  {filteredNotifications.length === 0 && (
+                    <DropdownMenuLabel>No notifications...</DropdownMenuLabel>
+                  )}
+                  {filteredNotifications.map(
+                    (notification: Notification) =>
+                      notification.vote && (
+                        <>
+                          <NotificationVote
+                            vote={notification.vote}
+                            review={notification.review}
+                          />
+                          <DropdownMenuSeparator />
+                        </>
+                      ),
+                  )}
+                  {filteredNotifications.length > 0 && (
+                    <>
+                      <div className="flex justify-center h-6">
+                        <Button
+                          className="bg-primary-red/50 py-0 h-6 w-full text-primary-white hover:bg-primary-red hover:shadow-primary-red hover:text-primary-white hover:font-bold transition duration-150 ease-out"
+                          onClick={clearNotifications}
+                        >
+                          Clear all
+                        </Button>
+                      </div>
+                    </>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
             </TooltipTrigger>
