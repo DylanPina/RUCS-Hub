@@ -1,4 +1,5 @@
-import { formatProfessorName } from "@/lib/utils";
+import { formatProfessorName, getProfessorRoute } from "@/lib/utils";
+import Link from "next/link";
 import React from "react";
 
 interface Props {
@@ -16,18 +17,27 @@ export default function NotificationVote({ vote, review }: Props) {
       </h2>
       <div className="flex space-x-2">
         <h3 className="font-bold">Course:</h3>
-        <p>
+        <Link
+          className="hover:underline"
+          href={`/course/${review.course.code}`}
+        >
           {review.course.code} - {review.course.name}
-        </p>
+        </Link>
       </div>
       <div className="flex space-x-2">
         <h3 className="font-bold">Professor:</h3>
-        <p>
-          {formatProfessorName(
-            review.professor.lastName,
-            review.professor.firstName,
+        <Link
+          className="hover:underline"
+          href={getProfessorRoute(
+            review.professor?.lastName ?? "",
+            review.professor?.firstName ?? "",
           )}
-        </p>
+        >
+          {formatProfessorName(
+            review.professor?.lastName ?? "",
+            review.professor?.firstName ?? "",
+          )}
+        </Link>
       </div>
       <div className="flex space-x-2">
         <h3 className="font-bold">Review:</h3>
