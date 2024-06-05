@@ -1,4 +1,8 @@
-import { formatProfessorName, getProfessorRoute } from "@/lib/utils";
+import {
+  formatProfessorName,
+  formatReviewDate,
+  getProfessorRoute,
+} from "@/lib/utils";
 import Link from "next/link";
 import React from "react";
 
@@ -18,7 +22,7 @@ export default function NotificationVote({
 
   return (
     <div
-      className={`flex flex-col p-1 text-primary-white text-xs ${
+      className={`flex flex-col py-1 px-2 text-primary-white text-xs ${
         !read && "bg-primary-white/10 rounded"
       } relative`}
     >
@@ -58,6 +62,9 @@ export default function NotificationVote({
         <h3 className="font-bold">Review:</h3>
         <p>{review.title}</p>
       </div>
+      <span className="text-[0.6rem] text-primary-white/50">
+        {formatReviewDate(notification.createdAt)}
+      </span>
     </div>
   );
 }
