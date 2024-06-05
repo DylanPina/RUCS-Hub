@@ -31,7 +31,7 @@ export default async function CourseBanner({ coursePage }: Props) {
       <div className="flex w-full lg:w-1/2 bg-primary-red border border-primary-white rounded overflow-hidden py-3 px-4">
         <div className="flex flex-col place-content-between min-w-fit space-y-3">
           <div className="flex flex-col space-y-1">
-            <h1 className="text-2xl max-md:text-xl text-primary-black font-black">
+            <h1 className="text-xl max-md:text-lg text-primary-black font-black">
               {courseCode} - {courseName}
             </h1>
             <div className="flex flex-col space-y-1">

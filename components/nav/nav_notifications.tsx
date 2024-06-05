@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "../shadcn/ui/button";
 import {
   Tooltip,
@@ -9,7 +9,7 @@ import {
   TooltipTrigger,
 } from "@/components/shadcn/ui/tooltip";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { MdNotifications } from "react-icons/md";
+import { MdNotifications, MdNotificationsActive } from "react-icons/md";
 import { Notification } from "@/lib/definitions/notification";
 import {
   DropdownMenu,
@@ -32,10 +32,18 @@ export default function NavNotification({ notifications }: Props) {
   const { user } = useUser();
   const [filteredNotifications, setFilteredNotifications] =
     useState(notifications);
+  const [newNotifications, setNewNotifications] = useState(
+    notifications.filter((notification) => !notification.read),
+  );
 
-  useEffect(() => {
-    readNotifications(notifications.map((notification) => notification.id));
-  }, [notifications]);
+  function handleDropdownChange(open: boolean) {
+    if (open) {
+      return;
+    }
+
+    readNotifications(newNotifications.map((notification) => notification.id));
+    setNewNotifications([]);
+  }
 
   function clearNotifications() {
     deleteNotifications(notifications.map((notification) => notification.id));
@@ -53,9 +61,18 @@ export default function NavNotification({ notifications }: Props) {
         <TooltipProvider delayDuration={100}>
           <Tooltip>
             <TooltipTrigger className="focus:outline-none">
-              <DropdownMenu>
-                <DropdownMenuTrigger className="flex align-center outline-none">
-                  <MdNotifications className="w-8 h-8 fill-primary-white cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in" />
+              <DropdownMenu onOpenChange={handleDropdownChange}>
+                <DropdownMenuTrigger className="relative flex align-center outline-none">
+                  {newNotifications.length !== 0 ? (
+                    <div className="relative">
+                      <MdNotificationsActive className="w-8 h-8 fill-primary-white cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in" />
+                      <span className="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-1 text-[0.625rem] font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-primary-red rounded-full">
+                        {newNotifications.length}
+                      </span>
+                    </div>
+                  ) : (
+                    <MdNotifications className="w-8 h-8 fill-primary-white cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in" />
+                  )}
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-primary-black text-primary-white">
                   <DropdownMenuLabel className="font-bold text-center">
