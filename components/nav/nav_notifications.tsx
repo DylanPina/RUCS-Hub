@@ -43,6 +43,11 @@ export default function NavNotification({ notifications }: Props) {
 
     readNotifications(newNotifications.map((notification) => notification.id));
     setNewNotifications([]);
+
+    for (const filteredNotification of filteredNotifications) {
+      filteredNotification.read = true;
+    }
+    setFilteredNotifications(filteredNotifications);
   }
 
   function clearNotifications() {
@@ -87,6 +92,7 @@ export default function NavNotification({ notifications }: Props) {
                       notification.vote && (
                         <>
                           <NotificationVote
+                            notification={notification}
                             vote={notification.vote}
                             review={notification.review}
                           />
@@ -98,7 +104,7 @@ export default function NavNotification({ notifications }: Props) {
                     <>
                       <div className="flex justify-center h-6">
                         <Button
-                          className="bg-primary-red/50 py-0 h-6 w-full text-primary-white hover:bg-primary-red hover:shadow-primary-red hover:text-primary-white hover:font-bold transition duration-150 ease-out"
+                          className="bg-primary-red/90 py-0 h-6 w-full text-primary-white hover:bg-primary-red hover:shadow-primary-red hover:text-primary-white hover:font-bold transition duration-150 ease-out"
                           onClick={clearNotifications}
                         >
                           Clear all

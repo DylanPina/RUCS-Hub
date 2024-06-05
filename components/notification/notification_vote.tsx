@@ -3,15 +3,30 @@ import Link from "next/link";
 import React from "react";
 
 interface Props {
+  notification: any;
   vote: any;
   review: any;
 }
 
-export default function NotificationVote({ vote, review }: Props) {
+export default function NotificationVote({
+  notification,
+  vote,
+  review,
+}: Props) {
   const { upvote } = vote;
+  const { read } = notification;
 
   return (
-    <div className="flex flex-col p-1 text-primary-white text-xs">
+    <div
+      className={`flex flex-col p-1 text-primary-white text-xs ${
+        !read && "bg-primary-white/10 rounded"
+      } relative`}
+    >
+      {!read && (
+        <span className="absolute top-0 right-2 text-md font-bold italic text-primary-white/50">
+          !
+        </span>
+      )}
       <h2 className="font-bold">
         Your review has been {upvote ? "upvoted" : "downvoted"}
       </h2>
