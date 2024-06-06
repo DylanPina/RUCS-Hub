@@ -114,7 +114,7 @@ export default function ReviewCardEditing({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col space-y-2 p-3 border border-primary-white rounded overflow-hidden">
+        <div className="flex flex-col space-y-2 p-3 border border-primary-red shadow shadow-primary-red rounded overflow-hidden">
           <FormField
             control={form.control}
             name="title"
