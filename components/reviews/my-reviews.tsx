@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/shadcn/ui/button";
 import ReviewCard from "./review-card";
 import ReviewsFilterProfessor from "./reviews_filter_professor";
+import { useSearchParams } from "next/navigation";
 
 interface Props {
   reviews: Review[];
@@ -25,9 +26,12 @@ interface Props {
 }
 
 export default function MyReviews({ reviews, user }: Props) {
+  const searchParams = useSearchParams();
   const [filteredReviews, setFilteredReviews] = useState(reviews);
   const [paginatedReviews, setPaginatedReviews] = useState(reviews);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState(
+    searchParams.get("searchTerm") ?? "",
+  );
   const [sortBy, setSortBy] = useState("newest");
   const [year, setYear] = useState("Any");
   const [years, setYears] = useState<any>([]);
@@ -35,7 +39,9 @@ export default function MyReviews({ reviews, user }: Props) {
   const [terms, setTerms] = useState<any>([]);
   const [course, setCourse] = useState("Any");
   const [courses, setCourses] = useState(["Any"]);
-  const [professor, setProfessor] = useState("Any");
+  const [professor, setProfessor] = useState(
+    searchParams.get("professor") ?? "Any",
+  );
   const [professors, setProfessors] = useState(["Any"]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [startIndex, setStartIndex] = useState(0);
@@ -214,6 +220,12 @@ export default function MyReviews({ reviews, user }: Props) {
     }
   }, [professor, reviews, course]);
 
+  useEffect(() => {
+    if (searchParams.get("searchTerm")) {
+      handleSearchTermChange(searchParams.get("searchTerm") ?? "");
+    }
+  }, [searchParams]);
+
   function noReviewsMessage() {
     if (reviews.length > 0 && !searchTerm) {
       const isAnyTermOrYear =
@@ -282,7 +294,8 @@ export default function MyReviews({ reviews, user }: Props) {
           <div className="flex-col space-y-3 max-lg:w-full lg:max-w-[300px] self-end">
             <ReviewsFilterSearch
               onFilterChange={handleSearchTermChange}
-              placeHolder="Filter reviews..."
+              placeHolder="Search reviews..."
+              defaultValue={searchParams.get("searchTerm") ?? ""}
             />
           </div>
           <div className="flex lg:self-end max-lg:flex-col lg:space-x-2 max-lg:space-y-3">

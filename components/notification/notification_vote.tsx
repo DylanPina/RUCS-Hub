@@ -31,7 +31,7 @@ export default function NotificationVote({
           !
         </span>
       )}
-      <h2 className="font-bold">
+      <h2 className="font-black">
         Your review has been {upvote ? "upvoted" : "downvoted"}
       </h2>
       <div className="flex space-x-2">
@@ -60,7 +60,12 @@ export default function NotificationVote({
       </div>
       <div className="flex space-x-2">
         <h3 className="font-bold">Review:</h3>
-        <p>{review.title}</p>
+        <Link
+          className="hover:underline"
+          href={`/my-reviews?searchTerm=${review.title}`}
+        >
+          {review.title}
+        </Link>
       </div>
       <span className="text-[0.6rem] text-primary-white/50">
         {formatReviewDate(notification.createdAt)}

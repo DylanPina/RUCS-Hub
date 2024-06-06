@@ -7,11 +7,13 @@ import { Input } from "@/components/shadcn/ui/input";
 interface ProfessorReviewsFilterSearchProps {
   onFilterChange: (searchTerm: string) => void;
   placeHolder: string;
+  defaultValue?: string;
 }
 
 export default function ReviewsFilterSearch({
   onFilterChange,
   placeHolder,
+  defaultValue,
 }: ProfessorReviewsFilterSearchProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -38,6 +40,7 @@ export default function ReviewsFilterSearch({
       />
       <Input
         placeholder={placeHolder}
+        defaultValue={defaultValue}
         onChange={(event) => onFilterChange(event.target.value)}
         ref={inputRef}
         className="pl-8 pr-8 focus:border-2 focus:border-primary-red hover:border-primary-red transition-all duration-150 ease-out hover:ease-in"
