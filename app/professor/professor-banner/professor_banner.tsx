@@ -12,12 +12,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/shadcn/ui/tooltip";
+import NotificationProfessorBanner from "@/components/notification/notification_professor_banner";
+import { getSession } from "@auth0/nextjs-auth0";
 
 interface Props {
   professor: ProfessorPage;
 }
 
 export default async function ProfessorBanner({ professor }: Props) {
+  const session = await getSession();
   const { firstName, lastName, overall, difficulty, reviews } = professor;
   const name = `${titleCase(firstName)} ${titleCase(lastName)}`;
   const totalOverallRatings = reviews.filter(
@@ -34,9 +37,15 @@ export default async function ProfessorBanner({ professor }: Props) {
   return (
     <div className="flex flex-col lg:flex-row justify-start lg:justify-between max-lg:space-y-3">
       <div className="flex w-full lg:w-1/2 bg-primary-red border border-primary-white rounded overflow-hidden py-3 px-4">
-        <div className="flex flex-col place-content-between min-w-fit space-y-3">
+        <div className="flex flex-col place-content-between min-w-fit w-full space-y-3 relative">
           <div className="flex flex-col space-y-1">
-            <h1 className="text-xl max-md:text-lg text-primary-black font-black">
+            {session?.user && (
+              <NotificationProfessorBanner
+                user={session?.user}
+                professor={professor}
+              />
+            )}
+            <h1 className="text-2xl max-md:text-xl text-primary-black font-black">
               {name}
             </h1>
             <div className="flex flex-col space-y-1">
