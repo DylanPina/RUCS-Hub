@@ -130,7 +130,7 @@ export default function ReviewCardEditing({
           <div className="flex flex-col space-y-1">
             <p className="text-sm max-sm:text-xs text-primary-white/50">
               <span className="font-semibold">Course:</span>{" "}
-              {review.course.name}
+              {review.course.code} - {review.course.name}
             </p>
             <p className="text-sm max-sm:text-xs text-primary-white/50">
               <span className="font-semibold">Professor: </span>

@@ -5,6 +5,7 @@ import {
 } from "@/lib/utils";
 import Link from "next/link";
 import React from "react";
+import { BiDownvote, BiUpvote } from "react-icons/bi";
 
 interface Props {
   notification: any;
@@ -27,15 +28,22 @@ export default function NotificationVote({
       } relative`}
     >
       {!read && (
-        <span className="absolute top-0 right-2 text-md font-bold italic text-primary-white/50">
+        <span className="absolute top-0 right-2 text-md font-semibold italic text-primary-white/50">
           !
         </span>
       )}
-      <h2 className="font-black">
-        Your review has been {upvote ? "upvoted" : "downvoted"}
-      </h2>
+      <div className="flex space-x-0.5">
+        {upvote ? (
+          <BiUpvote className="mt-0.5" />
+        ) : (
+          <BiDownvote className="mt-0.5" />
+        )}
+        <h3 className="font-black">
+          Your review has been {upvote ? "upvoted" : "downvoted"}
+        </h3>
+      </div>
       <div className="flex space-x-2">
-        <h3 className="font-bold">Course:</h3>
+        <h3 className="font-semibold">Course:</h3>
         <Link
           className="hover:underline"
           href={`/course/${review.course.code}`}
@@ -44,7 +52,7 @@ export default function NotificationVote({
         </Link>
       </div>
       <div className="flex space-x-2">
-        <h3 className="font-bold">Professor:</h3>
+        <h3 className="font-semibold">Professor:</h3>
         <Link
           className="hover:underline"
           href={getProfessorRoute(
@@ -59,7 +67,7 @@ export default function NotificationVote({
         </Link>
       </div>
       <div className="flex space-x-2">
-        <h3 className="font-bold">Review:</h3>
+        <h3 className="font-semibold">Review:</h3>
         <Link
           className="hover:underline"
           href={`/my-reviews?searchTerm=${review.title}`}
