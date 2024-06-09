@@ -1,8 +1,14 @@
 "use server";
 
-import { notifySubscribersReviewVote } from "../data/notification";
+import {
+  notifySubscribersCourseReviewCreated,
+  notifySubscribersProfessorReviewCreated,
+} from "../data/notification";
 import { downvoteReview, upvoteReview } from "../data/review";
-import { createSubscription } from "../data/subscription";
+import {
+  createSubscription,
+  getCourseSubscriptions,
+} from "../data/subscription";
 import { ReviewForm } from "../definitions/review";
 import { prisma } from "@/prisma/prisma";
 
@@ -33,12 +39,13 @@ export default async function createReview(
     },
   });
 
-  const professorId = professor?.id;
+  const professorId = professor?.id || -1;
+  const courseCode = Number(reviewForm.course.split(" ")[0]);
 
   const review = await prisma.review.create({
     data: {
       userId,
-      courseCode: Number(reviewForm.course.split(" ")[0]),
+      courseCode,
       professorId: professorId,
       year: Number(reviewForm.year),
       semester: Number(reviewForm.term),
@@ -52,7 +59,16 @@ export default async function createReview(
       lectureRating: Number(reviewForm.lectureRating),
     },
   });
+
+  if (!review) {
+    throw new Error("Failed to create review");
+  }
+
   await createSubscription(userId, undefined, undefined, review.id);
+
+  const { id: reviewId } = review;
+  await notifySubscribersCourseReviewCreated(courseCode, reviewId);
+  await notifySubscribersProfessorReviewCreated(professorId, reviewId);
 }
 
 /**

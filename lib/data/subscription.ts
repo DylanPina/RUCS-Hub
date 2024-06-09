@@ -24,9 +24,9 @@ export async function createSubscription(
     );
   }
 
-  if ([courseCode, professorId, reviewId].filter(Boolean).length !== 1) {
+  if ([courseCode, professorId].filter(Boolean).length > 1) {
     throw new Error(
-      "Must provide exactly one of courseCode, professorId, or reviewId to create subscription",
+      "Cannot provide both courseCode and professorId to create notification",
     );
   }
 
@@ -53,6 +53,23 @@ export async function deleteSubscription(subscriptionId: number) {
   return prisma.subscription.delete({
     where: {
       id: subscriptionId,
+    },
+  });
+}
+
+/**
+ * Gets all users subscribed to a course
+ *
+ * @courseId - ID of the course
+ */
+export async function getCourseSubscriptions(courseId: number) {
+  if (!courseId) {
+    throw new Error("Must provide courseId to get subscriptions");
+  }
+
+  return await prisma.subscription.findMany({
+    where: {
+      courseCode: courseId,
     },
   });
 }

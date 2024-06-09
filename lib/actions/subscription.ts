@@ -47,7 +47,7 @@ export async function createProfessorSubscription(
     throw new Error("User is already subscribed to this professor");
   }
 
-  await createSubscription(userId, undefined, professorId);
+  await createSubscription(userId, undefined, professorId, undefined);
 }
 
 /**
@@ -74,7 +74,7 @@ export async function createCourseSubscription(
     throw new Error("User is already subscribed to this course");
   }
 
-  await createSubscription(userId, courseCode);
+  await createSubscription(userId, courseCode, undefined, undefined);
 }
 
 /**

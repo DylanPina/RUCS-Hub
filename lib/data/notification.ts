@@ -1,4 +1,5 @@
 import { prisma } from "@/prisma/prisma";
+import { getCourseSubscriptions } from "./subscription";
 
 /**
  * Gets notifications for a user
@@ -18,6 +19,11 @@ export async function getNotifications(userId: string) {
         },
       },
       vote: true,
+      course: true,
+      professor: true,
+    },
+    orderBy: {
+      createdAt: "desc",
     },
   });
 }
@@ -48,9 +54,9 @@ export async function createNotification(
     );
   }
 
-  if ([courseCode, professorId, reviewId].filter(Boolean).length !== 1) {
+  if ([courseCode, professorId].filter(Boolean).length !== 1) {
     throw new Error(
-      "Must provide exactly one of courseCode, professorId, or reviewId to create subscription",
+      "Cannot provide both courseCode and professorId to create notification",
     );
   }
 
@@ -138,6 +144,128 @@ export async function notifySubscribersReviewVoteDeleted(
       where: {
         recipientId: subscriber.userId,
         voteId: voteId,
+      },
+    });
+
+    if (notification) {
+      await deleteNotification(notification.id);
+    }
+  }
+}
+
+/**
+ * Notifies subscribers of a course review that has been created
+ *
+ * @param courseCode - Course code of the course
+ * @param reviewId - ID of the review
+ */
+export async function notifySubscribersCourseReviewCreated(
+  courseCode: number,
+  reviewId: number,
+) {
+  const subscribers = await getCourseSubscriptions(courseCode);
+
+  if (subscribers.length === 0) {
+    return;
+  }
+
+  for (const subscriber of subscribers) {
+    await createNotification(
+      subscriber.userId,
+      courseCode,
+      undefined,
+      reviewId,
+      undefined,
+    );
+  }
+}
+
+/**
+ * Notifies subscribers of a course review that has been deleted
+ *
+ * @param courseCode - Course code of the course
+ * @param reviewId - ID of the review
+ */
+export async function notifySubscribersCourseReviewDeleted(
+  courseCode: number,
+  reviewId: number,
+) {
+  const subscribers = await getCourseSubscriptions(courseCode);
+
+  if (subscribers.length === 0) {
+    return;
+  }
+
+  for (const subscriber of subscribers) {
+    const notification = await prisma.notification.findFirst({
+      where: {
+        recipientId: subscriber.userId,
+        reviewId: reviewId,
+      },
+    });
+
+    if (notification) {
+      await deleteNotification(notification.id);
+    }
+  }
+}
+
+/**
+ * Notifies subscribers of a professor review that has been created
+ *
+ * @param professorId - ID of the professor
+ * @param reviewId - ID of the review
+ */
+export async function notifySubscribersProfessorReviewCreated(
+  professorId: number,
+  reviewId: number,
+) {
+  const subscribers = await prisma.subscription.findMany({
+    where: {
+      professorId: professorId,
+    },
+  });
+
+  if (subscribers.length === 0) {
+    return;
+  }
+
+  for (const subscriber of subscribers) {
+    await createNotification(
+      subscriber.userId,
+      undefined,
+      professorId,
+      reviewId,
+      undefined,
+    );
+  }
+}
+
+/**
+ * Notifies subscribers of a professor review that has been deleted
+ *
+ * @param professorId - ID of the professor
+ * @param reviewId - ID of the review
+ */
+export async function notifySubscribersProfessorReviewDeleted(
+  professorId: number,
+  reviewId: number,
+) {
+  const subscribers = await prisma.subscription.findMany({
+    where: {
+      professorId: professorId,
+    },
+  });
+
+  if (subscribers.length === 0) {
+    return;
+  }
+
+  for (const subscriber of subscribers) {
+    const notification = await prisma.notification.findFirst({
+      where: {
+        recipientId: subscriber.userId,
+        reviewId: reviewId,
       },
     });
 

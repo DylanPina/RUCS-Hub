@@ -10,7 +10,6 @@ import {
 } from "@/components/shadcn/ui/tooltip";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { MdNotifications, MdNotificationsActive } from "react-icons/md";
-import { Notification } from "@/lib/definitions/notification";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,6 +22,7 @@ import {
   deleteNotifications,
   readNotifications,
 } from "@/lib/actions/notification";
+import NotificationProfessor from "../notification/notification_professor";
 
 interface Props {
   notifications: any[];
@@ -85,18 +85,26 @@ export default function NavNotification({ notifications }: Props) {
                 {filteredNotifications.length === 0 && (
                   <DropdownMenuLabel>No notifications...</DropdownMenuLabel>
                 )}
-                {filteredNotifications.map(
-                  (notification: Notification) =>
-                    notification.vote && (
-                      <>
-                        <NotificationVote
-                          notification={notification}
-                          vote={notification.vote}
-                          review={notification.review}
-                        />
-                        <DropdownMenuSeparator />
-                      </>
-                    ),
+                {filteredNotifications.map((notification: any) =>
+                  notification.vote ? (
+                    <>
+                      <NotificationVote
+                        notification={notification}
+                        vote={notification.vote}
+                        review={notification.review}
+                      />
+                      <DropdownMenuSeparator />
+                    </>
+                  ) : notification.professor ? (
+                    <>
+                      <NotificationProfessor
+                        notification={notification}
+                        professor={notification.professor}
+                        review={notification.review}
+                      />
+                      <DropdownMenuSeparator />
+                    </>
+                  ) : null,
                 )}
                 {filteredNotifications.length > 0 && (
                   <>
