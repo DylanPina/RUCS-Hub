@@ -54,7 +54,7 @@ export async function createNotification(
     );
   }
 
-  if ([courseCode, professorId].filter(Boolean).length !== 1) {
+  if ([courseCode, professorId].filter(Boolean).length > 1) {
     throw new Error(
       "Cannot provide both courseCode and professorId to create notification",
     );

@@ -23,6 +23,7 @@ import {
   readNotifications,
 } from "@/lib/actions/notification";
 import NotificationProfessor from "../notification/notification_professor";
+import NotificationCourse from "../notification/notification_course";
 
 interface Props {
   notifications: any[];
@@ -104,7 +105,18 @@ export default function NavNotification({ notifications }: Props) {
                       />
                       <DropdownMenuSeparator />
                     </>
-                  ) : null,
+                  ) : (
+                    notification.course && (
+                      <>
+                        <NotificationCourse
+                          notification={notification}
+                          coursePage={notification.course}
+                          review={notification.review}
+                        />
+                        <DropdownMenuSeparator />
+                      </>
+                    )
+                  ),
                 )}
                 {filteredNotifications.length > 0 && (
                   <>

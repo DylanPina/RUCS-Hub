@@ -9,12 +9,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/shadcn/ui/tooltip";
+import { getSession } from "@auth0/nextjs-auth0";
+import NotificationCourseBanner from "../notification/notification_course_banner";
 
 interface Props {
   coursePage: CoursePage;
 }
 
 export default async function CourseBanner({ coursePage }: Props) {
+  const session = await getSession();
   const { courseCode, courseName, rating, difficulty, workload, reviews } =
     coursePage;
 
@@ -29,8 +32,14 @@ export default async function CourseBanner({ coursePage }: Props) {
   return (
     <div className="flex flex-col lg:flex-row justify-start lg:justify-between max-lg:space-y-3">
       <div className="flex w-full lg:w-1/2 bg-primary-red border border-primary-white rounded overflow-hidden py-3 px-4">
-        <div className="flex flex-col place-content-between min-w-fit space-y-3">
+        <div className="flex flex-col place-content-between min-w-fit w-full space-y-3 relative">
           <div className="flex flex-col space-y-1">
+            {session?.user && (
+              <NotificationCourseBanner
+                user={session?.user}
+                coursePage={coursePage}
+              />
+            )}
             <h1 className="text-xl max-md:text-lg text-primary-black font-black">
               {courseCode} - {courseName}
             </h1>
