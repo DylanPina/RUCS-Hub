@@ -24,6 +24,8 @@ import {
 } from "@/lib/actions/notification";
 import NotificationProfessor from "../notification/notification_professor";
 import NotificationCourse from "../notification/notification_course";
+import { MdEditNotifications } from "react-icons/md";
+import { useRouter } from "next/navigation";
 
 interface Props {
   notifications: any[];
@@ -31,6 +33,7 @@ interface Props {
 
 export default function NavNotification({ notifications }: Props) {
   const { user } = useUser();
+  const router = useRouter();
   const [filteredNotifications, setFilteredNotifications] =
     useState(notifications);
   const [newNotifications, setNewNotifications] = useState(
@@ -79,8 +82,23 @@ export default function NavNotification({ notifications }: Props) {
                 alignOffset={50}
                 className="bg-primary-black text-primary-white"
               >
-                <DropdownMenuLabel className="font-bold text-center">
-                  Notifications
+                <DropdownMenuLabel className="font-bold text-center w-full">
+                  <div className="flex justify-center space-x-1">
+                    <h2>Notifications</h2>
+                    <TooltipProvider delayDuration={100}>
+                      <Tooltip>
+                        <TooltipTrigger className="focus:outline-none">
+                          <MdEditNotifications
+                            onClick={() => router.push("/edit-notifications")}
+                            className="w-[1.1rem] h-[1.1rem] justify-self-end fill-primary-white cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in"
+                          />
+                        </TooltipTrigger>
+                        <TooltipContent className="bg-primary-red">
+                          Edit notifications
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {filteredNotifications.length === 0 && (
