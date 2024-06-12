@@ -23,7 +23,7 @@ export default function ReviewsFilterTerm({
   const termsSet = Array.from(new Set(terms));
 
   return (
-    <div className="flex flex-col space-y-2">
+    <div className="flex flex-col space-y-2 w-full">
       <label className="text-primary-white text-xs">Term</label>
       <Select defaultValue={selectedTerm} onValueChange={onTermChange}>
         <SelectTrigger>

@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/components/shadcn/ui/select";
 
-interface ReviewSortByProps {
+interface Props {
   selectedValue: string;
   onSelectChange: (value: string) => void;
 }
@@ -17,9 +17,9 @@ interface ReviewSortByProps {
 export default function ReviewsSortBy({
   selectedValue,
   onSelectChange,
-}: ReviewSortByProps) {
+}: Props) {
   return (
-    <div className="flex flex-col space-y-2">
+    <div className="flex flex-col space-y-2 w-full">
       <label className="text-primary-white text-xs">Sort By</label>
       <Select defaultValue={selectedValue} onValueChange={onSelectChange}>
         <SelectTrigger>

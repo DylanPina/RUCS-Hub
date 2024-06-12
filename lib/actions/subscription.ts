@@ -17,6 +17,17 @@ export async function getSubscriptions(userId: string) {
     where: {
       userId: userId,
     },
+    include: {
+      course: true,
+      professor: true,
+      review: {
+        include: {
+          course: true,
+          professor: true,
+          votes: true,
+        },
+      },
+    },
   });
 }
 

@@ -311,7 +311,7 @@ export default function MyReviews({ reviews, user }: Props) {
                 onProfessorChange={setProfessor}
               />
             </div>
-            <div className="flex space-x-2">
+            <div className="flex space-x-2 w-full">
               <ReviewsFilterYear
                 selectedYear={year}
                 onYearChange={setYear}

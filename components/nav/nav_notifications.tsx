@@ -83,22 +83,7 @@ export default function NavNotification({ notifications }: Props) {
                 className="bg-primary-black text-primary-white"
               >
                 <DropdownMenuLabel className="font-bold text-center w-full">
-                  <div className="flex justify-center space-x-1">
-                    <h2>Notifications</h2>
-                    <TooltipProvider delayDuration={100}>
-                      <Tooltip>
-                        <TooltipTrigger className="focus:outline-none">
-                          <MdEditNotifications
-                            onClick={() => router.push("/edit-notifications")}
-                            className="w-[1.1rem] h-[1.1rem] justify-self-end fill-primary-white cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in"
-                          />
-                        </TooltipTrigger>
-                        <TooltipContent className="bg-primary-red">
-                          Edit notifications
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
+                  Notifications
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {filteredNotifications.length === 0 && (

@@ -16,5 +16,5 @@ export default withMiddlewareAuthRequired(async function middleware(req) {
 });
 
 export const config = {
-  matcher: ["/add-review", "/my-reviews", "/profile"],
+  matcher: ["/add-review", "/my-reviews", "/profile", "/edit-notifications"],
 };

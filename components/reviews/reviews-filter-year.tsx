@@ -23,7 +23,7 @@ export default function ReviewsFilterYear({
   const yearsSet = Array.from(new Set(years));
 
   return (
-    <div className="flex flex-col space-y-2">
+    <div className="flex flex-col space-y-2 w-full">
       <label className="text-primary-white text-xs">Year</label>
       <Select
         defaultValue={selectedYear.toString()}

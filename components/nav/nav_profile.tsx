@@ -21,6 +21,7 @@ import {
 } from "@/components/shadcn/ui/dropdown-menu";
 import { BiSolidUser } from "react-icons/bi";
 import { MdLogout, MdRateReview } from "react-icons/md";
+import { FaStar } from "react-icons/fa";
 
 export default function NavProfile() {
   const { user } = useUser();
@@ -87,6 +88,15 @@ export default function NavProfile() {
                     <div className="flex items-center space-x-2">
                       <MdRateReview />
                       <h3>My Reviews</h3>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => router.push("/subscriptions")}
+                    className="cursor-pointer"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <FaStar />
+                      <h3>Subscriptions</h3>
                     </div>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
