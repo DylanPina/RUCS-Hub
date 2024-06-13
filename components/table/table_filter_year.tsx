@@ -15,7 +15,7 @@ interface Props {
   onYearChange: (value: string) => void;
 }
 
-export default function ReviewsFilterYear({
+export default function TableFilterYear({
   years,
   selectedYear,
   onYearChange,

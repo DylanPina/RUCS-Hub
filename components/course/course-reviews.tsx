@@ -3,12 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { formatProfessorName, getTermNameByValue } from "@/lib/utils";
 import { Review } from "@/lib/definitions/review";
-import ReviewsSortBy from "@/components/reviews/reviews-sort-by";
-import ReviewsFilterTerm from "@/components/reviews/reviews-filter-term";
-import ReviewsFilterYear from "@/components/reviews/reviews-filter-year";
-import ReviewsFilterSearch from "@/components/reviews/reviews-filter-search";
 import ReviewCard from "@/components/reviews/review-card";
-import ReviewsFilterProfessor from "../reviews/reviews_filter_professor";
 import { Button } from "../shadcn/ui/button";
 import {
   Select,
@@ -18,6 +13,11 @@ import {
   SelectValue,
 } from "@/components/shadcn/ui/select";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import TableSortBy from "../table/table_sort_by";
+import TableFilterYear from "../table/table_filter_year";
+import TableFilterTerm from "../table/table_filter_term";
+import TableFilterProfessor from "../table/table_filter_professor";
+import TableFilterSearch from "../table/table_filter_search";
 
 interface ProfessorReviewProps {
   reviews: Review[];
@@ -225,32 +225,39 @@ export default function CourseReviews({ reviews }: ProfessorReviewProps) {
             <h3 className="text-lg text-primary-white font-bold mt-auto">
               Course Reviews:
             </h3>
-            <ReviewsFilterSearch
-              onFilterChange={handleSearchTermChange}
+            <TableFilterSearch
+              filter={searchTerm}
+              setFilter={handleSearchTermChange}
               placeHolder="Filter reviews..."
             />
           </div>
           <div className="flex lg:self-end max-lg:flex-col lg:space-x-2 max-lg:space-y-3">
             <div className="lg:w-full">
-              <ReviewsFilterProfessor
+              <TableFilterProfessor
                 professors={professors}
                 selectedProfessor={professor}
                 onProfessorChange={setProfessor}
               />
             </div>
             <div className="flex space-x-2">
-              <ReviewsFilterYear
+              <TableFilterYear
                 selectedYear={year}
                 onYearChange={setYear}
                 years={years}
               />
-              <ReviewsFilterTerm
+              <TableFilterTerm
                 selectedTerm={term}
                 onTermChange={setTerm}
                 terms={terms}
               />
-              <ReviewsSortBy
+              <TableSortBy
                 selectedValue={sortBy}
+                options={[
+                  ["newest", "Newest"],
+                  ["oldest", "Oldest"],
+                  ["upvote", "Upvote"],
+                  ["downvote", "Downvote"],
+                ]}
                 onSelectChange={(value) => setSortBy(value)}
               />
             </div>

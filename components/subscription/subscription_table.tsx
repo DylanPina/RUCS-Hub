@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import ReviewsFilterCourse from "../reviews/reviews-filter-course";
-import ReviewsFilterProfessor from "../reviews/reviews_filter_professor";
-import ReviewsSortBy from "../reviews/reviews-sort-by";
-import ReviewsFilterSearch from "../reviews/reviews-filter-search";
+import TableFilterCourse from "../table/table_filter_course";
+import TableFilterProfessor from "../table/table_filter_professor";
+import TableFilterSearch from "../table/table_filter_search";
 import SubscriptionCard from "./subscription_card";
 import { formatProfessorName } from "@/lib/utils";
 import { Button } from "../shadcn/ui/button";
@@ -15,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn/ui/select";
+import TableSortBy from "../table/table_sort_by";
 
 interface Props {
   user: any;
@@ -22,11 +22,11 @@ interface Props {
 }
 
 export default function SubscriptionsTable({ user, subscriptions }: Props) {
+  const [searchTerm, setSearchTerm] = useState("");
   const [filteredSubscriptions, setFilteredSubscriptions] = useState<any[]>([]);
   const [paginatedSubscriptions, setPaginatedSubscriptions] = useState<any[]>(
     [],
   );
-  const [searchTerm, setSearchTerm] = useState("");
   const [course, setCourse] = useState("Any");
   const [courses, setCourses] = useState(["Any"]);
   const [professor, setProfessor] = useState("Any");
@@ -98,7 +98,6 @@ export default function SubscriptionsTable({ user, subscriptions }: Props) {
             .map((subscription: any) => subscription.review.course.name),
         ),
       );
-      console.log(`Filtered courses: ${filteredCourses}`);
       setCourses(["Any"].concat(filteredCourses));
       if (!filteredCourses.includes(course)) {
         setCourse("Any");
@@ -249,28 +248,32 @@ export default function SubscriptionsTable({ user, subscriptions }: Props) {
       <div className="flex flex-col max-sm:space-y-3">
         <div className="flex max-lg:flex-col lg:space-x-2 max-lg:space-y-3 place-content-between w-full space-y-1">
           <div className="flex-col space-y-3 w-full lg:max-w-[275px] self-end">
-            <ReviewsFilterSearch
-              onFilterChange={handleSearchTermChange}
+            <TableFilterSearch
+              filter={searchTerm}
+              setFilter={handleSearchTermChange}
               placeHolder="Search subscriptions..."
-              defaultValue=""
             />
           </div>
           <div className="flex lg:self-end max-lg:flex-col lg:space-x-2 max-lg:space-y-3">
             <div className="flex lg:space-x-2 max-lg:space-y-3 max-lg:flex-col max-lg:w-full">
-              <ReviewsFilterCourse
+              <TableFilterCourse
                 courses={courses}
                 selectedCourse={course}
                 onCourseChange={setCourse}
               />
-              <ReviewsFilterProfessor
+              <TableFilterProfessor
                 professors={professors}
                 selectedProfessor={professor}
                 onProfessorChange={setProfessor}
               />
             </div>
             <div className="flex max-lg:w-full">
-              <ReviewsSortBy
+              <TableSortBy
                 selectedValue={sortBy}
+                options={[
+                  ["newest", "Newest"],
+                  ["oldest", "Oldest"],
+                ]}
                 onSelectChange={(value) => setSortBy(value)}
               />
             </div>

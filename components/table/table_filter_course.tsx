@@ -9,17 +9,17 @@ import {
   SelectValue,
 } from "@/components/shadcn/ui/select";
 
-interface ReviewsFilterCourseProps {
+interface Props {
   courses: string[];
   selectedCourse: string;
   onCourseChange: (value: string) => void;
 }
 
-export default function ReviewsFilterCourse({
+export default function TableFilterCourse({
   courses,
   selectedCourse,
   onCourseChange,
-}: ReviewsFilterCourseProps) {
+}: Props) {
   return (
     <div className="flex flex-col space-y-2">
       <label className="text-primary-white text-xs">Course</label>

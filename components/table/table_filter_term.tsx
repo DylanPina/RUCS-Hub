@@ -15,7 +15,7 @@ interface Props {
   onTermChange: (value: string) => void;
 }
 
-export default function ReviewsFilterTerm({
+export default function TableFilterTerm({
   terms,
   selectedTerm,
   onTermChange,

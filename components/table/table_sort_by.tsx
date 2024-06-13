@@ -11,12 +11,14 @@ import {
 
 interface Props {
   selectedValue: string;
+  options: [string, string][];
   onSelectChange: (value: string) => void;
 }
 
-export default function ReviewsSortBy({
+export default function TableSortBy({
   selectedValue,
   onSelectChange,
+  options,
 }: Props) {
   return (
     <div className="flex flex-col space-y-2 w-full">
@@ -26,10 +28,11 @@ export default function ReviewsSortBy({
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="newest">Newest</SelectItem>
-          <SelectItem value="oldest">Oldest</SelectItem>
-          <SelectItem value="upvotes">Upvotes</SelectItem>
-          <SelectItem value="downvotes">Downvotes</SelectItem>
+          {options.map(([key, label]) => (
+            <SelectItem key={key} value={key}>
+              {label}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
     </div>
