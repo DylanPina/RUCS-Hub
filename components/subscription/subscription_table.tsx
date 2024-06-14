@@ -141,11 +141,16 @@ export default function SubscriptionsTable({ user, subscriptions }: Props) {
         new Set(
           subscriptions.map(
             (subscription: any) =>
-              subscription.review &&
-              formatProfessorName(
-                subscription.review.professor.lastName,
-                subscription.review.professor.firstName,
-              ),
+              (subscription.review &&
+                formatProfessorName(
+                  subscription.review.professor.lastName,
+                  subscription.review.professor.firstName,
+                )) ||
+              (subscription.professor &&
+                formatProfessorName(
+                  subscription.professor.lastName,
+                  subscription.professor.firstName,
+                )),
           ),
         ),
       );

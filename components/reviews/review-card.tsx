@@ -126,7 +126,7 @@ export default function ReviewCard({ review, user }: ReviewCardProps) {
             )}
           </li>
         </ul>
-        <ul className="flex flex-col space-y-1 text-sm max-sm:text-xs ">
+        <ul className="flex flex-col space-y-1 text-sm max-sm:text-xs">
           <li>
             <span className="text-primary-white font-semibold">
               Professor Rating:

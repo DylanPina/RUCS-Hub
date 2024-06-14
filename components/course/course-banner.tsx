@@ -51,10 +51,10 @@ export default async function CourseBanner({ coursePage }: Props) {
                 <h3 className="text-md max-md:text-sm text-primary-white font-bold">
                   Rating:{" "}
                   <span className="font-normal">{rating.toFixed(1)}</span>
-                  <span className="text-xs text-primary-white/50 font-normal">
+                  <span className="text-xs text-primary-white/80 font-normal">
                     /10
                   </span>{" "}
-                  <span className="text-xs text-primary-white/50 font-normal">
+                  <span className="text-xs text-primary-white/80 font-normal">
                     based on {reviews.length}{" "}
                     {reviews.length === 1 ? "review" : "reviews"}
                   </span>
@@ -68,10 +68,10 @@ export default async function CourseBanner({ coursePage }: Props) {
                 <h3 className="text-md max-md:text-sm text-primary-white font-bold">
                   Difficulty:{" "}
                   <span className="font-normal">{difficulty.toFixed(1)}</span>
-                  <span className="text-xs text-primary-white/50 font-normal">
+                  <span className="text-xs text-primary-white/80 font-normal">
                     /10
                   </span>{" "}
-                  <span className="text-xs text-primary-white/50 font-normal">
+                  <span className="text-xs text-primary-white/80 font-normal">
                     based on {totalDifficultyRatings}{" "}
                     {reviews.length === 1 ? "review" : "reviews"}
                   </span>
@@ -87,7 +87,7 @@ export default async function CourseBanner({ coursePage }: Props) {
                   <span className="font-normal">
                     {workload.toFixed(1)} {workload > 1 ? "hrs" : "hr"} per week
                   </span>
-                  <span className="text-xs text-primary-white/50 font-normal">
+                  <span className="text-xs text-primary-white/80 font-normal">
                     {" "}
                     based on {totalWorkloadRatings}{" "}
                     {reviews.length === 1 ? "review" : "reviews"}

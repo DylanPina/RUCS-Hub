@@ -156,7 +156,7 @@ export async function createProfessorNameIdMap(): Promise<Map<string, number>> {
  * @param professor - Professor we are interested
  * @return - Overall ratings for that professor
  */
-function getProfessorPageRatings(professor: any): any {
+export function getProfessorPageRatings(professor: any): any {
   const reviews: Review[] = professor.reviews ?? [];
 
   const reviewsWithOverallRating: Review[] = reviews.filter(

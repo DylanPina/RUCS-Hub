@@ -56,8 +56,10 @@ export default async function ProfessorBanner({ professor }: Props) {
                 <h3 className="text-md max-md:text-sm text-primary-white font-bold">
                   Overall:{" "}
                   <span className="font-normal">{overall.toFixed(1)}</span>
-                  <span className="font-normal">/10</span>{" "}
-                  <span className="text-xs text-primary-white/50">
+                  <span className="text-xs text-primary-white/80 font-normal">
+                    /10
+                  </span>{" "}
+                  <span className="text-xs text-primary-white/80 font-normal">
                     based on {totalOverallRatings}{" "}
                     {reviews.length === 1 ? "review" : "reviews"}
                   </span>
@@ -71,8 +73,10 @@ export default async function ProfessorBanner({ professor }: Props) {
                 <h3 className="text-md max-md:text-sm text-primary-white font-bold">
                   Difficulty:{" "}
                   <span className="font-normal">{difficulty.toFixed(1)}</span>
-                  <span className="font-normal">/10</span>{" "}
-                  <span className="text-xs text-primary-white/50">
+                  <span className="text-xs text-primary-white/70 font-normal">
+                    /10
+                  </span>{" "}
+                  <span className="text-xs text-primary-white/70 font-normal">
                     based on {totalDifficultyRatings}{" "}
                     {reviews.length === 1 ? "review" : "reviews"}
                   </span>

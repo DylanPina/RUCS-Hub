@@ -1,7 +1,6 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ReviewCard from "../reviews/review-card";
+import SubscriptionCardProfessor from "./subscription_card_professor";
 
 interface Props {
   user: any;
@@ -9,15 +8,13 @@ interface Props {
 }
 
 export default function SubscriptionCard({ user, subscription }: Props) {
-  const [review, setReview] = useState<any>();
-
-  useEffect(() => {
-    setReview(subscription.review);
-  }, [subscription]);
+  const { review, professor, course } = subscription;
 
   return review ? (
     <ReviewCard user={user} review={review} />
+  ) : professor ? (
+    <SubscriptionCardProfessor professor={professor} />
   ) : (
-    <span>Fuck off</span>
+    course && null
   );
 }

@@ -2,6 +2,7 @@
 
 import { prisma } from "@/prisma/prisma";
 import { createSubscription, deleteSubscription } from "../data/subscription";
+import { getProfessorPageRatings } from "../data/professor";
 
 /**
  * Gets all subscriptions for a user
@@ -29,6 +30,52 @@ export async function getSubscriptions(userId: string) {
       },
     },
   });
+}
+
+/**
+ * Gets all subscription card data to be displayed on the subscription page
+ *
+ * @param userId - The ID of the user
+ */
+export async function getSubscriptionCards(userId: string) {
+  const subscriptions = await prisma.subscription.findMany({
+    where: {
+      userId: userId,
+    },
+    include: {
+      course: true,
+      professor: {
+        include: {
+          reviews: {
+            include: {
+              course: true,
+              professor: true,
+              votes: true,
+            },
+          },
+        },
+      },
+      review: {
+        include: {
+          course: true,
+          professor: true,
+          votes: true,
+        },
+      },
+    },
+  });
+
+  return await Promise.all(
+    subscriptions.map(async (subscription) => {
+      if (subscription.professor) {
+        const updatedProfessor = await getProfessorPageRatings(
+          subscription.professor,
+        );
+        return { ...subscription, professor: updatedProfessor };
+      }
+      return subscription;
+    }),
+  );
 }
 
 /**

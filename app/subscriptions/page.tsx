@@ -1,12 +1,12 @@
 import SubscriptionTable from "@/components/subscription/subscription_table";
-import { getSubscriptions } from "@/lib/actions/subscription";
+import { getSubscriptionCards } from "@/lib/actions/subscription";
 import { hashEmailAddress } from "@/lib/utils";
 import { getSession } from "@auth0/nextjs-auth0";
 import React from "react";
 
 export default async function Page() {
   const session = await getSession();
-  const subscriptions = await getSubscriptions(
+  const subscriptions = await getSubscriptionCards(
     hashEmailAddress(session?.user.email),
   );
 
