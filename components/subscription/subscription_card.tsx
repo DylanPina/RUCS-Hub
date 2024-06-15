@@ -1,6 +1,7 @@
 import React from "react";
 import ReviewCard from "../reviews/review-card";
 import SubscriptionCardProfessor from "./subscription_card_professor";
+import SubscriptionCardCourse from "./subscription_card_course";
 
 interface Props {
   user: any;
@@ -15,6 +16,6 @@ export default function SubscriptionCard({ user, subscription }: Props) {
   ) : professor ? (
     <SubscriptionCardProfessor professor={professor} />
   ) : (
-    course && null
+    course && <SubscriptionCardCourse course={course} />
   );
 }

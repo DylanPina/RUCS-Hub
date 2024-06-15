@@ -111,7 +111,7 @@ export default function CourseTable({ data }: CourseTableProps) {
                   data-state={row.getIsSelected() && "selected"}
                   className="cursor-pointer hover:bg-primary-red/20 hover:font-bold"
                   onClick={() =>
-                    router.push(`/course/${row.original.courseCode}`)
+                    router.push(`/course/${row.original.code}`)
                   }
                 >
                   {row.getVisibleCells().map((cell) => (

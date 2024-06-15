@@ -5,10 +5,7 @@ import {
   notifySubscribersProfessorReviewCreated,
 } from "../data/notification";
 import { downvoteReview, upvoteReview } from "../data/review";
-import {
-  createSubscription,
-  getCourseSubscriptions,
-} from "../data/subscription";
+import { createSubscription } from "../data/subscription";
 import { ReviewForm } from "../definitions/review";
 import { prisma } from "@/prisma/prisma";
 
@@ -40,12 +37,12 @@ export default async function createReview(
   });
 
   const professorId = professor?.id || -1;
-  const courseCode = Number(reviewForm.course.split(" ")[0]);
+  const code = Number(reviewForm.course.split(" ")[0]);
 
   const review = await prisma.review.create({
     data: {
       userId,
-      courseCode,
+      courseCode: code,
       professorId: professorId,
       year: Number(reviewForm.year),
       semester: Number(reviewForm.term),
@@ -67,7 +64,7 @@ export default async function createReview(
   await createSubscription(userId, undefined, undefined, review.id);
 
   const { id: reviewId } = review;
-  await notifySubscribersCourseReviewCreated(courseCode, reviewId);
+  await notifySubscribersCourseReviewCreated(code, reviewId);
   await notifySubscribersProfessorReviewCreated(professorId, reviewId);
 }
 

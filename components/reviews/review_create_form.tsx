@@ -155,11 +155,11 @@ export default function ReviewCreateForm({
     setSubmitting(true);
     const userId = hashEmailAddress(user?.email as string);
 
-    const courseCode = parseInt(data.course.split(" ")[0]);
+    const code = parseInt(data.course.split(" ")[0]);
 
     const alreadyReviewed = await getIfUserReviewedCourse(
       user?.email as string,
-      courseCode,
+      code,
     );
 
     if (alreadyReviewed) {

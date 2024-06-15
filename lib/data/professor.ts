@@ -254,13 +254,13 @@ function getProfessorTableRatings(professor: any): any {
  * @return - List of professors
  */
 export async function queryProfessorsByCourse(
-  courseCode: number,
+  code: number,
 ): Promise<Professor[]> {
   const professors = await prisma.professor.findMany({
     where: {
       sections: {
         some: {
-          courseCode: courseCode,
+          courseCode: code,
         },
       },
     },

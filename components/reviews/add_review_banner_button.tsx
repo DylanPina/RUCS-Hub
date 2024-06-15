@@ -7,12 +7,12 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
 interface Props {
-  courseCode?: number;
+  code?: number;
   professorId?: number;
 }
 
 export default function AddReviewBannerButton({
-  courseCode,
+  code,
   professorId,
 }: Props) {
   const { user } = useUser();
@@ -24,14 +24,14 @@ export default function AddReviewBannerButton({
       return;
     }
 
-    if (professorId && courseCode) {
+    if (professorId && code) {
       router.push(
-        `/add-review?professorId=${professorId}&courseCode=${courseCode}`,
+        `/add-review?professorId=${professorId}&code=${code}`,
       );
     } else if (professorId) {
       router.push(`/add-review?professorId=${professorId}`);
-    } else if (courseCode) {
-      router.push(`/add-review?courseCode=${courseCode}`);
+    } else if (code) {
+      router.push(`/add-review?code=${code}`);
     }
   }
 

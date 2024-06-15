@@ -4,13 +4,13 @@ import { prisma } from "@/prisma/prisma";
  * Creates a subscription to a course, professor, or review
  *
  * @param userId - ID of the user who is subscribing
- * @param courseCode - Course code of the course the user is subscribing to
+ * @param code - Course code of the course the user is subscribing to
  * @param professorId - ID of the professor the user is subscribing to
  * @param reviewId - ID of the review the user is subscribing to
  */
 export async function createSubscription(
   userId: string,
-  courseCode?: number,
+  code?: number,
   professorId?: number,
   reviewId?: number,
 ) {
@@ -18,22 +18,22 @@ export async function createSubscription(
     throw new Error("Must provide userId to create subscription");
   }
 
-  if (!courseCode && !professorId && !reviewId) {
+  if (!code && !professorId && !reviewId) {
     throw new Error(
-      "Must provide a courseCode, professorId, or reviewId to create notification",
+      "Must provide a code, professorId, or reviewId to create notification",
     );
   }
 
-  if ([courseCode, professorId].filter(Boolean).length > 1) {
+  if ([code, professorId].filter(Boolean).length > 1) {
     throw new Error(
-      "Cannot provide both courseCode and professorId to create notification",
+      "Cannot provide both code and professorId to create notification",
     );
   }
 
   return await prisma.subscription.create({
     data: {
       userId: userId,
-      courseCode: courseCode,
+      courseCode: code,
       professorId: professorId,
       reviewId: reviewId,
     },

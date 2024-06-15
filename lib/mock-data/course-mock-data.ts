@@ -2,8 +2,8 @@ import { CourseTableColumn } from "../definitions/course";
 
 export const courseTableMockData: CourseTableColumn[] = [
   {
-    courseCode: 344,
-    courseName: "Design and Analysis of Computer Algorithms",
+    code: 344,
+    name: "Design and Analysis of Computer Algorithms",
     credits: 4,
     difficulty: 8,
     workload: 9.4,
@@ -11,8 +11,8 @@ export const courseTableMockData: CourseTableColumn[] = [
     totalReviews: 108,
   },
   {
-    courseCode: 352,
-    courseName: "Internet Technology",
+    code: 352,
+    name: "Internet Technology",
     credits: 4,
     difficulty: 6.7,
     workload: 5.4,
@@ -20,8 +20,8 @@ export const courseTableMockData: CourseTableColumn[] = [
     totalReviews: 125,
   },
   {
-    courseCode: 405,
-    courseName: "Seminar in Computers and Society",
+    code: 405,
+    name: "Seminar in Computers and Society",
     credits: 4,
     difficulty: 5.3,
     workload: 2.1,
@@ -29,8 +29,8 @@ export const courseTableMockData: CourseTableColumn[] = [
     totalReviews: 43,
   },
   {
-    courseCode: 411,
-    courseName: "Computer Architecture II",
+    code: 411,
+    name: "Computer Architecture II",
     credits: 4,
     difficulty: 5.3,
     workload: 9,
@@ -38,8 +38,8 @@ export const courseTableMockData: CourseTableColumn[] = [
     totalReviews: 304,
   },
   {
-    courseCode: 415,
-    courseName: "Compilers",
+    code: 415,
+    name: "Compilers",
     credits: 4,
     difficulty: 9.3,
     workload: 9,
@@ -47,8 +47,8 @@ export const courseTableMockData: CourseTableColumn[] = [
     totalReviews: 208,
   },
   {
-    courseCode: 417,
-    courseName: "Distributed Systems: Concepts and Design",
+    code: 417,
+    name: "Distributed Systems: Concepts and Design",
     credits: 4,
     difficulty: 9,
     workload: 4,
@@ -56,8 +56,8 @@ export const courseTableMockData: CourseTableColumn[] = [
     totalReviews: 102,
   },
   {
-    courseCode: 419,
-    courseName: "Computer Security",
+    code: 419,
+    name: "Computer Security",
     credits: 3,
     difficulty: 2.2,
     workload: 10,

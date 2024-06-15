@@ -224,11 +224,11 @@ export function getProfessorRoute(
 /**
  * Generates the route to the course's page
  *
- * @param courseCode - Course code
+ * @param code - Course code
  * @return - Route to the course's page
  */
-export function getCourseRoute(courseCode: number): string {
-  return `/course/${courseCode}`;
+export function getCourseRoute(code: number): string {
+  return `/course/${code}`;
 }
 
 /**

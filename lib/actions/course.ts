@@ -2,6 +2,6 @@
 
 import { queryProfessorsByCourse } from "../data/professor";
 
-export default async function getProfessorsByCourse(courseCode: number) {
-  return await queryProfessorsByCourse(courseCode);
+export default async function getProfessorsByCourse(code: number) {
+  return await queryProfessorsByCourse(code);
 }

@@ -43,7 +43,7 @@ export default function NavSearchBar({ courses, professors }: Props) {
 
   function handleCourseSelect(course: CourseTableColumn) {
     setOpen(false);
-    router.push(getCourseRoute(course.courseCode));
+    router.push(getCourseRoute(course.code));
   }
 
   function handleProfessorSelect(professor: ProfessorTableColumn) {
@@ -78,11 +78,11 @@ export default function NavSearchBar({ courses, professors }: Props) {
             <CommandGroup heading="Courses" className="text-primary-white">
               {courses.map((course: CourseTableColumn) => (
                 <CommandItem
-                  key={course.courseCode}
+                  key={course.code}
                   className="aria-selected:bg-primary-red/50 aria-selected:text-primary-white rounded overflow-hidden cursor-pointer"
                   onSelect={() => handleCourseSelect(course)}
                 >
-                  {course.courseCode} - {course.courseName}
+                  {course.code} - {course.name}
                 </CommandItem>
               ))}
             </CommandGroup>

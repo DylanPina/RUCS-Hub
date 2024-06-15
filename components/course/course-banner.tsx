@@ -18,7 +18,7 @@ interface Props {
 
 export default async function CourseBanner({ coursePage }: Props) {
   const session = await getSession();
-  const { courseCode, courseName, rating, difficulty, workload, reviews } =
+  const { code, name, rating, difficulty, workload, reviews } =
     coursePage;
 
   const totalDifficultyRatings = reviews.filter((review) => {
@@ -41,7 +41,7 @@ export default async function CourseBanner({ coursePage }: Props) {
               />
             )}
             <h1 className="text-xl max-md:text-lg text-primary-black font-black">
-              {courseCode} - {courseName}
+              {code} - {name}
             </h1>
             <div className="flex flex-col space-y-1">
               <h3 className="text-md max-md:text-sm text-primary-white font-bold">
@@ -101,7 +101,7 @@ export default async function CourseBanner({ coursePage }: Props) {
             </div>
           </div>
           <div className="flex space-x-2">
-            <AddReviewBannerButton courseCode={courseCode} />
+            <AddReviewBannerButton code={code} />
             <TooltipProvider>
               <Tooltip delayDuration={100}>
                 <TooltipTrigger>

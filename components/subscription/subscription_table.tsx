@@ -64,13 +64,58 @@ export default function SubscriptionsTable({ user, subscriptions }: Props) {
             subscription.professor.firstName,
           ) === professor);
 
-      return courseMatches && professorMatches;
+      const lowerCaseSearchTerm = searchTerm.toLowerCase();
+      const termMatches =
+        (subscription.review &&
+          ((subscription.review.professor.firstName &&
+            subscription.review.professor.firstName
+              .toLowerCase()
+              .includes(lowerCaseSearchTerm)) ||
+            (subscription.review.professor.lastName &&
+              subscription.review.professor.lastName
+                .toLowerCase()
+                .includes(lowerCaseSearchTerm)) ||
+            (subscription.review.title &&
+              subscription.review.title
+                .toLowerCase()
+                .includes(lowerCaseSearchTerm)) ||
+            (subscription.review.course.name &&
+              subscription.review.course.name
+                .toLowerCase()
+                .includes(lowerCaseSearchTerm)) ||
+            (subscription.review.course.code &&
+              subscription.review.course.code
+                .toString()
+                .includes(lowerCaseSearchTerm)) ||
+            (subscription.review.content &&
+              subscription.review.content
+                .toLowerCase()
+                .includes(lowerCaseSearchTerm)))) ||
+        (subscription.professor &&
+          ((subscription.professor.firstName &&
+            subscription.professor.firstName
+              .toLowerCase()
+              .includes(lowerCaseSearchTerm)) ||
+            (subscription.professor.lastName &&
+              subscription.professor.lastName
+                .toLowerCase()
+                .includes(lowerCaseSearchTerm)))) ||
+        (subscription.course &&
+          ((subscription.course.code &&
+            subscription.course.code === lowerCaseSearchTerm) ||
+            (subscription.course.name &&
+              subscription.course.name
+                .toLowerCase()
+                .includes(lowerCaseSearchTerm))));
+
+      return courseMatches && professorMatches && termMatches;
     });
 
     setFilteredSubscriptions(filtered);
     setPaginatedSubscriptions(filtered.slice(startIndex, endIndex));
   }, [
     sortBy,
+    searchTerm,
     course,
     professor,
     courses,
@@ -89,13 +134,15 @@ export default function SubscriptionsTable({ user, subscriptions }: Props) {
             .filter((subscription: any) => {
               return (
                 subscription.review &&
+                subscription.review.professor &&
                 formatProfessorName(
                   subscription.review.professor.lastName,
                   subscription.review.professor.firstName,
                 ) === professor
               );
             })
-            .map((subscription: any) => subscription.review.course.name),
+            .map((subscription: any) => subscription.review.course.name)
+            .filter((name: any) => name != null), // Filter out null values
         ),
       );
       setCourses(["Any"].concat(filteredCourses));
@@ -105,10 +152,13 @@ export default function SubscriptionsTable({ user, subscriptions }: Props) {
     } else {
       const uniqueCourses = Array.from(
         new Set(
-          subscriptions.map(
-            (subscription: any) =>
-              subscription.review && subscription.review.course.name,
-          ),
+          subscriptions
+            .map(
+              (subscription: any) =>
+                (subscription.review && subscription.review.course.name) ||
+                (subscription.course && subscription.course.name),
+            )
+            .filter((name: any) => name != null), // Filter out null values
         ),
       );
       setCourses(["Any"].concat(uniqueCourses));
@@ -121,6 +171,7 @@ export default function SubscriptionsTable({ user, subscriptions }: Props) {
             .filter((subscription: any) => {
               return (
                 subscription.review &&
+                subscription.review.course &&
                 subscription.review.course.name === course
               );
             })
@@ -129,7 +180,8 @@ export default function SubscriptionsTable({ user, subscriptions }: Props) {
                 subscription.review.professor.lastName,
                 subscription.review.professor.firstName,
               ),
-            ),
+            )
+            .filter((name: any) => name != null), // Filter out null values
         ),
       );
       setProfessors(["Any"].concat(filteredProfessors));
@@ -139,19 +191,22 @@ export default function SubscriptionsTable({ user, subscriptions }: Props) {
     } else {
       const uniqueProfessors = Array.from(
         new Set(
-          subscriptions.map(
-            (subscription: any) =>
-              (subscription.review &&
-                formatProfessorName(
-                  subscription.review.professor.lastName,
-                  subscription.review.professor.firstName,
-                )) ||
-              (subscription.professor &&
-                formatProfessorName(
-                  subscription.professor.lastName,
-                  subscription.professor.firstName,
-                )),
-          ),
+          subscriptions
+            .map(
+              (subscription: any) =>
+                (subscription.review &&
+                  subscription.review.professor &&
+                  formatProfessorName(
+                    subscription.review.professor.lastName,
+                    subscription.review.professor.firstName,
+                  )) ||
+                (subscription.professor &&
+                  formatProfessorName(
+                    subscription.professor.lastName,
+                    subscription.professor.firstName,
+                  )),
+            )
+            .filter((name: any) => name != null), // Filter out null values
         ),
       );
       setProfessors(["Any"].concat(uniqueProfessors));
@@ -166,48 +221,8 @@ export default function SubscriptionsTable({ user, subscriptions }: Props) {
 
   function handleSearchTermChange(value: string) {
     setSearchTerm(value);
-    setFilteredSubscriptions(
-      subscriptions.filter((subscription) => {
-        const lowerCaseValue = value.toLowerCase();
-        return (
-          (subscription.review &&
-            ((subscription.review.professor.firstName &&
-              subscription.review.professor.firstName
-                .toLowerCase()
-                .includes(lowerCaseValue)) ||
-              (subscription.review.professor.lastName &&
-                subscription.review.professor.lastName
-                  .toLowerCase()
-                  .includes(lowerCaseValue)) ||
-              (subscription.review.title &&
-                subscription.review.title
-                  .toLowerCase()
-                  .includes(lowerCaseValue)) ||
-              (subscription.review.content &&
-                subscription.review.content
-                  .toLowerCase()
-                  .includes(lowerCaseValue)))) ||
-          (subscription.professor &&
-            ((subscription.professor.firstName &&
-              subscription.professor.firstName
-                .toLowerCase()
-                .includes(lowerCaseValue)) ||
-              (subscription.professor.lastName &&
-                subscription.professor.lastName
-                  .toLowerCase()
-                  .includes(lowerCaseValue)))) ||
-          (subscription.course &&
-            ((subscription.course.courseCode &&
-              subscription.course.courseCode
-                .toLowerCase()
-                .includes(lowerCaseValue)) ||
-              (subscription.course.name &&
-                subscription.course.name
-                  .toLowerCase()
-                  .includes(lowerCaseValue))))
-        );
-      }),
-    );
+    setStartIndex(0);
+    setEndIndex(rowsPerPage);
   }
 
   function handleRowsPerPageChange(value: string) {

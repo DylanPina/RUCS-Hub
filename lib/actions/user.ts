@@ -62,17 +62,14 @@ export async function resetPassword(userEmail: string) {
  * Checks if a user has reviewed a course
  *
  * @param userEmail - The email of the user
- * @param courseCode - The code of the course
+ * @param code - The code of the course
  */
-export async function getIfUserReviewedCourse(
-  userEmail: string,
-  courseCode: number,
-) {
+export async function getIfUserReviewedCourse(userEmail: string, code: number) {
   const userId = hashEmailAddress(userEmail);
   return await prisma.review.findFirst({
     where: {
       userId: userId,
-      courseCode: courseCode,
+      courseCode: code,
     },
   });
 }

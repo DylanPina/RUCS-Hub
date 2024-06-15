@@ -1,17 +1,65 @@
 "use client";
 
-import React, { useState } from "react";
+import Link from "next/link";
+import React from "react";
 
 interface Props {
   course: any;
 }
 
-export default function SubscriptionCardCourse({ course }: any) {
-  const [rating, setRating] = useState(0);
-  const [reviews, setReviews] = useState(0);
-  const [difficulty, setDifficulty] = useState(0);
-  const [totalOverallRatings, setTotalOverallRatings] = useState(0);
-  const [totalDifficultyRatings, setTotalDifficultyRatings] = useState(0);
+export default function SubscriptionCardCourse({ course }: Props) {
+  const { reviews, rating, difficulty, workload } = course;
+  const totalOverallRatings = reviews.filter(
+    (review: any) => review.overallRating !== null,
+  ).length;
+  const totalDifficultyRatings = reviews.filter((review: any) => {
+    return review.difficultyRating !== null;
+  }).length;
+  const totalWorkloadRatings = reviews.filter((review: any) => {
+    return review.workload !== null;
+  }).length;
 
-  return <div>{course.name}</div>;
+  return (
+    <div className="flex flex-col space-y-2 p-3 border rounded overflow-hidden border-primary-white">
+      <h3 className="text-lg max-sm:text-base text-primary-white font-bold">
+        Course:{" "}
+        <Link
+          href={`/course/${course.code}`}
+          className="font-normal hover:underline"
+        >
+          {course.code} - {course.name}
+        </Link>
+      </h3>
+      <ul className="flex flex-col space-y-1 text-md max-sm:text-sm">
+        <li>
+          <span className="font-semibold">Reviews:</span> {reviews.length}
+        </li>
+        <li>
+          <span className="font-semibold">Rating:</span> {rating.toFixed(1)}
+          <span className="text-primary-white/80 text-xs">/10</span>{" "}
+          <span className="text-primary-white/80 italic text-xs">
+            based on {totalOverallRatings}{" "}
+            {totalOverallRatings === 1 ? "review" : "reviews"}
+          </span>
+        </li>
+        <li>
+          <span className="font-semibold">Difficulty:</span>{" "}
+          {difficulty.toFixed(1)}
+          <span className="text-primary-white/80 text-xs">/10</span>{" "}
+          <span className="text-primary-white/80 italic text-xs">
+            based on {totalDifficultyRatings}{" "}
+            {totalDifficultyRatings === 1 ? "review" : "reviews"}
+          </span>
+        </li>
+        <li>
+          <span className="font-semibold">Workload:</span> {workload.toFixed(1)}{" "}
+          hrs per week{" "}
+          <span className="text-primary-white/80 italic text-xs">
+            based on {totalWorkloadRatings}{" "}
+            {totalWorkloadRatings === 1 ? "review" : "reviews"}
+          </span>
+        </li>
+      </ul>
+    </div>
+  );
 }

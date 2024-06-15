@@ -16,13 +16,13 @@ export default function CurrentlyTeaching({ currentlyTeaching }: Props) {
       Currently Teaching:{" "}
       <span className="font-normal">
         {currentlyTeaching.map(
-          (courseCode: number, index: number, array: number[]) => (
-            <React.Fragment key={courseCode}>
+          (code: number, index: number, array: number[]) => (
+            <React.Fragment key={code}>
               <span
                 className="underline cursor-pointer"
-                onClick={() => router.push(getCourseRoute(courseCode))}
+                onClick={() => router.push(getCourseRoute(code))}
               >
-                01:198:{courseCode}
+                01:198:{code}
               </span>
               <span className="font-normal">
                 {index < array.length - 1 && ", "}

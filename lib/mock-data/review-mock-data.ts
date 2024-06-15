@@ -6,7 +6,7 @@ export const mockReviews: any[] = [
     userId: hashEmailAddress("dsp209@scarletmail.rutgers.edu"),
     semester: Term.Spring,
     year: 2024,
-    courseCode: 462,
+    code: 462,
     title: "Great class but suffers from too much material and lack of preq",
     content: `
 This was a great class for those who are interested in machine learning and deep learning. We covered a wide range of topics such as linear regression all the way to generative adversarial networks (GANs). However we really didn't go in depth in any particular topic, it was more like a crash course on a bunch of high level ideas in machine learning and deep learning.
@@ -30,7 +30,7 @@ For the final project we coded up a neural network which learned how to play min
     userId: hashEmailAddress("dsp209@scarletmail.rutgers.edu"),
     semester: Term.Spring,
     year: 2024,
-    courseCode: 419,
+    code: 419,
     title:
       "A lot of topics, easy projects, rote memory based multiple choice exams",
     content: `
@@ -61,7 +61,7 @@ There were 4 exams and they were all multiple choice. Some questions were set up
     userId: hashEmailAddress("dsp209@scarletmail.rutgers.edu"),
     semester: Term.Fall,
     year: 2023,
-    courseCode: 440,
+    code: 440,
     title:
       "A lot of topics, easy projects, rote memory based multiple choice exams",
     content: `
@@ -84,7 +84,7 @@ The final exam was cumulative and overall pretty fair and simple. Dr. Cowan is a
     userId: hashEmailAddress("kv347@scarletmail.rutgers.edu"),
     semester: Term.Spring,
     year: 2024,
-    courseCode: 112,
+    code: 112,
     title: "Solid Structured Course",
     content: `
 Course was structured well, good assignments and fair expectations… except for the spiderman assignment. Spiderman was horrible and we couldnt save bro.
@@ -102,7 +102,7 @@ Course was structured well, good assignments and fair expectations… except for
     userId: hashEmailAddress("kv347@scarletmail.rutgers.edu"),
     semester: Term.Fall,
     year: 2023,
-    courseCode: 111,
+    code: 111,
     title: "Solid Intro Course",
     content: `
 Great structure for an intro cs course. All assignments were well structured, DNA assignment was a little too much, otherwise great course.

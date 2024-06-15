@@ -32,14 +32,14 @@ export async function getNotifications(userId: string) {
  * Creates a notification
  *
  * @param userId - ID of the user who is subscribing
- * @param courseCode - Course code of the course the user is subscribing to
+ * @param code - Course code of the course the user is subscribing to
  * @param professorId - ID of the professor the user is subscribing to
  * @param reviewId - ID of the review the user is subscribing to
  * @param voteId - ID of the vote placed on the review the user is subscribing to
  */
 export async function createNotification(
   userId: string,
-  courseCode?: number,
+  code?: number,
   professorId?: number,
   reviewId?: number,
   voteId?: number,
@@ -48,22 +48,22 @@ export async function createNotification(
     throw new Error("Must provide userId to create notification");
   }
 
-  if (!courseCode && !professorId && !reviewId) {
+  if (!code && !professorId && !reviewId) {
     throw new Error(
-      "Must provide a courseCode, professorId, or reviewId to create notification",
+      "Must provide a code, professorId, or reviewId to create notification",
     );
   }
 
-  if ([courseCode, professorId].filter(Boolean).length > 1) {
+  if ([code, professorId].filter(Boolean).length > 1) {
     throw new Error(
-      "Cannot provide both courseCode and professorId to create notification",
+      "Cannot provide both code and professorId to create notification",
     );
   }
 
   return await prisma.notification.create({
     data: {
       recipientId: userId,
-      courseCode: courseCode,
+      courseCode: code,
       professorId: professorId,
       reviewId: reviewId,
       voteId: voteId,
@@ -156,14 +156,14 @@ export async function notifySubscribersReviewVoteDeleted(
 /**
  * Notifies subscribers of a course review that has been created
  *
- * @param courseCode - Course code of the course
+ * @param code - Course code of the course
  * @param reviewId - ID of the review
  */
 export async function notifySubscribersCourseReviewCreated(
-  courseCode: number,
+  code: number,
   reviewId: number,
 ) {
-  const subscribers = await getCourseSubscriptions(courseCode);
+  const subscribers = await getCourseSubscriptions(code);
 
   if (subscribers.length === 0) {
     return;
@@ -172,7 +172,7 @@ export async function notifySubscribersCourseReviewCreated(
   for (const subscriber of subscribers) {
     await createNotification(
       subscriber.userId,
-      courseCode,
+      code,
       undefined,
       reviewId,
       undefined,
@@ -183,14 +183,14 @@ export async function notifySubscribersCourseReviewCreated(
 /**
  * Notifies subscribers of a course review that has been deleted
  *
- * @param courseCode - Course code of the course
+ * @param code - Course code of the course
  * @param reviewId - ID of the review
  */
 export async function notifySubscribersCourseReviewDeleted(
-  courseCode: number,
+  code: number,
   reviewId: number,
 ) {
-  const subscribers = await getCourseSubscriptions(courseCode);
+  const subscribers = await getCourseSubscriptions(code);
 
   if (subscribers.length === 0) {
     return;

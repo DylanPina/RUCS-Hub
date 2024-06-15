@@ -3,6 +3,7 @@
 import { prisma } from "@/prisma/prisma";
 import { createSubscription, deleteSubscription } from "../data/subscription";
 import { getProfessorPageRatings } from "../data/professor";
+import { getCoursePageRatings } from "../data/course";
 
 /**
  * Gets all subscriptions for a user
@@ -43,7 +44,17 @@ export async function getSubscriptionCards(userId: string) {
       userId: userId,
     },
     include: {
-      course: true,
+      course: {
+        include: {
+          reviews: {
+            include: {
+              course: true,
+              professor: true,
+              votes: true,
+            },
+          },
+        },
+      },
       professor: {
         include: {
           reviews: {
@@ -65,17 +76,16 @@ export async function getSubscriptionCards(userId: string) {
     },
   });
 
-  return await Promise.all(
-    subscriptions.map(async (subscription) => {
-      if (subscription.professor) {
-        const updatedProfessor = await getProfessorPageRatings(
-          subscription.professor,
-        );
-        return { ...subscription, professor: updatedProfessor };
-      }
-      return subscription;
-    }),
-  );
+  return subscriptions.map((subscription) => {
+    if (subscription.professor) {
+      const updatedProfessor = getProfessorPageRatings(subscription.professor);
+      return { ...subscription, professor: updatedProfessor };
+    } else if (subscription.course) {
+      const updatedCourse = getCoursePageRatings(subscription.course);
+      return { ...subscription, course: updatedCourse };
+    }
+    return subscription;
+  });
 }
 
 /**
@@ -112,27 +122,24 @@ export async function createProfessorSubscription(
  * Creates a subscription to a course
  *
  * @param userId - The ID of the user
- * @param courseCode - The code of the course
+ * @param code - The code of the course
  */
-export async function createCourseSubscription(
-  userId: string,
-  courseCode: number,
-) {
-  if (!courseCode) {
-    throw new Error("Must provide courseCode to create subscription");
+export async function createCourseSubscription(userId: string, code: number) {
+  if (!code) {
+    throw new Error("Must provide code to create subscription");
   }
 
   if (!userId) {
     throw new Error("Must provide userId to create subscription");
   }
 
-  const alreadySubscribed = await isUserSubscribedToCourse(userId, courseCode);
+  const alreadySubscribed = await isUserSubscribedToCourse(userId, code);
 
   if (alreadySubscribed) {
     throw new Error("User is already subscribed to this course");
   }
 
-  await createSubscription(userId, courseCode, undefined, undefined);
+  await createSubscription(userId, code, undefined, undefined);
 }
 
 /**
@@ -150,7 +157,7 @@ export async function createReviewSubscription(
   }
 
   if (!reviewId) {
-    throw new Error("Must provide courseCode to create subscription");
+    throw new Error("Must provide code to create subscription");
   }
 
   await createSubscription(userId, undefined, undefined, reviewId);
@@ -187,16 +194,13 @@ export async function deleteProfessorSubscription(
  * Deletes a subscription to a course
  *
  * @param userId - The ID of the user
- * @param courseCode - The code of the course
+ * @param code - The code of the course
  */
-export async function deleteCourseSubscription(
-  userId: string,
-  courseCode: number,
-) {
+export async function deleteCourseSubscription(userId: string, code: number) {
   const subscription = await prisma.subscription.findFirst({
     where: {
       userId: userId,
-      courseCode: courseCode,
+      courseCode: code,
     },
     select: {
       id: true,
@@ -267,24 +271,21 @@ export async function isUserSubscribedToProfessor(
  * Checks if a user is subscribed to a course
  *
  * @param userId - The ID of the user
- * @param courseCode - The code of the course
+ * @param code - The code of the course
  */
-export async function isUserSubscribedToCourse(
-  userId: string,
-  courseCode: number,
-) {
+export async function isUserSubscribedToCourse(userId: string, code: number) {
   if (!userId) {
     throw new Error("Must provide userId to check subscription");
   }
 
-  if (!courseCode) {
-    throw new Error("Must provide courseCode to check subscription");
+  if (!code) {
+    throw new Error("Must provide code to check subscription");
   }
 
   return await prisma.subscription.findFirst({
     where: {
       userId: userId,
-      courseCode: courseCode,
+      courseCode: code,
     },
   });
 }
