@@ -9,15 +9,10 @@ import { FaBook } from "react-icons/fa6";
 
 interface Props {
   notification: any;
-  coursePage: any;
   review: any;
 }
 
-export default function NotificationCourse({
-  notification,
-  coursePage,
-  review,
-}: Props) {
+export default function NotificationCourse({ notification, review }: Props) {
   const { read } = notification;
 
   return (

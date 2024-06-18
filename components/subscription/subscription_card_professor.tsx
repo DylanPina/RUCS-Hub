@@ -1,6 +1,7 @@
 import { formatProfessorName, getProfessorRoute } from "@/lib/utils";
 import Link from "next/link";
 import React from "react";
+import NotificationButtonProfessor from "../notification/notification_button_professor";
 
 interface Props {
   professor: any;
@@ -17,7 +18,7 @@ export default function SubscriptionCardProfessor({ professor }: Props) {
   ).length;
 
   return (
-    <div className="flex flex-col space-y-2 p-3 border rounded overflow-hidden border-primary-white">
+    <div className="flex flex-col space-y-2 p-3 border rounded overflow-hidden border-primary-white relative">
       <h3 className="text-lg max-sm:text-base text-primary-white font-bold">
         Professor:{" "}
         <Link
@@ -51,6 +52,9 @@ export default function SubscriptionCardProfessor({ professor }: Props) {
           </span>
         </li>
       </ul>
+      <div className="absolute top-1 right-3">
+        <NotificationButtonProfessor professor={professor} />
+      </div>
     </div>
   );
 }

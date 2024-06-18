@@ -339,7 +339,7 @@ export default function MyReviews({ reviews, user }: Props) {
       <div className="flex flex-col space-y-3">
         {filteredReviews.length > 0
           ? paginatedReviews.map((review: any) => (
-              <ReviewCard key={review.id} review={review} user={user} />
+              <ReviewCard key={review.id} review={review} />
             ))
           : noReviewsMessage()}
       </div>

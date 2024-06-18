@@ -18,8 +18,7 @@ interface Props {
 
 export default async function CourseBanner({ coursePage }: Props) {
   const session = await getSession();
-  const { code, name, rating, difficulty, workload, reviews } =
-    coursePage;
+  const { code, name, rating, difficulty, workload, reviews } = coursePage;
 
   const totalDifficultyRatings = reviews.filter((review) => {
     return review.difficultyRating !== null;
@@ -35,10 +34,12 @@ export default async function CourseBanner({ coursePage }: Props) {
         <div className="flex flex-col place-content-between min-w-fit w-full space-y-3 relative">
           <div className="flex flex-col space-y-1">
             {session?.user && (
-              <NotificationCourseBanner
-                user={session?.user}
-                coursePage={coursePage}
-              />
+              <div className="absolute top-0 right-0">
+                <NotificationCourseBanner
+                  user={session?.user}
+                  coursePage={coursePage}
+                />
+              </div>
             )}
             <h1 className="text-xl max-md:text-lg text-primary-black font-black">
               {code} - {name}

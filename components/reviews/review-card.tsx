@@ -15,16 +15,19 @@ import ReviewCardEditing from "./review-card-editing";
 import ReviewDeleteButton from "./review-delete-button";
 import ReviewReportButton from "./review-report-button";
 import Link from "next/link";
+import NotificationReviewButton from "../notification/notification_button_review";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 interface ReviewCardProps {
   review: Review;
-  user: any;
 }
 
-export default function ReviewCard({ review, user }: ReviewCardProps) {
+export default function ReviewCard({ review }: ReviewCardProps) {
+  const { user } = useUser();
   const [editing, setEditing] = useState(false);
   const [updatedReview, setUpdatedReview] = useState(review);
-  const isUserReview = user && hashEmailAddress(user.email) === review.userId;
+  const isUserReview =
+    user && hashEmailAddress(user?.email ?? "") === review.userId;
 
   if (editing) {
     return (
@@ -38,7 +41,7 @@ export default function ReviewCard({ review, user }: ReviewCardProps) {
 
   return (
     <div
-      className={`flex flex-col space-y-2 p-3 border rounded overflow-hidden ${
+      className={`flex flex-col space-y-2 p-3 border rounded overflow-hidden relative ${
         isUserReview
           ? "border-primary-red shadow shadow-primary-red"
           : "border-primary-white"
@@ -177,10 +180,13 @@ export default function ReviewCard({ review, user }: ReviewCardProps) {
       <div className="flex space-x-3 !mt-4">
         <ReviewVotes review={review} user={user || null} />
         {isUserReview ? (
-          <div className="flex space-x-3">
+          <>
             <ReviewEditButton setEditing={() => setEditing(true)} />
             <ReviewDeleteButton review={review} />
-          </div>
+            <div className="absolute top-3 right-3">
+              <NotificationReviewButton user={user} review={review} />
+            </div>
+          </>
         ) : (
           <ReviewReportButton review={review} user={user} />
         )}

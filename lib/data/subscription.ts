@@ -1,4 +1,5 @@
 import { prisma } from "@/prisma/prisma";
+import { revalidatePath } from "next/cache";
 
 /**
  * Creates a subscription to a course, professor, or review
@@ -30,7 +31,7 @@ export async function createSubscription(
     );
   }
 
-  return await prisma.subscription.create({
+  const subscription = await prisma.subscription.create({
     data: {
       userId: userId,
       courseCode: code,
@@ -38,6 +39,9 @@ export async function createSubscription(
       reviewId: reviewId,
     },
   });
+
+  revalidatePath("/subscriptions");
+  return subscription;
 }
 
 /**
@@ -50,11 +54,14 @@ export async function deleteSubscription(subscriptionId: number) {
     throw new Error("Must provide subscriptionId to delete subscription");
   }
 
-  return prisma.subscription.delete({
+  const deletedSubscription = await prisma.subscription.delete({
     where: {
       id: subscriptionId,
     },
   });
+
+  revalidatePath("/subscriptions");
+  return deletedSubscription;
 }
 
 /**

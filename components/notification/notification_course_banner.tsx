@@ -36,22 +36,36 @@ export default function NotificationCourseBanner({ coursePage, user }: Props) {
   }, [user.email, coursePage.code]);
 
   const subscribe = () => {
-    createCourseSubscription(
-      hashEmailAddress(user.email),
-      coursePage.code,
-    );
+    createCourseSubscription(hashEmailAddress(user.email), coursePage.code);
     setSubscribed(true);
     toast.success(`Notifications turned on for ${coursePage.name}`);
   };
 
   const unsubscribe = () => {
-    deleteCourseSubscription(
-      hashEmailAddress(user.email),
-      coursePage.code,
-    );
+    deleteCourseSubscription(hashEmailAddress(user.email), coursePage.code);
     setSubscribed(false);
     toast.success(`Notifications turned off for ${coursePage.name}`);
   };
+
+  if (!user || !user.email_verified) {
+    return (
+      <TooltipProvider delayDuration={100}>
+        <Tooltip>
+          <TooltipTrigger>
+            <MdNotificationAdd
+              onClick={() => {
+                toast.error("Must be verified to turn on notifications");
+              }}
+              className="h-6 w-6"
+            />
+          </TooltipTrigger>
+          <TooltipContent className="outline outline-1 outline-primary-white">
+            Turn on notifications
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  }
 
   return (
     <TooltipProvider>
@@ -59,10 +73,7 @@ export default function NotificationCourseBanner({ coursePage, user }: Props) {
         {subscribed ? (
           <>
             <TooltipTrigger>
-              <MdNotificationsOff
-                onClick={unsubscribe}
-                className="absolute right-0 top-0 h-6 w-6"
-              />
+              <MdNotificationsOff onClick={unsubscribe} className="h-6 w-6" />
             </TooltipTrigger>
             <TooltipContent className="outline outline-1 outline-primary-white">
               Turn off notifications
@@ -71,12 +82,11 @@ export default function NotificationCourseBanner({ coursePage, user }: Props) {
         ) : (
           <>
             <TooltipTrigger>
-              <MdNotificationAdd
-                onClick={subscribe}
-                className="absolute right-0 top-0 h-6 w-6"
-              />
+              <MdNotificationAdd onClick={subscribe} className="h-6 w-6" />
             </TooltipTrigger>
-            <TooltipContent>Turn on notifications</TooltipContent>
+            <TooltipContent className="outline outline-1 outline-primary-white">
+              Turn on notifications
+            </TooltipContent>
           </>
         )}
       </Tooltip>

@@ -267,7 +267,7 @@ export default function CourseReviews({ reviews }: ProfessorReviewProps) {
       <div className="flex flex-col space-y-3">
         {filteredReviews.length > 0
           ? paginatedReviews.map((review) => (
-              <ReviewCard key={review.id} review={review} user={user} />
+              <ReviewCard key={review.id} review={review} />
             ))
           : noReviewsMessage()}
       </div>

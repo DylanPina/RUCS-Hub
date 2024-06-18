@@ -24,8 +24,6 @@ import {
 } from "@/lib/actions/notification";
 import NotificationProfessor from "../notification/notification_professor";
 import NotificationCourse from "../notification/notification_course";
-import { MdEditNotifications } from "react-icons/md";
-import { useRouter } from "next/navigation";
 
 interface Props {
   notifications: any[];
@@ -33,7 +31,6 @@ interface Props {
 
 export default function NavNotification({ notifications }: Props) {
   const { user } = useUser();
-  const router = useRouter();
   const [filteredNotifications, setFilteredNotifications] =
     useState(notifications);
   const [newNotifications, setNewNotifications] = useState(
@@ -113,7 +110,6 @@ export default function NavNotification({ notifications }: Props) {
                       <>
                         <NotificationCourse
                           notification={notification}
-                          coursePage={notification.course}
                           review={notification.review}
                         />
                         <DropdownMenuSeparator />

@@ -4,15 +4,14 @@ import SubscriptionCardProfessor from "./subscription_card_professor";
 import SubscriptionCardCourse from "./subscription_card_course";
 
 interface Props {
-  user: any;
   subscription: any;
 }
 
-export default function SubscriptionCard({ user, subscription }: Props) {
+export default function SubscriptionCard({ subscription }: Props) {
   const { review, professor, course } = subscription;
 
   return review ? (
-    <ReviewCard user={user} review={review} />
+    <ReviewCard review={review} />
   ) : professor ? (
     <SubscriptionCardProfessor professor={professor} />
   ) : (

@@ -305,7 +305,6 @@ export default function SubscriptionsTable({ user, subscriptions }: Props) {
           paginatedSubscriptions.map((subscription: any) => (
             <SubscriptionCard
               key={subscription.id}
-              user={user}
               subscription={subscription}
             />
           ))

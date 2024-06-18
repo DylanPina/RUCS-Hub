@@ -40,10 +40,12 @@ export default async function ProfessorBanner({ professor }: Props) {
         <div className="flex flex-col place-content-between min-w-fit w-full space-y-3 relative">
           <div className="flex flex-col space-y-1">
             {session?.user && (
-              <NotificationProfessorBanner
-                user={session?.user}
-                professor={professor}
-              />
+              <div className="absolute top-0 right-0">
+                <NotificationProfessorBanner
+                  user={session?.user}
+                  professor={professor}
+                />
+              </div>
             )}
             <h1 className="text-2xl max-md:text-xl text-primary-black font-black">
               {name}

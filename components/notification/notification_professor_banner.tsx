@@ -35,7 +35,8 @@ export default function NotificationProfessorBanner({
       );
       setSubscribed(isSubscribed != null);
     }
-    checkSubscription();
+
+    if (user) checkSubscription();
   }, [user.email, professor.id]);
 
   const subscribe = () => {
@@ -60,28 +61,46 @@ export default function NotificationProfessorBanner({
     );
   };
 
+  if (!user || !user.email_verified) {
+    return (
+      <TooltipProvider delayDuration={100}>
+        <Tooltip>
+          <TooltipTrigger>
+            <MdNotificationAdd
+              onClick={() => {
+                toast.error("Must be verified to turn on notifications");
+              }}
+              className="h-6 w-6"
+            />
+          </TooltipTrigger>
+          <TooltipContent className="bg-primary-red">
+            Turn on notifications
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  }
+
   return (
     <TooltipProvider>
       <Tooltip delayDuration={100}>
         {subscribed ? (
           <>
             <TooltipTrigger>
-              <MdNotificationsOff
-                onClick={unsubscribe}
-                className="absolute right-0 top-0 h-6 w-6"
-              />
+              <MdNotificationsOff onClick={unsubscribe} className="h-6 w-6" />
             </TooltipTrigger>
-            <TooltipContent>Turn off notifications</TooltipContent>
+            <TooltipContent className="outline outline-1 outline-primary-white">
+              Turn off notifications
+            </TooltipContent>
           </>
         ) : (
           <>
             <TooltipTrigger>
-              <MdNotificationAdd
-                onClick={subscribe}
-                className="absolute right-0 top-0 h-6 w-6"
-              />
+              <MdNotificationAdd onClick={subscribe} className="h-6 w-6" />
             </TooltipTrigger>
-            <TooltipContent>Turn on notifications</TooltipContent>
+            <TooltipContent className="outline outline-1 outline-primary-white">
+              Turn on notifications
+            </TooltipContent>
           </>
         )}
       </Tooltip>
