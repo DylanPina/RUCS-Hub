@@ -109,6 +109,12 @@ export async function updateReview(reviewId: number, reviewForm: ReviewForm) {
  * @param upvote - Whether the user is voting up or down
  */
 export async function vote(userId: string, reviewId: number, upvote: boolean) {
+  const isCreator = await isReviewCreator(userId, reviewId);
+
+  if (isCreator) {
+    throw new Error("Cannot vote on your own review");
+  }
+
   return upvote
     ? await upvoteReview(userId, reviewId)
     : await downvoteReview(userId, reviewId);
@@ -123,6 +129,21 @@ export async function deleteReview(reviewId: number) {
   return await prisma.review.delete({
     where: {
       id: reviewId,
+    },
+  });
+}
+
+/**
+ * Check if the user is the creator of the review
+ *
+ * @param userId - The ID of the user
+ * @param reviewId - The ID of the review
+ */
+export async function isReviewCreator(userId: string, reviewId: number) {
+  return await prisma.review.findFirst({
+    where: {
+      id: reviewId,
+      userId: userId,
     },
   });
 }

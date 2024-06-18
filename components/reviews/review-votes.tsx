@@ -21,11 +21,11 @@ interface ReviewVotesProps {
 
 export default function ReviewVotes({ review, user }: ReviewVotesProps) {
   const { votes } = review;
-
   const [upvotes, setUpvotes] = useState(0);
   const [downvotes, setDownvotes] = useState(0);
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
+  const [isSameUser, setIsSameUser] = useState(true);
 
   useEffect(() => {
     setUpvotes(votes.filter((vote: Vote) => vote.upvote).length);
@@ -33,6 +33,7 @@ export default function ReviewVotes({ review, user }: ReviewVotesProps) {
 
     if (user) {
       const userId = hashEmailAddress(user.email ?? "");
+      setIsSameUser(userId === review.userId);
 
       setUpvoted(
         votes.some((vote: Vote) => vote.userId === userId && vote.upvote),
@@ -51,6 +52,11 @@ export default function ReviewVotes({ review, user }: ReviewVotesProps) {
 
     if (!user.email_verified) {
       toast.error("Must verify email to vote.");
+      return;
+    }
+
+    if (isSameUser) {
+      toast.error("Cannot vote on your own review");
       return;
     }
 
@@ -81,6 +87,11 @@ export default function ReviewVotes({ review, user }: ReviewVotesProps) {
       return;
     }
 
+    if (isSameUser) {
+      toast.error("Cannot vote on your own review");
+      return;
+    }
+
     if (downvoted) {
       setDownvotes(downvotes - 1);
       setDownvoted(false);
@@ -107,7 +118,11 @@ export default function ReviewVotes({ review, user }: ReviewVotesProps) {
                 style={{ color: "primary-white" }}
                 className={`${
                   upvoted ? "fill-primary-red" : "fill-primary-white"
-                }  cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in`}
+                } ${
+                  isSameUser
+                    ? "cursor-auto"
+                    : "cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in"
+                }`}
                 onClick={() => handleUpvote()}
                 size={18}
               />
@@ -125,7 +140,11 @@ export default function ReviewVotes({ review, user }: ReviewVotesProps) {
                 style={{ color: "primary-white" }}
                 className={`${
                   downvoted ? "fill-primary-red" : "fill-primary-white"
-                } cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in`}
+                }  ${
+                  isSameUser
+                    ? "cursor-auto"
+                    : "cursor-pointer hover:fill-primary-red transition duration-150 ease-out hover:ease-in"
+                }`}
                 onClick={() => handleDownvote()}
                 size={18}
               />

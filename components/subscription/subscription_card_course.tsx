@@ -10,8 +10,6 @@ interface Props {
 export default function SubscriptionCardCourse({ course }: Props) {
   const { reviews, rating, difficulty, workload } = course;
 
-  console.log(`Course: ${JSON.stringify(course, null, 2)}`);
-
   const totalOverallRatings = reviews.filter(
     (review: any) => review.overallRating !== null,
   ).length;
