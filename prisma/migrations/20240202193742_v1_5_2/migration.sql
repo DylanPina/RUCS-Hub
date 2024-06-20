@@ -10,4 +10,4 @@
 ALTER TABLE "Section" DROP CONSTRAINT "Section_pkey",
 DROP COLUMN "semester",
 ADD COLUMN     "term" INTEGER NOT NULL,
-ADD CONSTRAINT "Section_pkey" PRIMARY KEY ("sectionNumber", "courseCode", "term", "year");
+ADD CONSTRAINT "Section_pkey" PRIMARY KEY ("sectionNumber", "code", "term", "year");

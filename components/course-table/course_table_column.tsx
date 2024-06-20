@@ -5,7 +5,7 @@ import { CourseTableColumn } from "@/lib/definitions/course";
 
 export const columns: ColumnDef<CourseTableColumn>[] = [
   {
-    accessorKey: "courseCode",
+    accessorKey: "code",
     header: ({ column }) => {
       return (
         <Button
@@ -20,7 +20,7 @@ export const columns: ColumnDef<CourseTableColumn>[] = [
     },
   },
   {
-    accessorKey: "courseName",
+    accessorKey: "name",
     header: ({ column }) => {
       return (
         <Button

@@ -12,12 +12,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/shadcn/ui/tooltip";
+import NotificationProfessorBanner from "@/components/notification/notification_professor_banner";
+import { getSession } from "@auth0/nextjs-auth0";
 
 interface Props {
   professor: ProfessorPage;
 }
 
 export default async function ProfessorBanner({ professor }: Props) {
+  const session = await getSession();
   const { firstName, lastName, overall, difficulty, reviews } = professor;
   const name = `${titleCase(firstName)} ${titleCase(lastName)}`;
   const totalOverallRatings = reviews.filter(
@@ -34,8 +37,16 @@ export default async function ProfessorBanner({ professor }: Props) {
   return (
     <div className="flex flex-col lg:flex-row justify-start lg:justify-between max-lg:space-y-3">
       <div className="flex w-full lg:w-1/2 bg-primary-red border border-primary-white rounded overflow-hidden py-3 px-4">
-        <div className="flex flex-col place-content-between min-w-fit space-y-3">
+        <div className="flex flex-col place-content-between min-w-fit w-full space-y-3 relative">
           <div className="flex flex-col space-y-1">
+            {session?.user && (
+              <div className="absolute top-0 right-0">
+                <NotificationProfessorBanner
+                  user={session?.user}
+                  professor={professor}
+                />
+              </div>
+            )}
             <h1 className="text-2xl max-md:text-xl text-primary-black font-black">
               {name}
             </h1>
@@ -47,8 +58,10 @@ export default async function ProfessorBanner({ professor }: Props) {
                 <h3 className="text-md max-md:text-sm text-primary-white font-bold">
                   Overall:{" "}
                   <span className="font-normal">{overall.toFixed(1)}</span>
-                  <span className="font-normal">/10</span>{" "}
-                  <span className="text-xs text-primary-white/50">
+                  <span className="text-xs text-primary-white/80 font-normal">
+                    /10
+                  </span>{" "}
+                  <span className="text-xs text-primary-white/80 font-normal">
                     based on {totalOverallRatings}{" "}
                     {reviews.length === 1 ? "review" : "reviews"}
                   </span>
@@ -62,8 +75,10 @@ export default async function ProfessorBanner({ professor }: Props) {
                 <h3 className="text-md max-md:text-sm text-primary-white font-bold">
                   Difficulty:{" "}
                   <span className="font-normal">{difficulty.toFixed(1)}</span>
-                  <span className="font-normal">/10</span>{" "}
-                  <span className="text-xs text-primary-white/50">
+                  <span className="text-xs text-primary-white/70 font-normal">
+                    /10
+                  </span>{" "}
+                  <span className="text-xs text-primary-white/70 font-normal">
                     based on {totalDifficultyRatings}{" "}
                     {reviews.length === 1 ? "review" : "reviews"}
                   </span>

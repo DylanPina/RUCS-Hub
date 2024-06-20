@@ -3,26 +3,30 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id                    String   @id
-  createdAt             DateTime @default(now())
-  lastEmailVerification DateTime @default(now())
-  lastPasswordReset     DateTime @default(now())
+  id                    String         @id
+  createdAt             DateTime       @default(now())
+  lastEmailVerification DateTime       @default(now())
+  lastPasswordReset     DateTime       @default(now())
   reviews               Review[]
   votes                 Vote[]
   reports               Report[]
+  notifications         Notification[]
+  subscriptions         Subscription[]
 }
 
 model Professor {
-  id        Int       @id @default(autoincrement())
-  firstName String
-  lastName  String
-  reviews   Review[]
-  sections  Section[]
+  id          Int            @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  reviews     Review[]
+  sections    Section[]
+  subscribers Subscription[]
+  notifications Notification[]
 }
 
 model Section {
@@ -38,31 +42,33 @@ model Section {
 }
 
 model Course {
-  code     Int       @id
-  name     String
-  prereqs  String[]
-  synopsis String?
-  credits  Int?
-  reviews  Review[]
-  sections Section[]
+  code        Int            @id
+  name        String
+  prereqs     String[]
+  synopsis    String?
+  credits     Int?
+  reviews     Review[]
+  sections    Section[]
+  subscribers Subscription[]
+  notifications Notification[]
 }
 
 model Review {
-  id                        Int        @id @default(autoincrement())
-  user                      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                        Int            @id @default(autoincrement())
+  user                      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId                    String
   semester                  Int
   year                      Int
-  course                    Course     @relation(fields: [courseCode], references: [code], onDelete: Cascade)
+  course                    Course         @relation(fields: [courseCode], references: [code], onDelete: Cascade)
   courseCode                Int
   title                     String
   content                   String
-  createdAt                 DateTime   @default(now())
-  lastModified              DateTime   @default(now())
+  createdAt                 DateTime       @default(now())
+  lastModified              DateTime       @default(now())
   rating                    Int?
   votes                     Vote[]
   difficultyRating          Int?
-  professor                 Professor? @relation(fields: [professorId], references: [id], onDelete: Cascade)
+  professor                 Professor?     @relation(fields: [professorId], references: [id], onDelete: Cascade)
   professorId               Int?
   professorQualityRating    Int?
   professorDifficultyRating Int?
@@ -71,16 +77,19 @@ model Review {
   piazzaRating              Int?
   workload                  Int?
   reports                   Report[]
+  notifications             Notification[]
+  subscribers               Subscription[]
 }
 
 model Vote {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
-  review    Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
-  reviewId  Int
-  upvote    Boolean
-  createdAt DateTime @default(now())
+  id            Int            @id @default(autoincrement())
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String
+  review        Review         @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  reviewId      Int
+  upvote        Boolean
+  createdAt     DateTime       @default(now())
+  notifications Notification[]
 }
 
 model Report {
@@ -92,4 +101,33 @@ model Report {
   category  String
   content   String
   createdAt DateTime @default(now())
+}
+
+model Notification {
+  id          Int      @id @default(autoincrement())
+  recipient   User     @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  recipientId String
+  vote        Vote?     @relation(fields: [voteId], references: [id], onDelete: Cascade)
+  voteId      Int?
+  review      Review?   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  reviewId    Int?
+  professor   Professor? @relation(fields: [professorId], references: [id], onDelete: Cascade)
+  professorId Int?
+  course      Course?    @relation(fields: [courseCode], references: [code], onDelete: Cascade)
+  courseCode  Int?
+  createdAt   DateTime @default(now())
+  read        Boolean  @default(false)
+}
+
+model Subscription {
+  id          Int        @id @default(autoincrement())
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  course      Course?    @relation(fields: [courseCode], references: [code], onDelete: Cascade)
+  courseCode  Int?
+  professor   Professor? @relation(fields: [professorId], references: [id], onDelete: Cascade)
+  professorId Int?
+  review      Review?    @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  reviewId    Int?
+  createdAt   DateTime   @default(now())
 }

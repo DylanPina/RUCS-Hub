@@ -9,14 +9,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/shadcn/ui/tooltip";
+import { getSession } from "@auth0/nextjs-auth0";
+import NotificationCourseBanner from "../notification/notification_course_banner";
 
 interface Props {
   coursePage: CoursePage;
 }
 
 export default async function CourseBanner({ coursePage }: Props) {
-  const { courseCode, courseName, rating, difficulty, workload, reviews } =
-    coursePage;
+  const session = await getSession();
+  const { code, name, rating, difficulty, workload, reviews } = coursePage;
 
   const totalDifficultyRatings = reviews.filter((review) => {
     return review.difficultyRating !== null;
@@ -29,10 +31,18 @@ export default async function CourseBanner({ coursePage }: Props) {
   return (
     <div className="flex flex-col lg:flex-row justify-start lg:justify-between max-lg:space-y-3">
       <div className="flex w-full lg:w-1/2 bg-primary-red border border-primary-white rounded overflow-hidden py-3 px-4">
-        <div className="flex flex-col place-content-between min-w-fit space-y-3">
+        <div className="flex flex-col place-content-between min-w-fit w-full space-y-3 relative">
           <div className="flex flex-col space-y-1">
-            <h1 className="text-2xl max-md:text-xl text-primary-black font-black">
-              {courseCode} - {courseName}
+            {session?.user && (
+              <div className="absolute top-0 right-0">
+                <NotificationCourseBanner
+                  user={session?.user}
+                  coursePage={coursePage}
+                />
+              </div>
+            )}
+            <h1 className="text-xl max-md:text-lg text-primary-black font-black">
+              {code} - {name}
             </h1>
             <div className="flex flex-col space-y-1">
               <h3 className="text-md max-md:text-sm text-primary-white font-bold">
@@ -42,10 +52,10 @@ export default async function CourseBanner({ coursePage }: Props) {
                 <h3 className="text-md max-md:text-sm text-primary-white font-bold">
                   Rating:{" "}
                   <span className="font-normal">{rating.toFixed(1)}</span>
-                  <span className="text-xs text-primary-white/50 font-normal">
+                  <span className="text-xs text-primary-white/80 font-normal">
                     /10
                   </span>{" "}
-                  <span className="text-xs text-primary-white/50 font-normal">
+                  <span className="text-xs text-primary-white/80 font-normal">
                     based on {reviews.length}{" "}
                     {reviews.length === 1 ? "review" : "reviews"}
                   </span>
@@ -59,10 +69,10 @@ export default async function CourseBanner({ coursePage }: Props) {
                 <h3 className="text-md max-md:text-sm text-primary-white font-bold">
                   Difficulty:{" "}
                   <span className="font-normal">{difficulty.toFixed(1)}</span>
-                  <span className="text-xs text-primary-white/50 font-normal">
+                  <span className="text-xs text-primary-white/80 font-normal">
                     /10
                   </span>{" "}
-                  <span className="text-xs text-primary-white/50 font-normal">
+                  <span className="text-xs text-primary-white/80 font-normal">
                     based on {totalDifficultyRatings}{" "}
                     {reviews.length === 1 ? "review" : "reviews"}
                   </span>
@@ -78,7 +88,7 @@ export default async function CourseBanner({ coursePage }: Props) {
                   <span className="font-normal">
                     {workload.toFixed(1)} {workload > 1 ? "hrs" : "hr"} per week
                   </span>
-                  <span className="text-xs text-primary-white/50 font-normal">
+                  <span className="text-xs text-primary-white/80 font-normal">
                     {" "}
                     based on {totalWorkloadRatings}{" "}
                     {reviews.length === 1 ? "review" : "reviews"}
@@ -92,7 +102,7 @@ export default async function CourseBanner({ coursePage }: Props) {
             </div>
           </div>
           <div className="flex space-x-2">
-            <AddReviewBannerButton courseCode={courseCode} />
+            <AddReviewBannerButton code={code} />
             <TooltipProvider>
               <Tooltip delayDuration={100}>
                 <TooltipTrigger>

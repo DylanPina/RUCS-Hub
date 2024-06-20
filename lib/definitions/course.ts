@@ -1,18 +1,17 @@
+import { Prisma } from "@prisma/client";
 import { Review } from "./review";
 
-export type Course = {
-  code: number;
-  name: string;
-  prereqs: string[];
-  synopsisUrl: string;
-  credits: number;
-  reviews?: Review[];
-  sections: CourseSection[];
-};
+export type Course = Prisma.CourseGetPayload<{
+  include: {
+    reviews: true;
+    sections: true;
+    subscribers: true;
+  };
+}>;
 
 export type CoursePage = {
-  courseCode: number;
-  courseName: string;
+  code: number;
+  name: string;
   prereqs: string[];
   synopsisUrl: string;
   credits: number;
@@ -27,7 +26,7 @@ export type CoursePage = {
 };
 
 export type CourseSection = {
-  courseCode: number;
+  code: number;
   year: number;
   term: number;
   webRegCourseSection: WebRegCourseSection;
@@ -72,13 +71,13 @@ export type MeetingTimes = {
 };
 
 export type CourseSynopsesListing = {
-  courseCode: number;
-  courseName: string;
+  code: number;
+  name: string;
   synopsisUrl: string;
 };
 
 export type CourseWebRegListing = {
-  courseCode: number;
+  code: number;
   title: string;
   year: number;
   term: Term;
@@ -89,8 +88,8 @@ export type CourseWebRegListing = {
 };
 
 export type CourseTableColumn = {
-  courseCode: number;
-  courseName: string;
+  code: number;
+  name: string;
   credits?: number;
   difficulty?: number;
   workload?: number;

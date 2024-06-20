@@ -1,16 +1,11 @@
-import { Review } from "./review";
-import { User } from "./user";
+import { Prisma } from "@prisma/client";
 
-export type Report = {
-  id: number;
-  user: User;
-  userId: string;
-  review: Review;
-  reviewId: number;
-  category: string;
-  content: string;
-  createdAt: Date;
-};
+export type Report = Prisma.ReportGetPayload<{
+  include: {
+    user: true;
+    review: true;
+  };
+}>;
 
 export const reportReasons = [
   "Inappropriate Content",

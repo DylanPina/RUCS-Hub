@@ -11,13 +11,23 @@ import { queryProfessorTableData } from "@/lib/data/professor";
 import { ProfessorTableColumn } from "@/lib/definitions/professor";
 import { CourseTableColumn } from "@/lib/definitions/course";
 import { MdRateReview } from "react-icons/md";
+import NavNotification from "./nav_notifications";
+import { getNotifications } from "@/lib/data/notification";
+import { getSession } from "@auth0/nextjs-auth0";
+import { hashEmailAddress } from "@/lib/utils";
 
 export default async function Nav() {
+  const session = await getSession();
+
   const courseTableData: CourseTableColumn[] =
     await queryCourseTableDataByYearTerm(null, null);
 
   const professorTableData: ProfessorTableColumn[] =
     await queryProfessorTableData();
+
+  const notifications = await getNotifications(
+    hashEmailAddress(session?.user?.email as string),
+  );
 
   return (
     <div className="flex place-items-center backdrop-blur justify-center w-full transition-colors duration-500 border-b border-primary-white bg-primary-black supports-backdrop-blur:bg-white/60 dark:bg-transparent">
@@ -37,6 +47,7 @@ export default async function Nav() {
           professors={professorTableData}
         />
         <div className="flex items-center space-x-4">
+          <NavNotification notifications={notifications} />
           <NavProfile />
           <SignIn />
         </div>

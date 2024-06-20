@@ -1,12 +1,9 @@
-import { Review } from "./review";
-import { User } from "./user";
+import { Prisma } from "@prisma/client";
 
-export type Vote = {
-  id: number;
-  user: User;
-  userId: string;
-  review: Review;
-  reviewId: number;
-  upvote: boolean;
-  createdAt: Date;
-};
+export type Vote = Prisma.VoteGetPayload<{
+  include: {
+    user: true;
+    review: true;
+    notifications: true;
+  };
+}>;

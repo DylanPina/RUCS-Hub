@@ -80,12 +80,12 @@ export default function ReviewCardEditing({
     mode: "onChange",
     defaultValues: {
       title: review.title,
-      courseRating: review.rating,
-      courseDifficultyRating: review.difficultyRating,
-      courseWorkload: review.workload,
-      professorRating: review.professorQualityRating,
-      professorDifficultyRating: review.professorDifficultyRating,
-      lectureRating: review.lectureRating,
+      courseRating: review.rating ?? undefined,
+      courseDifficultyRating: review.difficultyRating ?? undefined,
+      courseWorkload: review.workload ?? undefined,
+      professorRating: review.professorQualityRating ?? undefined,
+      professorDifficultyRating: review.professorDifficultyRating ?? undefined,
+      lectureRating: review.lectureRating ?? undefined,
       content: review.content,
     },
   });
@@ -114,7 +114,7 @@ export default function ReviewCardEditing({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col space-y-2 p-3 border border-primary-white rounded overflow-hidden">
+        <div className="flex flex-col space-y-2 p-3 border border-primary-red shadow shadow-primary-red rounded overflow-hidden">
           <FormField
             control={form.control}
             name="title"
@@ -130,13 +130,13 @@ export default function ReviewCardEditing({
           <div className="flex flex-col space-y-1">
             <p className="text-sm max-sm:text-xs text-primary-white/50">
               <span className="font-semibold">Course:</span>{" "}
-              {review.course.name}
+              {review.course.code} - {review.course.name}
             </p>
             <p className="text-sm max-sm:text-xs text-primary-white/50">
               <span className="font-semibold">Professor: </span>
               {formatProfessorName(
-                review.professor.lastName,
-                review.professor.firstName,
+                review.professor?.lastName ?? "",
+                review.professor?.firstName,
               )}
             </p>
             <p className="text-sm max-sm:text-xs text-primary-white/50">

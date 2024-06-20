@@ -16,14 +16,14 @@ export default async function Page({
 }) {
   const professors = await queryAllProfessors();
   const courses = await queryAllCourses();
-  const { professorId, courseCode } = searchParams;
+  const { professorId, code } = searchParams;
   const professor = professorId
     ? professors.find(
         (p: Professor) => p.id == parseInt(professorId.toString()),
       )
     : null;
-  const course = courseCode
-    ? courses.find((c: Course) => c.code == parseInt(courseCode.toString()))
+  const course = code
+    ? courses.find((c: Course) => c.code == parseInt(code.toString()))
     : null;
 
   return (

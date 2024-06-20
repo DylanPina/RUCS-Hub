@@ -75,8 +75,8 @@ export default function CourseTable({ data }: CourseTableProps) {
     <div className="min-w-[75%] max-lg:w-screen max-lg:px-4">
       <div className="max-sm:w-full sm:max-w-[300px] py-4">
         <TableFilterSearch
-          globalFilter={globalFilter}
-          setGlobalFilter={setGlobalFilter}
+          filter={globalFilter}
+          setFilter={setGlobalFilter}
           placeHolder="Filter courses..."
         />
       </div>
@@ -111,7 +111,7 @@ export default function CourseTable({ data }: CourseTableProps) {
                   data-state={row.getIsSelected() && "selected"}
                   className="cursor-pointer hover:bg-primary-red/20 hover:font-bold"
                   onClick={() =>
-                    router.push(`/course/${row.original.courseCode}`)
+                    router.push(`/course/${row.original.code}`)
                   }
                 >
                   {row.getVisibleCells().map((cell) => (

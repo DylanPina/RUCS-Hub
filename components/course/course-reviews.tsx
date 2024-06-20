@@ -1,19 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  formatProfessorName,
-  getTermNameByValue,
-  hashEmailAddress,
-} from "@/lib/utils";
+import { formatProfessorName, getTermNameByValue } from "@/lib/utils";
 import { Review } from "@/lib/definitions/review";
-import { Vote } from "@/lib/definitions/vote";
-import ReviewsSortBy from "@/components/reviews/reviews-sort-by";
-import ReviewsFilterTerm from "@/components/reviews/reviews-filter-term";
-import ReviewsFilterYear from "@/components/reviews/reviews-filter-year";
-import ReviewsFilterSearch from "@/components/reviews/reviews-filter-search";
 import ReviewCard from "@/components/reviews/review-card";
-import ReviewsFilterProfessor from "../reviews/reviews_filter_professor";
 import { Button } from "../shadcn/ui/button";
 import {
   Select,
@@ -23,6 +13,11 @@ import {
   SelectValue,
 } from "@/components/shadcn/ui/select";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import TableSortBy from "../table/table_sort_by";
+import TableFilterYear from "../table/table_filter_year";
+import TableFilterTerm from "../table/table_filter_term";
+import TableFilterProfessor from "../table/table_filter_professor";
+import TableFilterSearch from "../table/table_filter_search";
 
 interface ProfessorReviewProps {
   reviews: Review[];
@@ -48,8 +43,8 @@ export default function CourseReviews({ reviews }: ProfessorReviewProps) {
       new Set(
         reviews.map((review: Review) =>
           formatProfessorName(
-            review.professor.lastName,
-            review.professor.firstName,
+            review.professor?.lastName ?? "",
+            review.professor?.firstName ?? "",
           ),
         ),
       ),
@@ -81,9 +76,9 @@ export default function CourseReviews({ reviews }: ProfessorReviewProps) {
   }
 
   function sortReviewsByUpvotes(reviews: Review[]) {
-    return reviews.sort((a, b) => {
-      const upvotesA = a.votes.filter((vote: Vote) => vote.upvote).length ?? 0;
-      const upvotesB = b.votes.filter((vote: Vote) => vote.upvote).length ?? 0;
+    return reviews.sort((a: Review, b: Review) => {
+      const upvotesA = a.votes.filter((vote: any) => vote.upvote).length ?? 0;
+      const upvotesB = b.votes.filter((vote: any) => vote.upvote).length ?? 0;
 
       if (upvotesA > upvotesB) {
         return -1;
@@ -98,9 +93,9 @@ export default function CourseReviews({ reviews }: ProfessorReviewProps) {
   function sortReviewsByDownvotes(reviews: Review[]) {
     return reviews.sort((a, b) => {
       const downvotesA =
-        a.votes.filter((vote: Vote) => !vote.upvote).length ?? 0;
+        a.votes.filter((vote: any) => !vote.upvote).length ?? 0;
       const downvotesB =
-        b.votes.filter((vote: Vote) => !vote.upvote).length ?? 0;
+        b.votes.filter((vote: any) => !vote.upvote).length ?? 0;
 
       if (downvotesA > downvotesB) {
         return -1;
@@ -138,8 +133,8 @@ export default function CourseReviews({ reviews }: ProfessorReviewProps) {
       const professorMatches =
         professor === "Any" ||
         formatProfessorName(
-          review.professor.lastName,
-          review.professor.firstName,
+          review.professor?.lastName ?? "",
+          review.professor?.firstName ?? "",
         ) === professor;
       const searchMatches =
         review.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -230,32 +225,39 @@ export default function CourseReviews({ reviews }: ProfessorReviewProps) {
             <h3 className="text-lg text-primary-white font-bold mt-auto">
               Course Reviews:
             </h3>
-            <ReviewsFilterSearch
-              onFilterChange={handleSearchTermChange}
+            <TableFilterSearch
+              filter={searchTerm}
+              setFilter={handleSearchTermChange}
               placeHolder="Filter reviews..."
             />
           </div>
           <div className="flex lg:self-end max-lg:flex-col lg:space-x-2 max-lg:space-y-3">
             <div className="lg:w-full">
-              <ReviewsFilterProfessor
+              <TableFilterProfessor
                 professors={professors}
                 selectedProfessor={professor}
                 onProfessorChange={setProfessor}
               />
             </div>
             <div className="flex space-x-2">
-              <ReviewsFilterYear
+              <TableFilterYear
                 selectedYear={year}
                 onYearChange={setYear}
                 years={years}
               />
-              <ReviewsFilterTerm
+              <TableFilterTerm
                 selectedTerm={term}
                 onTermChange={setTerm}
                 terms={terms}
               />
-              <ReviewsSortBy
+              <TableSortBy
                 selectedValue={sortBy}
+                options={[
+                  ["newest", "Newest"],
+                  ["oldest", "Oldest"],
+                  ["upvote", "Upvote"],
+                  ["downvote", "Downvote"],
+                ]}
                 onSelectChange={(value) => setSortBy(value)}
               />
             </div>
@@ -265,7 +267,7 @@ export default function CourseReviews({ reviews }: ProfessorReviewProps) {
       <div className="flex flex-col space-y-3">
         {filteredReviews.length > 0
           ? paginatedReviews.map((review) => (
-              <ReviewCard key={review.id} review={review} user={user} />
+              <ReviewCard key={review.id} review={review} />
             ))
           : noReviewsMessage()}
       </div>

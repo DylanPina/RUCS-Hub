@@ -15,15 +15,19 @@ import ReviewCardEditing from "./review-card-editing";
 import ReviewDeleteButton from "./review-delete-button";
 import ReviewReportButton from "./review-report-button";
 import Link from "next/link";
+import NotificationReviewButton from "../notification/notification_button_review";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 interface ReviewCardProps {
   review: Review;
-  user: any;
 }
 
-export default function ReviewCard({ review, user }: ReviewCardProps) {
+export default function ReviewCard({ review }: ReviewCardProps) {
+  const { user } = useUser();
   const [editing, setEditing] = useState(false);
   const [updatedReview, setUpdatedReview] = useState(review);
+  const isUserReview =
+    user && hashEmailAddress(user?.email ?? "") === review.userId;
 
   if (editing) {
     return (
@@ -36,7 +40,13 @@ export default function ReviewCard({ review, user }: ReviewCardProps) {
   }
 
   return (
-    <div className="flex flex-col space-y-2 p-3 border border-primary-white rounded overflow-hidden">
+    <div
+      className={`flex flex-col space-y-2 p-3 border rounded overflow-hidden relative ${
+        isUserReview
+          ? "border-primary-red shadow shadow-primary-red"
+          : "border-primary-white"
+      }`}
+    >
       <h3 className="text-lg max-sm:text-base text-primary-white font-bold">
         {updatedReview.title}
       </h3>
@@ -55,13 +65,13 @@ export default function ReviewCard({ review, user }: ReviewCardProps) {
           <Link
             className="hover:underline"
             href={getProfessorRoute(
-              updatedReview.professor.lastName,
-              updatedReview.professor.firstName,
+              updatedReview.professor?.lastName ?? "",
+              updatedReview.professor?.firstName ?? "",
             )}
           >
             {formatProfessorName(
-              updatedReview.professor.lastName,
-              updatedReview.professor.firstName,
+              updatedReview.professor?.lastName ?? "",
+              updatedReview.professor?.firstName ?? "",
             )}
           </Link>
         </p>
@@ -119,7 +129,7 @@ export default function ReviewCard({ review, user }: ReviewCardProps) {
             )}
           </li>
         </ul>
-        <ul className="flex flex-col space-y-1 text-sm max-sm:text-xs ">
+        <ul className="flex flex-col space-y-1 text-sm max-sm:text-xs">
           <li>
             <span className="text-primary-white font-semibold">
               Professor Rating:
@@ -169,14 +179,17 @@ export default function ReviewCard({ review, user }: ReviewCardProps) {
       </div>
       <div className="flex space-x-3 !mt-4">
         <ReviewVotes review={review} user={user || null} />
-        {user && hashEmailAddress(user.email) === updatedReview.userId && (
-          <div className="flex space-x-3">
+        {isUserReview ? (
+          <>
             <ReviewEditButton setEditing={() => setEditing(true)} />
             <ReviewDeleteButton review={review} />
-          </div>
+            <div className="absolute top-3 right-3">
+              <NotificationReviewButton user={user} review={review} />
+            </div>
+          </>
+        ) : (
+          <ReviewReportButton review={review} user={user} />
         )}
-        {((user && hashEmailAddress(user.email) !== updatedReview.userId) ||
-          !user) && <ReviewReportButton review={review} user={user} />}
       </div>
     </div>
   );

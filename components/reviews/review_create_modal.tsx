@@ -92,7 +92,7 @@ export default function ReviewCreateModal({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      course: course ? `(${course.courseCode}) ${course.courseName}` : "",
+      course: course ? `(${course.code}) ${course.name}` : "",
       professor: professor
         ? formatProfessorName(
             professor?.lastName || "",
@@ -152,20 +152,20 @@ export default function ReviewCreateModal({
                       <SelectContent>
                         {courses.map((course: any) => (
                           <SelectItem
-                            key={course.courseName}
-                            value={`(${course.courseCode}) ${course.courseName}`}
+                            key={course.name}
+                            value={`(${course.code}) ${course.name}`}
                           >
-                            {`(${course.courseCode}) ${course.courseName}`}
+                            {`(${course.code}) ${course.name}`}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     ) : (
                       <SelectContent>
                         <SelectItem
-                          key={course?.courseCode}
-                          value={`(${course?.courseCode}) ${course?.courseName}`}
+                          key={course?.code}
+                          value={`(${course?.code}) ${course?.name}`}
                         >
-                          {`(${course?.courseCode}) ${course?.courseName}`}
+                          {`(${course?.code}) ${course?.name}`}
                         </SelectItem>
                       </SelectContent>
                     )}

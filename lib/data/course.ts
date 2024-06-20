@@ -28,15 +28,13 @@ import { prisma } from "@/prisma/prisma";
 /**
  * Queries a course by courseId
  *
- * @param courseCode - Course code of the course we are trying to fetch
+ * @param code - Course code of the course we are trying to fetch
  * @return - Course
  */
-export async function queryCourseByCode(
-  courseCode: number,
-): Promise<CoursePage> {
+export async function queryCourseByCode(code: number): Promise<CoursePage> {
   const course = await prisma.course.findUnique({
     where: {
-      code: courseCode,
+      code: code,
     },
     include: {
       reviews: {
@@ -50,7 +48,7 @@ export async function queryCourseByCode(
   });
 
   if (!course) {
-    console.error(`Failed to find course with code ${courseCode}`);
+    console.error(`Failed to find course with code ${code}`);
   }
 
   return getCoursePageRatings(course);
@@ -154,7 +152,7 @@ export async function queryCourseTableDataByYearTerm(
  *
  * @param course - Course we are interested
  */
-function getCoursePageRatings(course: any): CoursePage {
+export function getCoursePageRatings(course: any): CoursePage {
   const reviews: Review[] = course.reviews;
   const overallRatingSum = reviews.reduce(
     (acc, review) => acc + (review.rating ?? 0),
@@ -236,8 +234,8 @@ function getCoursePageRatings(course: any): CoursePage {
       : 0;
 
   return {
-    courseCode: course.code,
-    courseName: course.name,
+    code: course.code,
+    name: course.name,
     prereqs: course.prereqs,
     credits: course.credits,
     synopsisUrl: course.synopsis,
@@ -297,8 +295,8 @@ function getCourseTableRatings(course: any): any {
       : 0;
 
   return {
-    courseCode: course.code,
-    courseName: course.name,
+    code: course.code,
+    name: course.name,
     credits: course.credits,
     rating: reviews.length ? averageRating : -1,
     difficulty: reviewsWithDifficultyRating.length
@@ -439,7 +437,7 @@ export async function parseWebRegListingByYearTerm(
     const courseListingJson = await res.json();
     return courseListingJson.map((courseListing: any) => {
       return {
-        courseCode: Number(courseListing.courseNumber),
+        code: Number(courseListing.courseNumber),
         title: courseListing.title,
         year: year,
         term: term,
@@ -514,8 +512,8 @@ async function parseSynposesListing(): Promise<CourseSynopsesListing[]> {
         element.getAttribute("href") || ""
       }`;
 
-      const [courseCode, courseName] = parseCourseCodeNameString(courseString);
-      courses.push({ courseCode, courseName, synopsisUrl });
+      const [code, name] = parsecodeNameString(courseString);
+      courses.push({ code, name, synopsisUrl });
     });
 
     return courses;
@@ -541,7 +539,7 @@ export async function fetchSynposesListingById(
 
   const courseSynposesListing: CourseSynopsesListing =
     courseSynposesListings.filter(
-      (listing: CourseSynopsesListing) => listing.courseCode == courseId,
+      (listing: CourseSynopsesListing) => listing.code == courseId,
     )[0];
 
   return courseSynposesListing;
@@ -554,8 +552,8 @@ export async function fetchSynposesListingById(
  * @param courseSynposesString - String rerepesnting the listing on course synposes list
  * @return - Parsed course ID and course title (ex [103, "Introduction to Computer Skills"])
  */
-function parseCourseCodeNameString(courseCodeName: string): [number, string] {
-  const normalizedString = courseCodeName.replace(/-/g, " - ");
+function parsecodeNameString(codeName: string): [number, string] {
+  const normalizedString = codeName.replace(/-/g, " - ");
 
   let parts = normalizedString.split(/\s-\s/);
 
@@ -565,10 +563,10 @@ function parseCourseCodeNameString(courseCodeName: string): [number, string] {
 
   const idPart = parts.shift();
   const match = idPart ? idPart.match(/\d{3}(?=\D*$)/) : null;
-  const courseCode = match ? parseInt(match[0]) : -1;
-  const courseName = parts.join(" ").trim();
+  const code = match ? parseInt(match[0]) : -1;
+  const name = parts.join(" ").trim();
 
-  return [courseCode, courseName];
+  return [code, name];
 }
 
 /**
@@ -584,12 +582,12 @@ function combineCourseListings(
 ): CourseTableColumn[] {
   return courseWebRegListing.map((webReg: CourseWebRegListing) => {
     const synposes = courseSynposesListing.find(
-      (x: CourseSynopsesListing) => x.courseCode == webReg.courseCode,
+      (x: CourseSynopsesListing) => x.code == webReg.code,
     );
 
     return {
-      courseCode: webReg.courseCode,
-      courseName: synposes?.courseName || webReg.title,
+      code: webReg.code,
+      name: synposes?.name || webReg.title,
       credits: webReg.credits,
       synopsisUrl: synposes?.synopsisUrl || "",
       prereqs: webReg.prereqs,
@@ -607,12 +605,12 @@ function mergeCourseListings(
   courseListings: CourseTableColumn[][],
 ): CourseTableColumn[] {
   const mergedCourseListing: CourseTableColumn[] = [];
-  const courseCodes = new Set<number>();
+  const codes = new Set<number>();
 
   for (const columns of courseListings) {
     for (const column of columns) {
-      if (!courseCodes.has(column.courseCode)) {
-        courseCodes.add(column.courseCode);
+      if (!codes.has(column.code)) {
+        codes.add(column.code);
         mergedCourseListing.push(column);
       }
     }
@@ -634,12 +632,12 @@ export async function fetchCourseSections(): Promise<any[]> {
 
   webReg.forEach(
     ({
-      courseCode,
+      code,
       year,
       term,
       sections,
     }: {
-      courseCode: string;
+      code: string;
       year: number;
       term: Term;
       sections: CourseSection[];
@@ -664,7 +662,7 @@ export async function fetchCourseSections(): Promise<any[]> {
 
             courseSections.push({
               sectionNumber,
-              courseCode,
+              code,
               professorId,
               term,
               year,
@@ -703,11 +701,11 @@ export async function queryCoursesTaughtByProfessor(
 ): Promise<number[]> {
   const sections = await queryAllCourseSections();
 
-  const courseCodes = sections
+  const codes = sections
     .filter((section: Section) => section.professorId === professorId)
     .map((section) => section.courseCode);
 
-  return Array.from(new Set(courseCodes));
+  return Array.from(new Set(codes));
 }
 
 /**
@@ -721,7 +719,7 @@ export async function getCoursesBeingTaughtByProfessor(
 ): Promise<number[]> {
   const sections = await queryAllCourseSections();
 
-  const courseCodes = sections
+  const codes = sections
     .filter(
       (section: Section) =>
         section.professorId === professorId &&
@@ -730,7 +728,7 @@ export async function getCoursesBeingTaughtByProfessor(
     )
     .map((section) => section.courseCode);
 
-  return Array.from(new Set(courseCodes));
+  return Array.from(new Set(codes));
 }
 
 /**

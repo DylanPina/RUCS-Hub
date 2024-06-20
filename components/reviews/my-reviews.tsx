@@ -1,11 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import ReviewsFilterCourse from "@/components/reviews/reviews-filter-course";
-import ReviewsFilterSearch from "@/components/reviews/reviews-filter-search";
-import ReviewsFilterTerm from "@/components/reviews/reviews-filter-term";
-import ReviewsFilterYear from "@/components/reviews/reviews-filter-year";
-import ReviewsSortBy from "@/components/reviews/reviews-sort-by";
+import TableFilterCourse from "@/components/table/table_filter_course";
+import TableFilterSearch from "@/components/table/table_filter_search";
+import TableFilterTerm from "@/components/table/table_filter_term";
+import TableFilterYear from "@/components/table/table_filter_year";
 import { formatProfessorName, getTermNameByValue } from "@/lib/utils";
 import { Review } from "@prisma/client";
 import {
@@ -17,7 +16,9 @@ import {
 } from "@/components/shadcn/ui/select";
 import { Button } from "@/components/shadcn/ui/button";
 import ReviewCard from "./review-card";
-import ReviewsFilterProfessor from "./reviews_filter_professor";
+import TableFilterProfessor from "../table/table_filter_professor";
+import { useSearchParams } from "next/navigation";
+import TableSortBy from "../table/table_sort_by";
 
 interface Props {
   reviews: Review[];
@@ -25,9 +26,12 @@ interface Props {
 }
 
 export default function MyReviews({ reviews, user }: Props) {
+  const searchParams = useSearchParams();
   const [filteredReviews, setFilteredReviews] = useState(reviews);
   const [paginatedReviews, setPaginatedReviews] = useState(reviews);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState(
+    searchParams.get("searchTerm") ?? "",
+  );
   const [sortBy, setSortBy] = useState("newest");
   const [year, setYear] = useState("Any");
   const [years, setYears] = useState<any>([]);
@@ -35,7 +39,9 @@ export default function MyReviews({ reviews, user }: Props) {
   const [terms, setTerms] = useState<any>([]);
   const [course, setCourse] = useState("Any");
   const [courses, setCourses] = useState(["Any"]);
-  const [professor, setProfessor] = useState("Any");
+  const [professor, setProfessor] = useState(
+    searchParams.get("professor") ?? "Any",
+  );
   const [professors, setProfessors] = useState(["Any"]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [startIndex, setStartIndex] = useState(0);
@@ -214,6 +220,12 @@ export default function MyReviews({ reviews, user }: Props) {
     }
   }, [professor, reviews, course]);
 
+  useEffect(() => {
+    if (searchParams.get("searchTerm")) {
+      handleSearchTermChange(searchParams.get("searchTerm") ?? "");
+    }
+  }, [searchParams]);
+
   function noReviewsMessage() {
     if (reviews.length > 0 && !searchTerm) {
       const isAnyTermOrYear =
@@ -280,38 +292,45 @@ export default function MyReviews({ reviews, user }: Props) {
       <div className="flex flex-col max-sm:space-y-3">
         <div className="flex max-lg:flex-col lg:space-x-2 max-lg:space-y-3 place-content-between w-full space-y-1">
           <div className="flex-col space-y-3 max-lg:w-full lg:max-w-[300px] self-end">
-            <ReviewsFilterSearch
-              onFilterChange={handleSearchTermChange}
-              placeHolder="Filter reviews..."
+            <TableFilterSearch
+              filter={searchTerm}
+              setFilter={handleSearchTermChange}
+              placeHolder="Search reviews..."
             />
           </div>
           <div className="flex lg:self-end max-lg:flex-col lg:space-x-2 max-lg:space-y-3">
             <div className="flex lg:space-x-2 max-lg:space-y-3 max-lg:flex-col max-lg:w-full">
-              <ReviewsFilterCourse
+              <TableFilterCourse
                 courses={courses}
                 selectedCourse={course}
                 onCourseChange={setCourse}
               />
-              <ReviewsFilterProfessor
+              <TableFilterProfessor
                 professors={professors}
                 selectedProfessor={professor}
                 onProfessorChange={setProfessor}
               />
             </div>
-            <div className="flex space-x-2">
-              <ReviewsFilterYear
+            <div className="flex space-x-2 w-full">
+              <TableFilterYear
                 selectedYear={year}
                 onYearChange={setYear}
                 years={years}
               />
-              <ReviewsFilterTerm
+              <TableFilterTerm
                 selectedTerm={term}
                 onTermChange={setTerm}
                 terms={terms}
               />
-              <ReviewsSortBy
+              <TableSortBy
                 selectedValue={sortBy}
-                onSelectChange={(value) => setSortBy(value)}
+                options={[
+                  ["newest", "Newest"],
+                  ["oldest", "Oldest"],
+                  ["upvote", "Upvote"],
+                  ["downvote", "Downvote"],
+                ]}
+                onSelectChange={(value: any) => setSortBy(value)}
               />
             </div>
           </div>
@@ -320,7 +339,7 @@ export default function MyReviews({ reviews, user }: Props) {
       <div className="flex flex-col space-y-3">
         {filteredReviews.length > 0
           ? paginatedReviews.map((review: any) => (
-              <ReviewCard key={review.id} review={review} user={user} />
+              <ReviewCard key={review.id} review={review} />
             ))
           : noReviewsMessage()}
       </div>

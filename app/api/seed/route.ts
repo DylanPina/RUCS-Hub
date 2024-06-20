@@ -59,9 +59,9 @@ async function seedMockUsers(prisma: any): Promise<Response> {
 async function seedCourses(prisma: any): Promise<Response> {
   const courseTableListings: any[] = await fetchAllCourseTableListings();
   const courses = courseTableListings.map(
-    ({ courseCode, courseName, credits, synopsisUrl, prereqs }) => ({
-      code: courseCode,
-      name: courseName,
+    ({ code, name, credits, synopsisUrl, prereqs }) => ({
+      courseCode: code,
+      name: name,
       credits,
       synopsis: synopsisUrl,
       prereqs,

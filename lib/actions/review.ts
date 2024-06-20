@@ -1,11 +1,16 @@
 "use server";
 
+import {
+  notifySubscribersCourseReviewCreated,
+  notifySubscribersProfessorReviewCreated,
+} from "../data/notification";
 import { downvoteReview, upvoteReview } from "../data/review";
+import { createSubscription } from "../data/subscription";
 import { ReviewForm } from "../definitions/review";
 import { prisma } from "@/prisma/prisma";
 
 /**
- * Creates a new review
+ * Creates a new review and subscribes the user to updates on the review
  *
  * @param reviewForm - The review form data
  * @param userId - The ID of the user creating the review
@@ -31,12 +36,13 @@ export default async function createReview(
     },
   });
 
-  const professorId = professor?.id;
+  const professorId = professor?.id || -1;
+  const code = Number(reviewForm.course.split(" ")[0]);
 
-  await prisma.review.create({
+  const review = await prisma.review.create({
     data: {
       userId,
-      courseCode: Number(reviewForm.course.split(" ")[0]),
+      courseCode: code,
       professorId: professorId,
       year: Number(reviewForm.year),
       semester: Number(reviewForm.term),
@@ -50,6 +56,16 @@ export default async function createReview(
       lectureRating: Number(reviewForm.lectureRating),
     },
   });
+
+  if (!review) {
+    throw new Error("Failed to create review");
+  }
+
+  await createSubscription(userId, undefined, undefined, review.id);
+
+  const { id: reviewId } = review;
+  await notifySubscribersCourseReviewCreated(code, reviewId);
+  await notifySubscribersProfessorReviewCreated(professorId, reviewId);
 }
 
 /**
@@ -93,11 +109,15 @@ export async function updateReview(reviewId: number, reviewForm: ReviewForm) {
  * @param upvote - Whether the user is voting up or down
  */
 export async function vote(userId: string, reviewId: number, upvote: boolean) {
-  if (upvote) {
-    return await upvoteReview(userId, reviewId);
+  const isCreator = await isReviewCreator(userId, reviewId);
+
+  if (isCreator) {
+    throw new Error("Cannot vote on your own review");
   }
 
-  return await downvoteReview(userId, reviewId);
+  return upvote
+    ? await upvoteReview(userId, reviewId)
+    : await downvoteReview(userId, reviewId);
 }
 
 /**
@@ -109,6 +129,21 @@ export async function deleteReview(reviewId: number) {
   return await prisma.review.delete({
     where: {
       id: reviewId,
+    },
+  });
+}
+
+/**
+ * Check if the user is the creator of the review
+ *
+ * @param userId - The ID of the user
+ * @param reviewId - The ID of the review
+ */
+export async function isReviewCreator(userId: string, reviewId: number) {
+  return await prisma.review.findFirst({
+    where: {
+      id: reviewId,
+      userId: userId,
     },
   });
 }

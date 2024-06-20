@@ -1,32 +1,16 @@
-import { Course } from "./course";
-import { Professor } from "./professor";
-import { User } from "./user";
-import { Vote } from "./vote";
+import { Prisma } from "@prisma/client";
 
-export type Review = {
-  id: number;
-  user: User;
-  userId: string;
-  semester: number;
-  year: number;
-  course: Course;
-  courseCode: number;
-  title: string;
-  content: string;
-  createdAt: Date;
-  lastModified: Date;
-  rating: number;
-  votes: Vote[];
-  difficultyRating: number;
-  professor: Professor;
-  professorId?: number;
-  professorQualityRating?: number;
-  professorDifficultyRating?: number;
-  lectureRating?: number;
-  bookRating?: number;
-  piazzaRating?: number;
-  workload?: number;
-};
+export type Review = Prisma.ReviewGetPayload<{
+  include: {
+    user: true;
+    course: true;
+    votes: true;
+    professor: true;
+    reports: true;
+    notifications: true;
+    subscribers: true;
+  };
+}>;
 
 export type ReviewForm = {
   course: string;

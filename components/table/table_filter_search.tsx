@@ -5,13 +5,13 @@ import { IoFilter } from "react-icons/io5";
 import { Input } from "../shadcn/ui/input";
 
 interface Props {
-  globalFilter: any;
-  setGlobalFilter: any;
+  filter: any;
+  setFilter: (value: string) => void;
   placeHolder: string;
 }
 export default function TableFilterSearch({
-  globalFilter,
-  setGlobalFilter,
+  filter,
+  setFilter,
   placeHolder,
 }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -41,8 +41,8 @@ export default function TableFilterSearch({
         />
         <Input
           placeholder={placeHolder}
-          value={globalFilter || ""}
-          onChange={(event) => setGlobalFilter(event.target.value)}
+          value={filter || ""}
+          onChange={(event) => setFilter(event.target.value)}
           ref={inputRef}
           className="pl-8 pr-8 focus:border-2 focus:border-primary-red hover:border-primary-red transition-all duration-150 ease-out hover:ease-in"
         />
