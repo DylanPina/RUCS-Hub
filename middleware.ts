@@ -8,7 +8,11 @@ export default withMiddlewareAuthRequired(async function middleware(req) {
   const res = NextResponse.next();
   const session = await getSession(req, res);
 
-  if (!session?.user.email_verified && req.nextUrl.pathname === "/add-review") {
+  if (
+    !session?.user.email_verified &&
+    (req.nextUrl.pathname === "/add-review" ||
+      req.nextUrl.pathname === "/my-reviews")
+  ) {
     return NextResponse.redirect(new URL("/verify", req.url));
   }
 

@@ -1,4 +1,4 @@
-import SubscriptionTable from "@/components/subscription/subscription_table";
+import SubscriptionTable from "@/components/Subscription/SubscriptionTable";
 import { getSubscriptionCards } from "@/lib/actions/subscription";
 import { hashEmailAddress } from "@/lib/utils";
 import { getSession } from "@auth0/nextjs-auth0";

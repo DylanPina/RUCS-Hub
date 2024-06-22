@@ -1,14 +1,14 @@
 import React from "react";
 import { Avatar, AvatarImage } from "@/components/shadcn/ui/avatar";
 import { Input } from "@/components/shadcn/ui/input";
-import DeleteUserButton from "@/components/profile/delete-user-button";
-import ResetPasswordButton from "@/components/profile/reset-password-button";
+import ProfileDeleteUserButton from "@/components/Profile/ProfileDeleteUserButton";
+import ResetPasswordButton from "@/components/Profile/ProfileResetPasswordButton";
 import { getSession } from "@auth0/nextjs-auth0";
 import {
   getLastEmailVerification,
   getLastPasswordReset,
 } from "@/lib/data/user";
-import ResendEmailVerificationBadge from "@/components/auth/resend-email-verification-badge";
+import ResendEmailVerificationBadge from "@/components/Auth/ResendEmailVerificationBadge";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -69,7 +69,7 @@ export default async function Page() {
             user={session?.user}
             lastPasswordReset={lastPasswordReset}
           />
-          <DeleteUserButton
+          <ProfileDeleteUserButton
             email={session?.user.email || ""}
             userAuthId={session?.user.sub || ""}
           />

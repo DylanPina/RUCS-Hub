@@ -1,4 +1,4 @@
-import ReviewCreateForm from "@/components/reviews/review_create_form";
+import ReviewCreateForm from "@/components/Review/ReviewCreateForm";
 import { queryAllCourses } from "@/lib/data/course";
 import { queryAllProfessors } from "@/lib/data/professor";
 import { Course, Professor } from "@prisma/client";

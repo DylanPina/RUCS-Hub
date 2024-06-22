@@ -1,5 +1,5 @@
 import React from "react";
-import MyReviews from "@/components/reviews/my-reviews";
+import ReviewList from "@/components/Review/ReviewList";
 import { getSession } from "@auth0/nextjs-auth0";
 import { getReviewsByUser } from "@/lib/data/user";
 import type { Metadata } from "next";
@@ -17,7 +17,7 @@ export default async function Page() {
       <h1 className="text-4xl max-sm:text-2xl text-primary-white font-bold">
         My Reviews
       </h1>
-      <MyReviews reviews={reviews} user={session?.user} />
+      <ReviewList reviews={reviews} user={session?.user} />
     </div>
   );
 }

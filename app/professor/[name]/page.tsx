@@ -2,8 +2,8 @@ import { queryProfessorByName } from "@/lib/data/professor";
 import { ProfessorPage } from "@/lib/definitions/professor";
 import { kebabCaseToTitleCase } from "@/lib/utils";
 import type { Metadata } from "next";
-import ProfessorBanner from "../professor-banner/professor_banner";
-import ProfessorReviews from "../professor-reviews/professor_reviews";
+import ProfessorBanner from "@/components/Professor/ProfessorBanner";
+import ProfessorReviews from "@/components/Professor/ProfessorReviews";
 
 type Props = {
   params: { name: string };
