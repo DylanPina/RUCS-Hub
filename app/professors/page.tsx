@@ -1,5 +1,5 @@
-import ProfessorListingHeader from "@/components/professor-table/professor_listing_header";
-import ProfessorTable from "@/components/professor-table/professor_table";
+import ProfessorListingHeader from "@/components/ProfessorTable/ProfessorTableHeader";
+import ProfessorTable from "@/components/ProfessorTable/ProfessorTable";
 import { queryProfessorTableData } from "@/lib/data/professor";
 import { ProfessorTableColumn } from "@/lib/definitions/professor";
 import { Metadata } from "next";

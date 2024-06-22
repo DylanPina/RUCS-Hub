@@ -2,8 +2,8 @@ import { queryCourseByCode } from "@/lib/data/course";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { CoursePage } from "@/lib/definitions/course";
-import CourseBanner from "@/components/course/course-banner";
-import CourseReviews from "@/components/course/course-reviews";
+import CourseBanner from "@/components/Course/CourseBanner";
+import CourseReviews from "@/components/Course/CourseReviews";
 
 type Props = {
   params: { id: string };

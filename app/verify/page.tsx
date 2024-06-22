@@ -1,4 +1,4 @@
-import ResendEmailVerificationButton from "@/components/auth/resend_email_verification_button";
+import ResendEmailVerificationButton from "@/components/Auth/ResendEmailVerificationButton";
 import { getLastEmailVerification } from "@/lib/data/user";
 import { getSession } from "@auth0/nextjs-auth0";
 import { Metadata } from "next";

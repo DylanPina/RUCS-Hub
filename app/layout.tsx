@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Source_Code_Pro } from "next/font/google";
-import Nav from "@/components/nav/nav";
+import Nav from "@/components/Nav/Nav";
 import "@/app/globals.css";
-import Footer from "@/components/footer/footer";
-import { AuthProvider } from "@/components/auth/auth_provider";
+import Footer from "@/components/Footer/Footer";
+import { AuthProvider } from "@/components/Auth/AuthProvider";
 import { ToastContainer } from "react-toastify";
 import { Toaster } from "@/components/shadcn/ui/toaster";
 import "react-toastify/dist/ReactToastify.css";
