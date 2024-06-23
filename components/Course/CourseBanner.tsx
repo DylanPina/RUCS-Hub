@@ -41,7 +41,7 @@ export default async function CourseBanner({ coursePage }: Props) {
                 />
               </div>
             )}
-            <h1 className="text-xl max-md:text-lg text-primary-black font-black">
+            <h1 className="text-xl max-w-[95%] text-wrap max-md:text-lg text-primary-black font-black">
               {code} - {name}
             </h1>
             <div className="flex flex-col space-y-1">
