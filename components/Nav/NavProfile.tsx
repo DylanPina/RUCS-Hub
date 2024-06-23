@@ -40,7 +40,6 @@ export default function NavProfile() {
                     variant="ghost"
                     size="icon"
                     className="rounded-full overflow-hidden transition duration-150 ease-out hover:ease-in"
-                    onClick={() => router.push("/api/auth/logout")}
                   >
                     <Avatar className="w-9 h-9 border-2 rounded-full overflow-hidden shadow-sm shadow-primary-white/20 outline-primary-white transition duration-150 ease-out hover:ease-in hover:outline-primary-red hover:shadow-primary-red">
                       <AvatarImage
