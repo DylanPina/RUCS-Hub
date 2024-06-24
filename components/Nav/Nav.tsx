@@ -7,7 +7,7 @@ import { HiMiniAcademicCap } from "react-icons/hi2";
 import NavProfile from "./NavProfile";
 import SignIn from "../Auth/SignIn";
 import { getCourseTableDataByYearTerm } from "@/lib/data/course";
-import { queryProfessorTableData } from "@/lib/data/professor";
+import { getProfessorTableData } from "@/lib/data/professor";
 import { ProfessorTableColumn } from "@/lib/definitions/professor";
 import { CourseTableColumn } from "@/lib/definitions/course";
 import { MdRateReview } from "react-icons/md";
@@ -23,7 +23,7 @@ export default async function Nav() {
     await getCourseTableDataByYearTerm(null, null);
 
   const professorTableData: ProfessorTableColumn[] =
-    await queryProfessorTableData();
+    await getProfessorTableData();
 
   const notifications = await getNotifications(
     hashEmailAddress(session?.user?.email as string),

@@ -2,7 +2,7 @@ import {
   getAllCourseTableListings,
   getCourseSectionsWebReg,
 } from "@/lib/data/course";
-import { fetchProfessorNames } from "@/lib/data/professor";
+import { getProfessorNames } from "@/lib/data/professor";
 import { mockReviews } from "@/lib/mock-data/review-mock-data";
 import { mockUsers } from "@/lib/mock-data/user-mock-data";
 import { mockVotes } from "@/lib/mock-data/vote-mock-data";
@@ -84,7 +84,7 @@ async function seedCourses(prisma: any): Promise<Response> {
  * @param prisma - The Prisma client
  */
 async function seedProfessors(prisma: any): Promise<Response> {
-  const professorNames: string[][] = await fetchProfessorNames();
+  const professorNames: string[][] = await getProfessorNames();
   const professrNamesMapped: any[] = professorNames.map(
     (professorName: string[]) => {
       return {

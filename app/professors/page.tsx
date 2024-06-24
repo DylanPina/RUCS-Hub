@@ -1,6 +1,6 @@
 import ProfessorListingHeader from "@/components/ProfessorTable/ProfessorTableHeader";
 import ProfessorTable from "@/components/ProfessorTable/ProfessorTable";
-import { queryProfessorTableData } from "@/lib/data/professor";
+import { getProfessorTableData } from "@/lib/data/professor";
 import { ProfessorTableColumn } from "@/lib/definitions/professor";
 import { Metadata } from "next";
 
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const professorData: ProfessorTableColumn[] = await queryProfessorTableData();
+  const professorData: ProfessorTableColumn[] = await getProfessorTableData();
 
   return (
     <div className="flex flex-col place-items-center justify-center space-y-2">

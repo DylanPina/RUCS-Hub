@@ -1,7 +1,7 @@
 "use server";
 
-import { queryProfessorsByCourse } from "../data/professor";
+import { getProfessorByCourse } from "../data/professor";
 
 export default async function getProfessorsByCourse(code: number) {
-  return await queryProfessorsByCourse(code);
+  return await getProfessorByCourse(code);
 }

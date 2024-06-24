@@ -1,4 +1,4 @@
-import { queryProfessorByName } from "@/lib/data/professor";
+import { getProfessorByName } from "@/lib/data/professor";
 import { ProfessorPage } from "@/lib/definitions/professor";
 import { kebabCaseToTitleCase } from "@/lib/utils";
 import type { Metadata } from "next";
@@ -20,7 +20,7 @@ export default async function Page({ params }: Props) {
   const [firstName, lastName] =
     name.split("-").length == 2 ? name.split("-") : ["", name];
 
-  const professor: ProfessorPage = await queryProfessorByName(
+  const professor: ProfessorPage = await getProfessorByName(
     firstName.toUpperCase() ?? "",
     lastName.toUpperCase(),
   );

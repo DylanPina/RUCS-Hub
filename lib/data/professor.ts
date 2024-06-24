@@ -2,17 +2,16 @@ import { Term } from "../definitions/course";
 import { ProfessorPage, ProfessorTableColumn } from "../definitions/professor";
 import { formatProfessorName, getValidYearTermMap } from "../utils";
 import { getListingByYearTermWebReg } from "./course";
-import { titleCase } from "../utils";
 import { prisma } from "@/prisma/prisma";
 import { Professor, Review } from "@prisma/client";
 
 /**
- * Query professor by first and last name
+ * Get professor by first and last name
  *
  * @param firstName - First name of professor or null
  * @param lastName - Last name of professor
  */
-export async function queryProfessorByName(
+export async function getProfessorByName(
   firstName: string | null,
   lastName: string,
 ): Promise<ProfessorPage> {
@@ -40,11 +39,11 @@ export async function queryProfessorByName(
 }
 
 /**
- * Query all professors
+ * Get all professors
  *
  * @return - List of all professors
  */
-export async function queryAllProfessors(): Promise<Professor[]> {
+export async function getAllProfessors(): Promise<Professor[]> {
   const professors = await prisma.professor.findMany({
     orderBy: [{ lastName: "asc" }, { firstName: "asc" }],
   });
@@ -52,13 +51,11 @@ export async function queryAllProfessors(): Promise<Professor[]> {
 }
 
 /**
- * Query for professor table data
+ * Get professor table data
  *
  * @return - Professor table data
  */
-export async function queryProfessorTableData(): Promise<
-  ProfessorTableColumn[]
-> {
+export async function getProfessorTableData(): Promise<ProfessorTableColumn[]> {
   const professors = await prisma.professor.findMany({
     include: {
       reviews: true,
@@ -71,32 +68,11 @@ export async function queryProfessorTableData(): Promise<
 }
 
 /**
- * Fetches professor table data
- *
- * @return - Professor table data
- */
-export async function fetchProfessorTableData(): Promise<
-  ProfessorTableColumn[]
-> {
-  const professorNames: [string, string][] = await fetchProfessorNames();
-
-  return professorNames.map(([lastName, firstName]: [string, string]) => {
-    return {
-      firstName: titleCase(firstName),
-      lastName: titleCase(lastName),
-      overall: 0,
-      difficulty: 0,
-      totalReviews: 0,
-    };
-  });
-}
-
-/**
- * Fetches all the names of professors for the CS department
+ * Get all the names of professors for the CS department
  *
  * @return - List of tuples which contain [lastName, firstName]
  */
-export async function fetchProfessorNames(): Promise<[string, string][]> {
+export async function getProfessorNames(): Promise<[string, string][]> {
   const validYearTermMap: Map<number, Term[]> = getValidYearTermMap();
 
   const sections: Promise<any[]>[] = [];
@@ -248,14 +224,12 @@ function getProfessorTableRatings(professor: any): any {
 }
 
 /**
- * Query for professor by course
+ * Get professor by course
  *
  * @param courseId - Course ID
  * @return - List of professors
  */
-export async function queryProfessorsByCourse(
-  code: number,
-): Promise<Professor[]> {
+export async function getProfessorByCourse(code: number): Promise<Professor[]> {
   const professors = await prisma.professor.findMany({
     where: {
       sections: {

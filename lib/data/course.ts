@@ -26,7 +26,7 @@ import { Review } from "../definitions/review";
 import { prisma } from "@/prisma/prisma";
 
 /**
- * Queries a course by courseId
+ * Get course by courseId
  *
  * @param code - Course code of the course we are trying to fetch
  * @return - Course
@@ -55,7 +55,7 @@ export async function getCourseByCode(code: number): Promise<CoursePage> {
 }
 
 /**
- * Queries all courses
+ * Get courses
  *
  * @return - List of all courses
  */
@@ -77,7 +77,7 @@ export async function getAllCourses(): Promise<Course[]> {
 }
 
 /**
- * Queries all course table listings
+ * Get course table listings
  *
  * @return - List of all course table listings
  */
@@ -99,7 +99,7 @@ export async function getAllCourseTableListings(): Promise<
 }
 
 /**
- * Query course table data based on the given year and term
+ * Get course table data based on the given year and term
  *
  * @param year - Year the courses were offered (or null or all)
  * @param term - Term the courses were offered (or null or all)
@@ -321,9 +321,9 @@ export async function getCourseTableData(
   if (year !== null && term !== null) {
     return await getCourseTableListingsByYearTermWebReg(year, term);
   } else if (term !== null && year === null) {
-    return await fetchCourseTableListingsByTerm(term);
+    return await getCourseTableListingByTermWebReg(term);
   } else if (term === null && year !== null) {
-    return await fetchCourseTableListingByYear(year);
+    return await getCourseTableListingByYearWebReg(year);
   } else {
     return await getAllCourseTableListingsWebReg();
   }
@@ -359,7 +359,7 @@ export async function getAllCourseTableListingsWebReg(): Promise<
  * @param term - The term we are interested in
  * @return - A list of all the documented courses from that term
  */
-async function fetchCourseTableListingsByTerm(
+async function getCourseTableListingByTermWebReg(
   term: Term,
 ): Promise<CourseTableColumn[]> {
   const years: number[] = getYears();
@@ -382,7 +382,7 @@ async function fetchCourseTableListingsByTerm(
  * @param year - The year we are interested in
  * @return - A list of all the documented courses from that year
  */
-async function fetchCourseTableListingByYear(
+async function getCourseTableListingByYearWebReg(
   year: number,
 ): Promise<CourseTableColumn[]> {
   const terms: Term[] = getTerms();
@@ -686,7 +686,7 @@ export async function getCourseSectionsWebReg(): Promise<any[]> {
 }
 
 /**
- * Query all course section from the database
+ * Get all course section from the database
  *
  * @return - All course sections from the database
  */

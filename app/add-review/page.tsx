@@ -1,6 +1,6 @@
 import ReviewCreateForm from "@/components/Review/ReviewCreateForm";
 import { getAllCourses } from "@/lib/data/course";
-import { queryAllProfessors } from "@/lib/data/professor";
+import { getAllProfessors } from "@/lib/data/professor";
 import { Course, Professor } from "@prisma/client";
 import React from "react";
 import type { Metadata } from "next";
@@ -14,7 +14,7 @@ export default async function Page({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const professors = await queryAllProfessors();
+  const professors = await getAllProfessors();
   const courses = await getAllCourses();
   const { professorId, code } = searchParams;
   const professor = professorId
