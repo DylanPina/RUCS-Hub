@@ -15,7 +15,7 @@ import {
   validateCourseTermYear,
 } from "@/lib/utils";
 import {
-  COURSE_SYNOPSES_URL,
+  CS_COURSE_SYNOPSES_URL,
   RUTGERS_CS_URL,
   WEBREG_BASE_URL,
 } from "@/lib/constants";
@@ -457,7 +457,7 @@ export async function parseWebRegListingByYearTerm(
     });
   } catch (error) {
     console.error(
-      `Failed to parse synposes listing from ${COURSE_SYNOPSES_URL} - ${error}`,
+      `Failed to parse synposes listing from ${CS_COURSE_SYNOPSES_URL} - ${error}`,
     );
     return [];
   }
@@ -489,11 +489,11 @@ export async function fetchAllWebRegListings(): Promise<CourseWebRegListing[]> {
  */
 async function parseSynposesListing(): Promise<CourseSynopsesListing[]> {
   try {
-    const res = await fetch(COURSE_SYNOPSES_URL);
+    const res = await fetch(CS_COURSE_SYNOPSES_URL);
 
     if (!res.ok) {
       throw new Error(
-        `Error fetching synposes listing from ${COURSE_SYNOPSES_URL}`,
+        `Error fetching synposes listing from ${CS_COURSE_SYNOPSES_URL}`,
       );
     }
 
@@ -519,7 +519,7 @@ async function parseSynposesListing(): Promise<CourseSynopsesListing[]> {
     return courses;
   } catch (error) {
     console.error(
-      `Error parsing synposes listing from ${COURSE_SYNOPSES_URL}: ${error}`,
+      `Error parsing synposes listing from ${CS_COURSE_SYNOPSES_URL}: ${error}`,
     );
     return [];
   }

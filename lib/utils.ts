@@ -181,6 +181,7 @@ export function getValidTerms(year: number | null): string[] {
 export function titleCase(input: string): string {
   return input
     .toLowerCase()
+    .replace(" and ", " & ")
     .split(" ")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");

@@ -20,12 +20,12 @@ model User {
 }
 
 model Professor {
-  id          Int            @id @default(autoincrement())
-  firstName   String
-  lastName    String
-  reviews     Review[]
-  sections    Section[]
-  subscribers Subscription[]
+  id            Int            @id @default(autoincrement())
+  firstName     String
+  lastName      String
+  reviews       Review[]
+  sections      Section[]
+  subscribers   Subscription[]
   notifications Notification[]
 }
 
@@ -42,14 +42,16 @@ model Section {
 }
 
 model Course {
-  code        Int            @id
-  name        String
-  prereqs     String[]
-  synopsis    String?
-  credits     Int?
-  reviews     Review[]
-  sections    Section[]
-  subscribers Subscription[]
+  code          Int            @id
+  name          String
+  prereqs       String[]
+  synopsis      String?
+  credits       Int?
+  subject       Subject        @relation(fields: [subjectCode], references: [code], onDelete: Cascade)
+  subjectCode   String         
+  reviews       Review[]
+  sections      Section[]
+  subscribers   Subscription[]
   notifications Notification[]
 }
 
@@ -104,19 +106,19 @@ model Report {
 }
 
 model Notification {
-  id          Int      @id @default(autoincrement())
-  recipient   User     @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  id          Int        @id @default(autoincrement())
+  recipient   User       @relation(fields: [recipientId], references: [id], onDelete: Cascade)
   recipientId String
-  vote        Vote?     @relation(fields: [voteId], references: [id], onDelete: Cascade)
+  vote        Vote?      @relation(fields: [voteId], references: [id], onDelete: Cascade)
   voteId      Int?
-  review      Review?   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  review      Review?    @relation(fields: [reviewId], references: [id], onDelete: Cascade)
   reviewId    Int?
   professor   Professor? @relation(fields: [professorId], references: [id], onDelete: Cascade)
   professorId Int?
   course      Course?    @relation(fields: [courseCode], references: [code], onDelete: Cascade)
   courseCode  Int?
-  createdAt   DateTime @default(now())
-  read        Boolean  @default(false)
+  createdAt   DateTime   @default(now())
+  read        Boolean    @default(false)
 }
 
 model Subscription {
@@ -131,3 +133,10 @@ model Subscription {
   reviewId    Int?
   createdAt   DateTime   @default(now())
 }
+
+model Subject {
+  code    String   @id
+  name    String
+  courses Course[]
+}
+

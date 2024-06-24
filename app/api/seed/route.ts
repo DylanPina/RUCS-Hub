@@ -8,6 +8,7 @@ import { mockUsers } from "@/lib/mock-data/user-mock-data";
 import { mockVotes } from "@/lib/mock-data/vote-mock-data";
 import { Professor, Review, Vote } from "@prisma/client";
 import { prisma } from "@/prisma/prisma";
+import { getSubjects } from "@/lib/data/subject";
 
 export async function GET() {
   // Uncomment the following line to seed the database when this URL is visited
@@ -24,6 +25,7 @@ export async function GET() {
  */
 async function seedDatabase(prisma: any): Promise<Response> {
   const seedUsersResponse: Response = await seedMockUsers(prisma);
+  const seedSubjectsResponse: Response = await seedSubjects(prisma);
   const seedCoursesResponse: Response = await seedCourses(prisma);
   const seedProfessorsResponse: Response = await seedProfessors(prisma);
   const seedSectionsResponse: Response = await seedSections(prisma);
@@ -32,6 +34,7 @@ async function seedDatabase(prisma: any): Promise<Response> {
 
   return Response.json({
     users: seedUsersResponse,
+    subjects: seedSubjectsResponse,
     courses: seedCoursesResponse,
     professors: seedProfessorsResponse,
     sections: seedSectionsResponse,
@@ -137,4 +140,18 @@ async function seedSections(prisma: any): Promise<Response> {
   });
 
   return Response.json(createSections);
+}
+
+/**
+ * Seed the database with subjects
+ *
+ * @param prisma - The Prisma client
+ */
+async function seedSubjects(prisma: any): Promise<Response> {
+  const subjects = await getSubjects();
+  const createSubjects: any = await prisma.subject.createMany({
+    data: subjects,
+  });
+
+  return Response.json(createSubjects);
 }
