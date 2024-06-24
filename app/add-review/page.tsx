@@ -1,5 +1,5 @@
 import ReviewCreateForm from "@/components/Review/ReviewCreateForm";
-import { queryAllCourses } from "@/lib/data/course";
+import { getAllCourses } from "@/lib/data/course";
 import { queryAllProfessors } from "@/lib/data/professor";
 import { Course, Professor } from "@prisma/client";
 import React from "react";
@@ -15,7 +15,7 @@ export default async function Page({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const professors = await queryAllProfessors();
-  const courses = await queryAllCourses();
+  const courses = await getAllCourses();
   const { professorId, code } = searchParams;
   const professor = professorId
     ? professors.find(

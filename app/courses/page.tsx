@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import CourseTable from "@/components/CourseTable/CourseTable";
 import CourseTableHeader from "@/components/CourseTable/CourseTableHeader";
-import { queryCourseTableDataByYearTerm } from "@/lib/data/course";
+import { getCourseTableDataByYearTerm } from "@/lib/data/course";
 import { CourseTableColumn } from "@/lib/definitions/course";
 import { getTermByName } from "@/lib/utils";
 
@@ -15,7 +15,7 @@ export default async function Page({ searchParams }: { searchParams: string }) {
   const term = getTermByName(params.get("term") || "");
 
   const courseTableData: CourseTableColumn[] =
-    await queryCourseTableDataByYearTerm(year, term);
+    await getCourseTableDataByYearTerm(year, term);
 
   return (
     <div className="flex flex-col place-items-center justify-center space-y-2">

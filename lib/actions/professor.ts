@@ -1,10 +1,10 @@
 "use server";
 
-import { queryCoursesTaughtByProfessor } from "../data/course";
+import { getCoursesTaughtByProfessor } from "../data/course";
 import { getProfessorPageRatings } from "../data/professor";
 
 export async function getCoursesByProfessor(professorId: number) {
-  return await queryCoursesTaughtByProfessor(professorId);
+  return await getCoursesTaughtByProfessor(professorId);
 }
 
 export async function getProfessorMetrics(professor: any) {

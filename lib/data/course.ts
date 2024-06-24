@@ -31,7 +31,7 @@ import { prisma } from "@/prisma/prisma";
  * @param code - Course code of the course we are trying to fetch
  * @return - Course
  */
-export async function queryCourseByCode(code: number): Promise<CoursePage> {
+export async function getCourseByCode(code: number): Promise<CoursePage> {
   const course = await prisma.course.findUnique({
     where: {
       code: code,
@@ -55,11 +55,11 @@ export async function queryCourseByCode(code: number): Promise<CoursePage> {
 }
 
 /**
- *  Queries all courses
+ * Queries all courses
  *
- *  @return - List of all courses
+ * @return - List of all courses
  */
-export async function queryAllCourses(): Promise<Course[]> {
+export async function getAllCourses(): Promise<Course[]> {
   const courses: Course[] = await prisma.course.findMany({
     include: {
       reviews: true,
@@ -81,7 +81,7 @@ export async function queryAllCourses(): Promise<Course[]> {
  *
  * @return - List of all course table listings
  */
-export async function queryAllCourseTableListings(): Promise<
+export async function getAllCourseTableListings(): Promise<
   CourseTableColumn[]
 > {
   const courses: Course[] = await prisma.course.findMany({
@@ -105,7 +105,7 @@ export async function queryAllCourseTableListings(): Promise<
  * @param term - Term the courses were offered (or null or all)
  * @return - Course table data for the courses based on year and terms
  */
-export async function queryCourseTableDataByYearTerm(
+export async function getCourseTableDataByYearTerm(
   year: number | null,
   term: Term | null,
 ): Promise<CourseTableColumn[]> {
@@ -308,33 +308,33 @@ function getCourseTableRatings(course: any): any {
 }
 
 /**
- * Fetches course table data based on the given year and term
+ * Get course table data based on the given year and term
  *
  * @param year - Year the courses were offered (or null or all)
  * @param term - Term the courses were offered (or null or all)
  * @return - Course table data for the courses based on year and term
  */
-export async function fetchCourseTableData(
+export async function getCourseTableData(
   year: number | null,
   term: Term | null,
 ): Promise<CourseTableColumn[]> {
   if (year !== null && term !== null) {
-    return await fetchCourseTableListingsByYearTerm(year, term);
+    return await getCourseTableListingsByYearTermWebReg(year, term);
   } else if (term !== null && year === null) {
     return await fetchCourseTableListingsByTerm(term);
   } else if (term === null && year !== null) {
     return await fetchCourseTableListingByYear(year);
   } else {
-    return await fetchAllCourseTableListings();
+    return await getAllCourseTableListingsWebReg();
   }
 }
 
 /**
- * Fetches all courses from Rutgers CS webreg listing for all documented years and semesters.
+ * Get all courses from Rutgers CS webreg listing for all documented years and semesters.
  *
  * @return - A list of all the documented courses from documented years and semesters.
  */
-export async function fetchAllCourseTableListings(): Promise<
+export async function getAllCourseTableListingsWebReg(): Promise<
   CourseTableColumn[]
 > {
   const validYearTermMap: Map<number, Term[]> = getValidYearTermMap();
@@ -342,7 +342,10 @@ export async function fetchAllCourseTableListings(): Promise<
   const courseTableListings: Promise<CourseTableColumn[]>[] = [];
   validYearTermMap.forEach((terms: Term[], year: number) => {
     terms.forEach((term: Term) => {
-      const courseTableListing = fetchCourseTableListingsByYearTerm(year, term);
+      const courseTableListing = getCourseTableListingsByYearTermWebReg(
+        year,
+        term,
+      );
       courseTableListings.push(courseTableListing);
     });
   });
@@ -351,7 +354,7 @@ export async function fetchAllCourseTableListings(): Promise<
 }
 
 /**
- * Fetches courses from Rutgers CS webreg listing for a given term
+ * Get courses from Rutgers CS webreg listing for a given term
  *
  * @param term - The term we are interested in
  * @return - A list of all the documented courses from that term
@@ -363,7 +366,10 @@ async function fetchCourseTableListingsByTerm(
   const courseTableListings: Promise<CourseTableColumn[]>[] = [];
 
   years.forEach((year: number) => {
-    const courseTableListing = fetchCourseTableListingsByYearTerm(year, term);
+    const courseTableListing = getCourseTableListingsByYearTermWebReg(
+      year,
+      term,
+    );
     courseTableListings.push(courseTableListing);
   });
 
@@ -371,7 +377,7 @@ async function fetchCourseTableListingsByTerm(
 }
 
 /**
- * Fetches courses from Rutgers CS webreg listing for a given year
+ * Get courses from Rutgers CS webreg listing for a given year
  *
  * @param year - The year we are interested in
  * @return - A list of all the documented courses from that year
@@ -383,7 +389,10 @@ async function fetchCourseTableListingByYear(
   const courseTableListings: Promise<CourseTableColumn[]>[] = [];
 
   terms.forEach((term: Term) => {
-    const courseTableListing = fetchCourseTableListingsByYearTerm(year, term);
+    const courseTableListing = getCourseTableListingsByYearTermWebReg(
+      year,
+      term,
+    );
     courseTableListings.push(courseTableListing);
   });
 
@@ -391,18 +400,18 @@ async function fetchCourseTableListingByYear(
 }
 
 /**
- * Fetches all courses from Rutgers CS webreg listing for a given year and semester.
+ * Get all courses from Rutgers CS webreg listing for a given year and semester.
  *
  * @param year - Year the course is/was offered (2022 - 2024)
  * @param term - Term it is/was offered
  * @return - List of courses offered for that specific year and term
  */
-async function fetchCourseTableListingsByYearTerm(
+async function getCourseTableListingsByYearTermWebReg(
   year: number,
   term: Term,
 ): Promise<CourseTableColumn[]> {
-  const courseSynposesListing = await parseSynposesListing();
-  const courseWebRegListing = await parseWebRegListingByYearTerm(year, term);
+  const courseSynposesListing = await getCourseSynposesListing();
+  const courseWebRegListing = await getListingByYearTermWebReg(year, term);
   const combinedCourseListings = combineCourseListings(
     courseSynposesListing,
     courseWebRegListing,
@@ -418,7 +427,7 @@ async function fetchCourseTableListingsByYearTerm(
  * @param term - Term it is/was offered
  * @return - List of course webreg listings
  */
-export async function parseWebRegListingByYearTerm(
+export async function getListingByYearTermWebReg(
   year: number,
   term: Term,
 ): Promise<CourseWebRegListing[]> {
@@ -464,17 +473,17 @@ export async function parseWebRegListingByYearTerm(
 }
 
 /**
- * Fetches WebReg listings for a particular course for all years and terms
+ * Get WebReg listings for a particular course for all years and terms
  *
  * @return - List of course names and open sections
  */
-export async function fetchAllWebRegListings(): Promise<CourseWebRegListing[]> {
+export async function getAllListingsWebReg(): Promise<CourseWebRegListing[]> {
   const validYearTermMap: Map<number, Term[]> = getValidYearTermMap();
 
   const courseWebRegListings: Promise<CourseWebRegListing[]>[] = Array.from(
     validYearTermMap,
   ).flatMap(([year, terms]: [number, Term[]]) => {
-    return terms.map((term: Term) => parseWebRegListingByYearTerm(year, term));
+    return terms.map((term: Term) => getListingByYearTermWebReg(year, term));
   });
 
   const listings = await Promise.all(courseWebRegListings);
@@ -487,7 +496,7 @@ export async function fetchAllWebRegListings(): Promise<CourseWebRegListing[]> {
  * @param courseSynposesHtml - HTML for the course synposes website
  * @return - An array of course synposes listings
  */
-async function parseSynposesListing(): Promise<CourseSynopsesListing[]> {
+async function getCourseSynposesListing(): Promise<CourseSynopsesListing[]> {
   try {
     const res = await fetch(CS_COURSE_SYNOPSES_URL);
 
@@ -512,7 +521,7 @@ async function parseSynposesListing(): Promise<CourseSynopsesListing[]> {
         element.getAttribute("href") || ""
       }`;
 
-      const [code, name] = parsecodeNameString(courseString);
+      const [code, name] = parseCourseCodeName(courseString);
       courses.push({ code, name, synopsisUrl });
     });
 
@@ -526,16 +535,16 @@ async function parseSynposesListing(): Promise<CourseSynopsesListing[]> {
 }
 
 /**
- * Fetches the synposes listing for a particular course given the courses ID
+ * Get the synposes listing for a particular course given the courses ID
  *
  * @param courseId - Course ID for the course we are interested in
  * @return - Synposes listing for that course
  */
-export async function fetchSynposesListingById(
+export async function getCourseSynposesListingById(
   courseId: number,
 ): Promise<CourseSynopsesListing> {
   const courseSynposesListings: CourseSynopsesListing[] =
-    await parseSynposesListing();
+    await getCourseSynposesListing();
 
   const courseSynposesListing: CourseSynopsesListing =
     courseSynposesListings.filter(
@@ -552,7 +561,7 @@ export async function fetchSynposesListingById(
  * @param courseSynposesString - String rerepesnting the listing on course synposes list
  * @return - Parsed course ID and course title (ex [103, "Introduction to Computer Skills"])
  */
-function parsecodeNameString(codeName: string): [number, string] {
+function parseCourseCodeName(codeName: string): [number, string] {
   const normalizedString = codeName.replace(/-/g, " - ");
 
   let parts = normalizedString.split(/\s-\s/);
@@ -620,12 +629,12 @@ function mergeCourseListings(
 }
 
 /**
- * Fetches all course sections
+ * Get all course sections
  *
  * @return - All course sections
  */
-export async function fetchCourseSections(): Promise<any[]> {
-  const webReg: any[] = await fetchAllWebRegListings();
+export async function getCourseSectionsWebReg(): Promise<any[]> {
+  const webReg: any[] = await getAllListingsWebReg();
   const courseSections: any[] = [];
   const professorNameIdMap: Map<string, number> =
     await createProfessorNameIdMap();
@@ -676,11 +685,12 @@ export async function fetchCourseSections(): Promise<any[]> {
   return courseSections;
 }
 
-/** Query all course section from the database
+/**
+ * Query all course section from the database
  *
  * @return - All course sections from the database
  */
-export async function queryAllCourseSections(): Promise<Section[]> {
+export async function getAllCourseSections(): Promise<Section[]> {
   const courseSections: Section[] = await prisma.section.findMany();
 
   if (!courseSections) {
@@ -696,10 +706,10 @@ export async function queryAllCourseSections(): Promise<Section[]> {
  * @param professorId - ID for the professor we are interested in
  * @return - Unique course IDs that the professor taught
  */
-export async function queryCoursesTaughtByProfessor(
+export async function getCoursesTaughtByProfessor(
   professorId: number,
 ): Promise<number[]> {
-  const sections = await queryAllCourseSections();
+  const sections = await getAllCourseSections();
 
   const codes = sections
     .filter((section: Section) => section.professorId === professorId)
@@ -717,7 +727,7 @@ export async function queryCoursesTaughtByProfessor(
 export async function getCoursesBeingTaughtByProfessor(
   professorId: number,
 ): Promise<number[]> {
-  const sections = await queryAllCourseSections();
+  const sections = await getAllCourseSections();
 
   const codes = sections
     .filter(

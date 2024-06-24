@@ -1,6 +1,6 @@
 import {
-  fetchAllCourseTableListings,
-  fetchCourseSections,
+  getAllCourseTableListings,
+  getCourseSectionsWebReg,
 } from "@/lib/data/course";
 import { fetchProfessorNames } from "@/lib/data/professor";
 import { mockReviews } from "@/lib/mock-data/review-mock-data";
@@ -60,7 +60,7 @@ async function seedMockUsers(prisma: any): Promise<Response> {
  * @param prisma - The Prisma client
  */
 async function seedCourses(prisma: any): Promise<Response> {
-  const courseTableListings: any[] = await fetchAllCourseTableListings();
+  const courseTableListings: any[] = await getAllCourseTableListings();
   const courses = courseTableListings.map(
     ({ code, name, credits, synopsisUrl, prereqs }) => ({
       courseCode: code,
@@ -134,7 +134,7 @@ async function seedVotes(prisma: any): Promise<Response> {
  * @param prisma - The Prisma client
  */
 async function seedSections(prisma: any): Promise<Response> {
-  const sections = await fetchCourseSections();
+  const sections = await getCourseSectionsWebReg();
   const createSections: any = await prisma.section.createMany({
     data: sections,
   });

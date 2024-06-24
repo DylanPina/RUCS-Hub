@@ -6,7 +6,7 @@ import { FaBook } from "react-icons/fa6";
 import { HiMiniAcademicCap } from "react-icons/hi2";
 import NavProfile from "./NavProfile";
 import SignIn from "../Auth/SignIn";
-import { queryCourseTableDataByYearTerm } from "@/lib/data/course";
+import { getCourseTableDataByYearTerm } from "@/lib/data/course";
 import { queryProfessorTableData } from "@/lib/data/professor";
 import { ProfessorTableColumn } from "@/lib/definitions/professor";
 import { CourseTableColumn } from "@/lib/definitions/course";
@@ -20,7 +20,7 @@ export default async function Nav() {
   const session = await getSession();
 
   const courseTableData: CourseTableColumn[] =
-    await queryCourseTableDataByYearTerm(null, null);
+    await getCourseTableDataByYearTerm(null, null);
 
   const professorTableData: ProfessorTableColumn[] =
     await queryProfessorTableData();

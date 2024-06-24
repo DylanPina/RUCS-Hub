@@ -1,7 +1,7 @@
 import { Term } from "../definitions/course";
 import { ProfessorPage, ProfessorTableColumn } from "../definitions/professor";
 import { formatProfessorName, getValidYearTermMap } from "../utils";
-import { parseWebRegListingByYearTerm } from "./course";
+import { getListingByYearTermWebReg } from "./course";
 import { titleCase } from "../utils";
 import { prisma } from "@/prisma/prisma";
 import { Professor, Review } from "@prisma/client";
@@ -102,7 +102,7 @@ export async function fetchProfessorNames(): Promise<[string, string][]> {
   const sections: Promise<any[]>[] = [];
   validYearTermMap.forEach((terms, year) => {
     terms.forEach((term) => {
-      sections.push(parseWebRegListingByYearTerm(year, term));
+      sections.push(getListingByYearTermWebReg(year, term));
     });
   });
 
