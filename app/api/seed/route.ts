@@ -1,6 +1,5 @@
 import {
   getAllCourseTableListings,
-  getCourseSectionsWebReg,
 } from "@/lib/data/course";
 import { getProfessorNames } from "@/lib/data/professor";
 import { mockReviews } from "@/lib/mock-data/review-mock-data";
@@ -9,6 +8,7 @@ import { mockVotes } from "@/lib/mock-data/vote-mock-data";
 import { Professor, Review, Vote } from "@prisma/client";
 import { prisma } from "@/prisma/prisma";
 import { getSubjects } from "@/lib/data/subject";
+import { getCourseSectionsWebReg } from "@/lib/data/webreg";
 
 export async function GET() {
   // Uncomment the following line to seed the database when this URL is visited

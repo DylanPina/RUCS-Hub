@@ -70,7 +70,7 @@ export type MeetingTimes = {
   pmCode: "P" | "A";
 };
 
-export type CourseSynopsesListing = {
+export type CourseSynopsisListing = {
   code: number;
   name: string;
   synopsisUrl: string;

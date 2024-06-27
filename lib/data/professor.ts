@@ -1,9 +1,9 @@
 import { Term } from "../definitions/course";
 import { ProfessorPage, ProfessorTableColumn } from "../definitions/professor";
 import { formatProfessorName, getValidYearTermMap } from "../utils";
-import { getListingByYearTermWebReg } from "./course";
 import { prisma } from "@/prisma/prisma";
 import { Professor, Review } from "@prisma/client";
+import { getListingByYearTermWebReg } from "./webreg";
 
 /**
  * Get professor by first and last name
