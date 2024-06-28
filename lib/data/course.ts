@@ -64,7 +64,7 @@ export async function getAllCourses(): Promise<Course[]> {
  *
  * @return - List of all course table listings
  */
-export async function getAllCourseTableListings(): Promise<
+export async function getAllCourseTableListing(): Promise<
   CourseTableColumn[]
 > {
   const courses: Course[] = await prisma.course.findMany({

@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 
-export type Subject = Prisma.SectionGetPayload<{
+export type Subject = Prisma.SubjectGetPayload<{
   include: {
-    course: true;
-  };
+    courses: true;   
+  } 
 }>;

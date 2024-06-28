@@ -1,143 +1,71 @@
 import { WEBREG_BASE_URL } from "../constants";
-import { CourseSection, CourseSynopsisListing, CourseTableColumn, CourseWebRegListing, Term } from "../definitions/course";
-import { formatProfessorName, getTerms, getValidYearTermMap, getYears, parseProfessorName, validateCourseTermYear } from "../utils";
+import {
+  CourseSection,
+  CourseWebRegListing,
+  Term,
+} from "../definitions/course";
+import {
+  formatProfessorName,
+  getValidYearTermMap,
+  parseProfessorName,
+  validateWebRegCourseTermYear,
+} from "../utils";
 import { parsePrereqNotes } from "./course";
-import { createProfessorNameIdMap } from "./professor";
-import { getCourseSynopsisListing } from "./synopsis";
+import { getSubjects } from "./subject";
 
 /**
- * Get courses from Rutgers CS webreg listing for a given year
- *
- * @param year - The year we are interested in
- * @return - A list of all the documented courses from that year
- */
-async function getCourseTableListingByYearWebReg(
-  year: number,
-): Promise<CourseTableColumn[]> {
-  const terms: Term[] = getTerms();
-  const courseTableListings: Promise<CourseTableColumn[]>[] = [];
-
-  terms.forEach((term: Term) => {
-    const courseTableListing = getCourseTableListingsByYearTermWebReg(
-      year,
-      term,
-    );
-    courseTableListings.push(courseTableListing);
-  });
-
-  return mergeCourseListings(await Promise.all(courseTableListings));
-}
-
-/**
- * Get courses from Rutgers CS webreg listing for a given term
- *
- * @param term - The term we are interested in
- * @return - A list of all the documented courses from that term
- */
-async function getCourseTableListingByTermWebReg(
-  term: Term,
-): Promise<CourseTableColumn[]> {
-  const years: number[] = getYears();
-  const courseTableListings: Promise<CourseTableColumn[]>[] = [];
-
-  years.forEach((year: number) => {
-    const courseTableListing = getCourseTableListingsByYearTermWebReg(
-      year,
-      term,
-    );
-    courseTableListings.push(courseTableListing);
-  });
-
-  return mergeCourseListings(await Promise.all(courseTableListings));
-}
-
-/**
- * Get course table data based on the given year and term
- *
- * @param year - Year the courses were offered (or null or all)
- * @param term - Term the courses were offered (or null or all)
- * @return - Course table data for the courses based on year and term
- */
-export async function getCourseTableData(
-  year: number | null,
-  term: Term | null,
-): Promise<CourseTableColumn[]> {
-  if (year !== null && term !== null) {
-    return await getCourseTableListingsByYearTermWebReg(year, term);
-  } else if (term !== null && year === null) {
-    return await getCourseTableListingByTermWebReg(term);
-  } else if (term === null && year !== null) {
-    return await getCourseTableListingByYearWebReg(year);
-  } else {
-    return await getAllCourseTableListingsWebReg();
-  }
-}
-
-
-/**
- * Get all courses from Rutgers CS webreg listing for all documented years and semesters.
- *
- * @return - A list of all the documented courses from documented years and semesters.
- */
-export async function getAllCourseTableListingsWebReg(): Promise<
-  CourseTableColumn[]
-> {
-  const validYearTermMap: Map<number, Term[]> = getValidYearTermMap();
-
-  const courseTableListings: Promise<CourseTableColumn[]>[] = [];
-  validYearTermMap.forEach((terms: Term[], year: number) => {
-    terms.forEach((term: Term) => {
-      const courseTableListing = getCourseTableListingsByYearTermWebReg(
-        year,
-        term,
-      );
-      courseTableListings.push(courseTableListing);
-    });
-  });
-
-  return mergeCourseListings(await Promise.all(courseTableListings));
-}
-
-/**
- * Get all courses from Rutgers CS webreg listing for a given year and semester.
- *
- * @param year - Year the course is/was offered (2022 - 2024)
- * @param term - Term it is/was offered
- * @return - List of courses offered for that specific year and term
- */
-async function getCourseTableListingsByYearTermWebReg(
-  year: number,
-  term: Term,
-): Promise<CourseTableColumn[]> {
-  const courseSynopsisListing = await getCourseSynopsisListing();
-  const courseWebRegListing = await getListingByYearTermWebReg(year, term);
-  const combinedCourseListings = combineCourseListings(
-    courseSynopsisListing,
-    courseWebRegListing,
-  );
-
-  return combinedCourseListings;
-}
-
-
-
-
-/**
- * Get WebReg listings for a particular course for all years and terms
+ * Get all listings
  *
  * @return - List of course names and open sections
  */
-export async function getAllListingsWebReg(): Promise<CourseWebRegListing[]> {
+export async function getAllCourseListingWebReg(): Promise<
+  Map<string, CourseWebRegListing[]>
+> {
+  const subjects = await getSubjects();
+  const courseListings: Promise<CourseWebRegListing[]>[] = [];
+
+  subjects.forEach(({ code }: { code: string }) =>
+    courseListings.push(getCourseListingBySubjectWebReg(code)),
+  );
+
+  const listings = await Promise.all(courseListings);
+  const mergedCourseListingMap = mergeCourseListingBySubjectCode(
+    listings.flat(),
+  );
+  return mergedCourseListingMap;
+}
+
+/**
+ * Get all listings for all courses by subject
+ *
+ * @param subjectCode - The subject code we are interested in
+ * @return - A list of all the documented courses
+ */
+async function getCourseListingBySubjectWebReg(
+  subjectCode: string,
+): Promise<CourseWebRegListing[]> {
   const validYearTermMap: Map<number, Term[]> = getValidYearTermMap();
+  const courseListingsPromises: Promise<CourseWebRegListing[]>[] = [];
 
-  const courseWebRegListings: Promise<CourseWebRegListing[]>[] = Array.from(
-    validYearTermMap,
-  ).flatMap(([year, terms]: [number, Term[]]) => {
-    return terms.map((term: Term) => getListingByYearTermWebReg(year, term));
-  });
+  for (const [year, terms] of Array.from(validYearTermMap.entries())) {
+    for (const term of terms) {
+      const courseListingPromise = getCourseListingByYearTermWebReg(
+        subjectCode,
+        year,
+        term,
+      ).catch((error) => {
+        console.error(
+          `Error fetching courses for subject:[${subjectCode}] year:[${year}] term:[${term}]`,
+          error,
+        );
+        return [];
+      });
+      courseListingsPromises.push(courseListingPromise);
+    }
+  }
 
-  const listings = await Promise.all(courseWebRegListings);
-  return listings.flat();
+  const courseListings = await Promise.all(courseListingsPromises);
+  return courseListings.flat();
 }
 
 /**
@@ -145,54 +73,37 @@ export async function getAllListingsWebReg(): Promise<CourseWebRegListing[]> {
  *
  * @return - All course sections
  */
-export async function getCourseSectionsWebReg(): Promise<any[]> {
-  const webReg: any[] = await getAllListingsWebReg();
+export async function getAllCourseSectionsWebReg(): Promise<CourseSection[]> {
+  const courseListings: Map<string, CourseWebRegListing[]> =
+    await getAllCourseListingWebReg();
   const courseSections: any[] = [];
-  const professorNameIdMap: Map<string, number> =
-    await createProfessorNameIdMap();
 
-  webReg.forEach(
-    ({
-      code,
-      year,
-      term,
-      sections,
-    }: {
-      code: string;
-      year: number;
-      term: Term;
-      sections: CourseSection[];
-    }) => {
+  courseListings.forEach((listings, _) => {
+    listings.forEach(({ code, year, term, sections }) => {
       sections.forEach(async (section: any) => {
         const [professorLastName, professorFirstName] = section.professorName[0]
           ?.name
           ? parseProfessorName(section.professorName[0].name)
           : [null, null];
 
-        if (professorLastName) {
-          const professorId = professorNameIdMap.get(
-            formatProfessorName(professorLastName, professorFirstName),
-          );
-
-          if (!professorId) {
-            console.error(
-              `Failed to find professor ${professorFirstName} ${professorLastName}`,
-            );
-          } else {
-            const sectionNumber = section.sectionNumber;
-
-            courseSections.push({
-              sectionNumber,
-              code,
-              professorId,
-              term,
-              year,
-            });
-          }
+        if (!professorLastName) {
+          console.log("Nope ", section.professorName[0]);
+          return;
         }
+
+        courseSections.push({
+          sectionNumber: section.sectionNumber,
+          code,
+          professorName: formatProfessorName(
+            professorLastName || "",
+            professorFirstName,
+          ),
+          term,
+          year,
+        });
       });
-    },
-  );
+    });
+  });
 
   return courseSections;
 }
@@ -200,64 +111,68 @@ export async function getCourseSectionsWebReg(): Promise<any[]> {
 /**
  * Parses the API request from webreg listing all of the CS courses for a given year and term
  *
+ * @param subjectCode - The subject code we are interested in
  * @param year - Year the course is/was offered (2022 - 2024)
  * @param term - Term it is/was offered
  * @return - List of course webreg listings
  */
-export async function getListingByYearTermWebReg(
+export async function getCourseListingByYearTermWebReg(
+  subjectCode: string,
   year: number,
   term: Term,
 ): Promise<CourseWebRegListing[]> {
-  if (!validateCourseTermYear(year, term)) {
+  if (!validateWebRegCourseTermYear(year, term)) {
     throw new Error(`Failed to parse WebReg courses for ${year} ${term}`);
   }
 
-  const endpoint = `${WEBREG_BASE_URL}&semester=${term.valueOf()}${year}&campus=NB&level=UG`;
-  try {
-    const res = await fetch(endpoint);
-    const courseListingJson = await res.json();
-
-    return courseListingJson.map((courseListing: any) => {
-      return {
-        code: Number(courseListing.courseNumber),
-        title: courseListing.title,
-        year: year,
-        term: term,
-        openSections: courseListing.openSections,
-        sections: courseListing.sections.map((section: any) => ({
-          sectionNumber: section.number,
-          professorName: section.instructors,
-          index: section.index,
-          open: section.openStatus,
-          meetingTimes: section.meetingTimes,
-        })),
-        prereqs: courseListing.preReqNotes
-          ? parsePrereqNotes(courseListing.preReqNotes)
-          : [],
-        credits: courseListing.credits,
-      };
-    });
-  } catch (error) {
-    console.error(
-      `Failed to fetch webreg listing from ${endpoint}`,
-    );
-    return [];
+  const webRegUrl = `${WEBREG_BASE_URL}?subject=${subjectCode}&semester=${term.valueOf()}${year}&campus=NB&level=UG`;
+  const res = await fetch(webRegUrl);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch courses from ${webRegUrl}`);
   }
+
+  const courseListingJson = await res.json();
+  if (!courseListingJson) {
+    throw new Error(`Failed to parse courses json from ${webRegUrl}`);
+  }
+
+  return courseListingJson.map((courseListing: any) => {
+    return {
+      subject: subjectCode,
+      code: Number(courseListing.courseNumber),
+      title: courseListing.title,
+      year: year,
+      term: term,
+      openSections: courseListing.openSections,
+      sections: courseListing.sections.map((section: any) => ({
+        sectionNumber: section.number,
+        professorName: section.instructors,
+        index: section.index,
+        open: section.openStatus,
+        meetingTimes: section.meetingTimes,
+      })),
+      prereqs: courseListing.preReqNotes
+        ? parsePrereqNotes(courseListing.preReqNotes)
+        : [],
+      credits: courseListing.credits,
+    };
+  });
 }
 
 /**
- * Merges coures listings from different years and terms into one course listing
+ * Merges course listings from different years and terms into one course listings
+ * based on course code
  *
- * @param courseListings - A list of course listings to merge together
+ * @param courseListing - A list of course listings to merge together
  * @return - One combined course listing with no duplicates
  */
-function mergeCourseListings(
-  courseListings: CourseTableColumn[][],
-): CourseTableColumn[] {
-  const mergedCourseListing: CourseTableColumn[] = [];
+function mergeCourseListingByCourseCode(
+  courseListing: CourseWebRegListing[][],
+): CourseWebRegListing[] {
+  const mergedCourseListing: CourseWebRegListing[] = [];
   const codes = new Set<number>();
 
-  for (const columns of courseListings) {
+  for (const columns of courseListing) {
     for (const column of columns) {
       if (!codes.has(column.code)) {
         codes.add(column.code);
@@ -270,28 +185,23 @@ function mergeCourseListings(
 }
 
 /**
- * Combines data from course listings from synpopses and webreg
+ * Merges course listings from different years and terms into a hashmap
+ * based on subject code
  *
- * @param courseSynopsisListing - Course listings from synposes RUCS website
- * @param courseWebRegListing - Course listings from RUCS WebReg
- * @return - An array of course table entries based on these two listings
+ * @param courseListings - A list of course listings to merge together
+ * @return - A hashmap where the key is the subject code and the values are the merged course listings for each subject
  */
-function combineCourseListings(
-  courseSynopsisListing: CourseSynopsisListing[],
-  courseWebRegListing: CourseWebRegListing[],
-): CourseTableColumn[] {
-  return courseWebRegListing.map((webReg: CourseWebRegListing) => {
-    const synposes = courseSynopsisListing.find(
-      (x: CourseSynopsisListing) => x.code == webReg.code,
-    );
+function mergeCourseListingBySubjectCode(
+  courseListings: CourseWebRegListing[],
+): Map<string, CourseWebRegListing[]> {
+  const mergedCourseListingMap = new Map<string, CourseWebRegListing[]>();
 
-    return {
-      code: webReg.code,
-      name: synposes?.name || webReg.title,
-      credits: webReg.credits,
-      synopsisUrl: synposes?.synopsisUrl || "",
-      prereqs: webReg.prereqs,
-    };
+  courseListings.forEach((courseListing) => {
+    if (!mergedCourseListingMap.has(courseListing.subject)) {
+      mergedCourseListingMap.set(courseListing.subject, []);
+    }
+    mergedCourseListingMap.get(courseListing.subject)!.push(courseListing);
   });
-}
 
+  return mergedCourseListingMap;
+}

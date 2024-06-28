@@ -1,5 +1,6 @@
-import { getSubjects } from "@/lib/data/subject";
+import { getProfessorNames } from "@/lib/data/professor";
 
 export async function GET() {
-  return Response.json(await getSubjects());
+  const professorNames = await getProfessorNames();
+  return new Response(JSON.stringify(professorNames));
 }

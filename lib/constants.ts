@@ -1,5 +1,4 @@
-export const WEBREG_BASE_URL =
-  "https://sis.rutgers.edu/oldsoc/courses.json?subject=198";
+export const WEBREG_BASE_URL = "https://sis.rutgers.edu/oldsoc/courses.json";
 export const RUTGERS_CS_URL = "https://www.cs.rutgers.edu/";
 export const CS_COURSE_SYNOPSIS_URL =
   "https://www.cs.rutgers.edu/academics/undergraduate/course-synopsis";
@@ -7,6 +6,8 @@ export const RUTGERS_SUBJECTS_URL =
   "https://sis.rutgers.edu/oldsoc/subjects.json?semester=72024&campus=NB&level=U";
 export const MAX_YEAR = 2024;
 export const MIN_YEAR = 2004;
+export const WEBREG_MAX_YEAR = 2024;
+export const WEBREG_MIN_YEAR = 2022;
 export const GITHUB_URL = "https://github.com/DylanPina/RUCS-Hub";
 export const DISCORD_URL = "https://discord.gg/A5dx4nvDEv";
 export const GITHUB_ISSUES_URL = "https://github.com/DylanPina/RUCS-Hub/issues";

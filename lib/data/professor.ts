@@ -1,9 +1,9 @@
-import { Term } from "../definitions/course";
 import { ProfessorPage, ProfessorTableColumn } from "../definitions/professor";
-import { formatProfessorName, getValidYearTermMap } from "../utils";
+import { formatProfessorName } from "../utils";
 import { prisma } from "@/prisma/prisma";
 import { Professor, Review } from "@prisma/client";
-import { getListingByYearTermWebReg } from "./webreg";
+import { getAllCourseSectionsWebReg } from "./webreg";
+import { CourseSection } from "../definitions/course";
 
 /**
  * Get professor by first and last name
@@ -72,38 +72,18 @@ export async function getProfessorTableData(): Promise<ProfessorTableColumn[]> {
  *
  * @return - List of tuples which contain [lastName, firstName]
  */
-export async function getProfessorNames(): Promise<[string, string][]> {
-  const validYearTermMap: Map<number, Term[]> = getValidYearTermMap();
-
-  const sections: Promise<any[]>[] = [];
-  validYearTermMap.forEach((terms, year) => {
-    terms.forEach((term) => {
-      sections.push(getListingByYearTermWebReg(year, term));
-    });
-  });
-
-  const listings = (await Promise.all(sections)).flat();
-
+export async function getProfessorNames(): Promise<string[]> {
+  const sections: CourseSection[] = await getAllCourseSectionsWebReg();
   const professorFullNames = new Set<string>();
-  listings
-    .flatMap((listing) => listing.sections)
-    .forEach((section) => {
-      if (section.professorName[0]?.name) {
-        professorFullNames.add(section.professorName[0].name);
-      }
-    });
 
-  return Array.from(professorFullNames).map((professor: string) => {
-    const parts = professor
-      .split(new RegExp("[, ]+"))
-      .map((part: string) => part.trim());
-
-    if (parts.length > 1) {
-      return [parts[0], parts[1]];
+  sections.forEach((section: any) => {
+    const professorName = section.professorName;
+    if (professorName) {
+      professorFullNames.add(professorName);
     }
-
-    return [parts[0], ""];
   });
+
+  return Array.from(professorFullNames);
 }
 
 /**

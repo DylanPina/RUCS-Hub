@@ -1,5 +1,10 @@
 import { Term } from "@/lib/definitions/course";
-import { MAX_YEAR, MIN_YEAR } from "@/lib/constants";
+import {
+  MAX_YEAR,
+  MIN_YEAR,
+  WEBREG_MAX_YEAR,
+  WEBREG_MIN_YEAR,
+} from "@/lib/constants";
 import sha256 from "crypto-js/sha256";
 import { NextRouter } from "next/router";
 
@@ -10,14 +15,15 @@ import { NextRouter } from "next/router";
  * @param term - Term it is/was offered
  * @return - Will return an error if range check is violated.
  */
-export function validateCourseTermYear(
+export function validateWebRegCourseTermYear(
   year: number,
   term: Term | null,
 ): boolean {
   if (
-    year > MAX_YEAR ||
-    year < MIN_YEAR ||
-    (year === MAX_YEAR && term !== Term.Spring)
+    year > WEBREG_MAX_YEAR ||
+    year < WEBREG_MIN_YEAR ||
+    (year === WEBREG_MAX_YEAR && term === Term.Winter) ||
+    (year === WEBREG_MIN_YEAR && term !== Term.Fall)
   ) {
     return false;
   }
@@ -37,7 +43,7 @@ export function getTerms(): Term[] {
  */
 export function getYears(): number[] {
   const years: number[] = [];
-  for (let year = MAX_YEAR; year >= MIN_YEAR; year--) {
+  for (let year = WEBREG_MAX_YEAR; year >= WEBREG_MIN_YEAR; year--) {
     years.push(year);
   }
   return years;
@@ -55,7 +61,7 @@ export function getValidYearTermMap(): Map<number, Term[]> {
     const validTerms: Term[] = [];
 
     terms.forEach((term: Term) => {
-      if (validateCourseTermYear(year, term)) {
+      if (validateWebRegCourseTermYear(year, term)) {
         validTerms.push(term);
       }
     });
@@ -140,7 +146,7 @@ export function getValidYears(term: Term | null): number[] {
   const years: number[] = [];
   for (let year = MIN_YEAR; year <= MAX_YEAR; year++) {
     if (
-      (term !== null && validateCourseTermYear(year, term)) ||
+      (term !== null && validateWebRegCourseTermYear(year, term)) ||
       term === null
     ) {
       years.push(year);
@@ -163,8 +169,8 @@ export function getValidTerms(year: number | null): string[] {
   const validTerms: string[] = [];
   terms.forEach((term: string) => {
     if (
-      (year !== null && validateCourseTermYear(year, getTermByName(term))) ||
-      year === null
+      (year && validateWebRegCourseTermYear(year, getTermByName(term))) ||
+      !year
     ) {
       validTerms.push(term);
     }

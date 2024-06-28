@@ -1,6 +1,4 @@
-import {
-  getAllCourseTableListings,
-} from "@/lib/data/course";
+import { getAllCourseTableListing } from "@/lib/data/course";
 import { getProfessorNames } from "@/lib/data/professor";
 import { mockReviews } from "@/lib/mock-data/review-mock-data";
 import { mockUsers } from "@/lib/mock-data/user-mock-data";
@@ -8,7 +6,7 @@ import { mockVotes } from "@/lib/mock-data/vote-mock-data";
 import { Professor, Review, Vote } from "@prisma/client";
 import { prisma } from "@/prisma/prisma";
 import { getSubjects } from "@/lib/data/subject";
-import { getCourseSectionsWebReg } from "@/lib/data/webreg";
+import { getAllCourseSectionsWebReg } from "@/lib/data/webreg";
 
 export async function GET() {
   // Uncomment the following line to seed the database when this URL is visited
@@ -60,8 +58,8 @@ async function seedMockUsers(prisma: any): Promise<Response> {
  * @param prisma - The Prisma client
  */
 async function seedCourses(prisma: any): Promise<Response> {
-  const courseTableListings: any[] = await getAllCourseTableListings();
-  const courses = courseTableListings.map(
+  const courseTableListing: any[] = await getAllCourseTableListing();
+  const courses = courseTableListing.map(
     ({ code, name, credits, synopsisUrl, prereqs }) => ({
       courseCode: code,
       name: name,
@@ -134,7 +132,7 @@ async function seedVotes(prisma: any): Promise<Response> {
  * @param prisma - The Prisma client
  */
 async function seedSections(prisma: any): Promise<Response> {
-  const sections = await getCourseSectionsWebReg();
+  const sections = await getAllCourseSectionsWebReg();
   const createSections: any = await prisma.section.createMany({
     data: sections,
   });

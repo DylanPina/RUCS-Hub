@@ -2,7 +2,7 @@ import { RUTGERS_SUBJECTS_URL } from "../constants";
 import { titleCase } from "../utils";
 
 /**
- * Fetches all subjects from the webreg subject endpoint
+ * Fetches all subjects from webreg
  *
  * @return - List of all subjects
  */

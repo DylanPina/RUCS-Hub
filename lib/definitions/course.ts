@@ -77,6 +77,7 @@ export type CourseSynopsisListing = {
 };
 
 export type CourseWebRegListing = {
+  subject: string;
   code: number;
   title: string;
   year: number;
@@ -88,6 +89,7 @@ export type CourseWebRegListing = {
 };
 
 export type CourseTableColumn = {
+  subject: string;
   code: number;
   name: string;
   credits?: number;
