@@ -1,17 +1,15 @@
 import { getAllCourseTableListing } from "@/lib/data/course";
-import { getProfessorNames } from "@/lib/data/professor";
 import { mockReviews } from "@/lib/mock-data/review-mock-data";
 import { mockUsers } from "@/lib/mock-data/user-mock-data";
 import { mockVotes } from "@/lib/mock-data/vote-mock-data";
-import { Professor, Review, Vote } from "@prisma/client";
+import { Review, Vote } from "@prisma/client";
 import { prisma } from "@/prisma/prisma";
 import { getSubjects } from "@/lib/data/subject";
-import { getAllCourseSectionsWebReg } from "@/lib/data/webreg";
+import { getAllCourseSectionsWebReg, getProfessorNamesWebReg } from "@/lib/data/webreg";
+import { parseProfessorName } from "@/lib/utils";
 
+/** Performs seeding operations */
 export async function GET() {
-  // Uncomment the following line to seed the database when this URL is visited
-  // await seedDatabase(prisma);
-
   prisma.$disconnect();
   return Response.json({ message: `Seeding complete!` });
 }
@@ -82,22 +80,37 @@ async function seedCourses(prisma: any): Promise<Response> {
  * @param prisma - The Prisma client
  */
 async function seedProfessors(prisma: any): Promise<Response> {
-  const professorNames: string[][] = await getProfessorNames();
-  const professrNamesMapped: any[] = professorNames.map(
-    (professorName: string[]) => {
-      return {
-        lastName: professorName[0],
-        firstName: professorName[1],
-      };
-    },
+  const professorNames: string[] = await getProfessorNamesWebReg();
+  const parsedProfessorNames = professorNames.map((professorName: string) =>
+    parseProfessorName(professorName),
   );
 
-  const createProfessors: Professor[] | null =
-    await prisma.professor.createMany({
-      data: professrNamesMapped,
-    });
+  const createProfessors = await prisma.professor.createMany({
+    data: parsedProfessorNames.map((professorName: [string, string | null]) => {
+      if (professorName[1]) {
+        return {
+          firstName: professorName[0] || "",
+          lastName: professorName[1],
+        };
+      } else {
+        return {
+          firstName: "",
+          lastName: professorName[0],
+        };
+      }
+    }),
+  });
 
   return Response.json(createProfessors);
+}
+
+/**
+ * Drop the professor table
+ * 
+ * @param prisma - The Prisma client
+ */
+async function dropProfessors(prisma: any): Promise<Response> {
+  return Response.json(await prisma.professor.deleteMany());
 }
 
 /**

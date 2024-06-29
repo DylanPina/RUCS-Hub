@@ -28,7 +28,7 @@ export default async function Page({ params }: Props) {
   return (
     <div className="flex flex-col space-y-3">
       <ProfessorBanner professor={professor} />
-      <ProfessorReviews reviews={professor.reviews} />
+      <ProfessorReviews reviews={professor.reviews ?? []} />
     </div>
   );
 }

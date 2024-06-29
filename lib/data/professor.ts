@@ -68,25 +68,6 @@ export async function getProfessorTableData(): Promise<ProfessorTableColumn[]> {
 }
 
 /**
- * Get all the names of professors for the CS department
- *
- * @return - List of tuples which contain [lastName, firstName]
- */
-export async function getProfessorNames(): Promise<string[]> {
-  const sections: CourseSection[] = await getAllCourseSectionsWebReg();
-  const professorFullNames = new Set<string>();
-
-  sections.forEach((section: any) => {
-    const professorName = section.professorName;
-    if (professorName) {
-      professorFullNames.add(professorName);
-    }
-  });
-
-  return Array.from(professorFullNames);
-}
-
-/**
  * Creates a map of professor names to their respective IDs
  *
  * @return - Map of professor names to their respective IDs
@@ -113,7 +94,7 @@ export async function createProfessorNameIdMap(): Promise<Map<string, number>> {
  * @return - Overall ratings for that professor
  */
 export function getProfessorPageRatings(professor: any): any {
-  const reviews: Review[] = professor.reviews ?? [];
+  const reviews: Review[] = professor?.reviews ?? [];
 
   const reviewsWithOverallRating: Review[] = reviews.filter(
     (review: Review) => {

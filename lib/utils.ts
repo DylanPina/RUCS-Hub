@@ -241,7 +241,9 @@ export function getCourseRoute(code: number): string {
  * @return - Tuple containing the last name and first name of the professor
  */
 export function parseProfessorName(name: string): [string, string | null] {
-  const names: string[] = name.replace(",", "").split(" ");
+  const names: string[] = name.toUpperCase()
+    .replace(",", "")
+    .split(" ");
   return names.length === 2 ? [names[0], names[1]] : [names[0], null];
 }
 

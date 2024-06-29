@@ -87,7 +87,6 @@ export async function getAllCourseSectionsWebReg(): Promise<CourseSection[]> {
           : [null, null];
 
         if (!professorLastName) {
-          console.log("Nope ", section.professorName[0]);
           return;
         }
 
@@ -157,6 +156,26 @@ export async function getCourseListingByYearTermWebReg(
       credits: courseListing.credits,
     };
   });
+}
+
+/**
+ * Get all the names of professors for the CS department
+ *
+ * @return - List of tuples which contain [lastName, firstName]
+ */
+export async function getProfessorNamesWebReg(): Promise<string[]> {
+  const sections: CourseSection[] = await getAllCourseSectionsWebReg();
+  const professorFullNames = new Set<string>();
+
+  sections.forEach((section: any) => {
+    const professorName = section.professorName;
+
+    if (professorName) {
+      professorFullNames.add(professorName);
+    }
+  });
+
+  return Array.from(professorFullNames);
 }
 
 /**
