@@ -7,6 +7,7 @@ import {
 } from "@/lib/constants";
 import sha256 from "crypto-js/sha256";
 import { NextRouter } from "next/router";
+import { titleCase as _titleCase } from "title-case";
 
 /**
  * Validates the supported term and year range for a course.
@@ -23,7 +24,7 @@ export function validateWebRegCourseTermYear(
     year > WEBREG_MAX_YEAR ||
     year < WEBREG_MIN_YEAR ||
     (year === WEBREG_MAX_YEAR && term === Term.Winter) ||
-    (year === WEBREG_MIN_YEAR && term !== Term.Fall)
+    (year === WEBREG_MIN_YEAR && term !== Term.Winter)
   ) {
     return false;
   }
@@ -185,12 +186,7 @@ export function getValidTerms(year: number | null): string[] {
  * @returns - The input string transformed into title case.
  */
 export function titleCase(input: string): string {
-  return input
-    .toLowerCase()
-    .replace(" and ", " & ")
-    .split(" ")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+  return _titleCase(input.toLowerCase());
 }
 
 /**
