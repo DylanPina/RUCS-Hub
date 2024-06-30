@@ -137,7 +137,7 @@ export async function getCourseListingByYearTermWebReg(
 
   return courseListingJson.map((courseListing: any) => {
     return {
-      subject: subjectCode,
+      subjectCode: subjectCode,
       code: Number(courseListing.courseNumber),
       title: courseListing.title,
       year: year,
@@ -179,13 +179,36 @@ export async function getProfessorNamesWebReg(): Promise<string[]> {
 }
 
 /**
+ * Merges course listings from different years and terms into one course listings based on
+ * subject and course code
+ *
+ * @param courseListings - A list of course listings to merge together
+ * @return - One combined course listing with no duplicates
+ */
+export function mergeCourseListingBySubjectCourseCode(
+  courseListings: CourseWebRegListing[][],
+) {
+  const mergedCourseListings: { [key: string]: CourseWebRegListing } = {};
+
+  courseListings.flat().forEach((courseListing: CourseWebRegListing) => {
+    const key = `${courseListing.subjectCode}-${courseListing.code}`;
+
+    if (!mergedCourseListings[key]) {
+      mergedCourseListings[key] = courseListing;
+    }
+  });
+
+  return Object.values(mergedCourseListings);
+}
+
+/**
  * Merges course listings from different years and terms into one course listings
  * based on course code
  *
  * @param courseListing - A list of course listings to merge together
  * @return - One combined course listing with no duplicates
  */
-function mergeCourseListingByCourseCode(
+export function mergeCourseListingByCourseCode(
   courseListing: CourseWebRegListing[][],
 ): CourseWebRegListing[] {
   const mergedCourseListing: CourseWebRegListing[] = [];
@@ -210,16 +233,16 @@ function mergeCourseListingByCourseCode(
  * @param courseListings - A list of course listings to merge together
  * @return - A hashmap where the key is the subject code and the values are the merged course listings for each subject
  */
-function mergeCourseListingBySubjectCode(
+export function mergeCourseListingBySubjectCode(
   courseListings: CourseWebRegListing[],
 ): Map<string, CourseWebRegListing[]> {
   const mergedCourseListingMap = new Map<string, CourseWebRegListing[]>();
 
   courseListings.forEach((courseListing) => {
-    if (!mergedCourseListingMap.has(courseListing.subject)) {
-      mergedCourseListingMap.set(courseListing.subject, []);
+    if (!mergedCourseListingMap.has(courseListing.subjectCode)) {
+      mergedCourseListingMap.set(courseListing.subjectCode, []);
     }
-    mergedCourseListingMap.get(courseListing.subject)!.push(courseListing);
+    mergedCourseListingMap.get(courseListing.subjectCode)!.push(courseListing);
   });
 
   return mergedCourseListingMap;

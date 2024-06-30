@@ -2,7 +2,7 @@ import { CourseTableColumn } from "../definitions/course";
 
 export const courseTableMockData: CourseTableColumn[] = [
   {
-    subject: "198",
+    subjectCode: "198",
     code: 344,
     name: "Design and Analysis of Computer Algorithms",
     credits: 4,
@@ -12,7 +12,7 @@ export const courseTableMockData: CourseTableColumn[] = [
     totalReviews: 108,
   },
   {
-    subject: "198",
+    subjectCode: "198",
     code: 352,
     name: "Internet Technology",
     credits: 4,
@@ -22,7 +22,7 @@ export const courseTableMockData: CourseTableColumn[] = [
     totalReviews: 125,
   },
   {
-    subject: "198",
+    subjectCode: "198",
     code: 405,
     name: "Seminar in Computers and Society",
     credits: 4,
@@ -32,7 +32,7 @@ export const courseTableMockData: CourseTableColumn[] = [
     totalReviews: 43,
   },
   {
-    subject: "198",
+    subjectCode: "198",
     code: 411,
     name: "Computer Architecture II",
     credits: 4,
@@ -42,7 +42,7 @@ export const courseTableMockData: CourseTableColumn[] = [
     totalReviews: 304,
   },
   {
-    subject: "198",
+    subjectCode: "198",
     code: 415,
     name: "Compilers",
     credits: 4,
@@ -52,7 +52,7 @@ export const courseTableMockData: CourseTableColumn[] = [
     totalReviews: 208,
   },
   {
-    subject: "198",
+    subjectCode: "198",
     code: 417,
     name: "Distributed Systems: Concepts and Design",
     credits: 4,
@@ -62,7 +62,7 @@ export const courseTableMockData: CourseTableColumn[] = [
     totalReviews: 102,
   },
   {
-    subject: "198",
+    subjectCode: "198",
     code: 419,
     name: "Computer Security",
     credits: 3,

@@ -31,28 +31,31 @@ model Professor {
 
 model Section {
   sectionNumber String
-  course        Course    @relation(fields: [courseCode], references: [code], onDelete: Cascade)
+  course        Course    @relation(fields: [courseCode, subjectCode], references: [code, subjectCode], onDelete: Cascade)
   courseCode    Int
+  subjectCode   String
   professor     Professor @relation(fields: [professorId], references: [id], onDelete: Cascade)
   professorId   Int
   term          Int
   year          Int
 
-  @@id([sectionNumber, courseCode, term, year])
+  @@id([sectionNumber, courseCode, subjectCode, professorId, term, year])
 }
 
 model Course {
-  code          Int            @id
+  code          Int
   name          String
   prereqs       String[]
   synopsis      String?
   credits       Int?
   subject       Subject        @relation(fields: [subjectCode], references: [code], onDelete: Cascade)
-  subjectCode   String         
+  subjectCode   String
   reviews       Review[]
   sections      Section[]
   subscribers   Subscription[]
   notifications Notification[]
+
+  @@id([code, subjectCode])
 }
 
 model Review {
@@ -61,8 +64,9 @@ model Review {
   userId                    String
   semester                  Int
   year                      Int
-  course                    Course         @relation(fields: [courseCode], references: [code], onDelete: Cascade)
+  course                    Course        @relation(fields: [courseCode, subjectCode], references: [code, subjectCode], onDelete: Cascade)
   courseCode                Int
+  subjectCode               String
   title                     String
   content                   String
   createdAt                 DateTime       @default(now())
@@ -115,8 +119,9 @@ model Notification {
   reviewId    Int?
   professor   Professor? @relation(fields: [professorId], references: [id], onDelete: Cascade)
   professorId Int?
-  course      Course?    @relation(fields: [courseCode], references: [code], onDelete: Cascade)
+  course      Course?    @relation(fields: [courseCode, subjectCode], references: [code, subjectCode], onDelete: Cascade)
   courseCode  Int?
+  subjectCode String
   createdAt   DateTime   @default(now())
   read        Boolean    @default(false)
 }
@@ -125,8 +130,9 @@ model Subscription {
   id          Int        @id @default(autoincrement())
   user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
-  course      Course?    @relation(fields: [courseCode], references: [code], onDelete: Cascade)
+  course      Course?    @relation(fields: [courseCode, subjectCode], references: [code, subjectCode], onDelete: Cascade)
   courseCode  Int?
+  subjectCode String
   professor   Professor? @relation(fields: [professorId], references: [id], onDelete: Cascade)
   professorId Int?
   review      Review?    @relation(fields: [reviewId], references: [id], onDelete: Cascade)
@@ -139,4 +145,3 @@ model Subject {
   name    String
   courses Course[]
 }
-

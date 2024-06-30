@@ -64,9 +64,7 @@ export async function getAllCourses(): Promise<Course[]> {
  *
  * @return - List of all course table listings
  */
-export async function getAllCourseTableListing(): Promise<
-  CourseTableColumn[]
-> {
+export async function getAllCourseTableListing(): Promise<CourseTableColumn[]> {
   const courses: Course[] = await prisma.course.findMany({
     include: {
       reviews: true,
@@ -289,8 +287,6 @@ function getCourseTableRatings(course: any): any {
     reviews: reviews.length,
   };
 }
-
-
 
 /**
  * Get all course section from the database

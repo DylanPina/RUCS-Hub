@@ -1,15 +1,23 @@
-import { getAllCourseTableListing } from "@/lib/data/course";
 import { mockReviews } from "@/lib/mock-data/review-mock-data";
 import { mockUsers } from "@/lib/mock-data/user-mock-data";
 import { mockVotes } from "@/lib/mock-data/vote-mock-data";
 import { Review, Vote } from "@prisma/client";
 import { prisma } from "@/prisma/prisma";
 import { getSubjects } from "@/lib/data/subject";
-import { getAllCourseSectionsWebReg, getProfessorNamesWebReg } from "@/lib/data/webreg";
-import { parseProfessorName } from "@/lib/utils";
+import {
+  getAllCourseListingWebReg,
+  getAllCourseSectionsWebReg,
+  getProfessorNamesWebReg,
+  mergeCourseListingBySubjectCourseCode,
+} from "@/lib/data/webreg";
+import { parseProfessorName, titleCase } from "@/lib/utils";
+import { CourseWebRegListing } from "@/lib/definitions/course";
 
 /** Performs seeding operations */
 export async function GET() {
+  // await dropCourses(prisma);
+  // await seedCourses(prisma);
+
   prisma.$disconnect();
   return Response.json({ message: `Seeding complete!` });
 }
@@ -56,22 +64,36 @@ async function seedMockUsers(prisma: any): Promise<Response> {
  * @param prisma - The Prisma client
  */
 async function seedCourses(prisma: any): Promise<Response> {
-  const courseTableListing: any[] = await getAllCourseTableListing();
-  const courses = courseTableListing.map(
-    ({ code, name, credits, synopsisUrl, prereqs }) => ({
-      courseCode: code,
-      name: name,
-      credits,
-      synopsis: synopsisUrl,
-      prereqs,
-    }),
+  const courseListings = await getAllCourseListingWebReg();
+  const mergedCourseListings = mergeCourseListingBySubjectCourseCode(
+    Array.from(courseListings.values()),
   );
 
+  const courseListingsFormatted = Array.from(mergedCourseListings.values())
+    .flat()
+    .map((courseListing: CourseWebRegListing) => {
+      return {
+        subjectCode: courseListing.subjectCode,
+        code: courseListing.code,
+        name: titleCase(courseListing.title).replace("Ii", "II"),
+        credits: courseListing.credits,
+      };
+    });
+
   const createCourses: any = await prisma.course.createMany({
-    data: courses,
+    data: courseListingsFormatted,
   });
 
   return Response.json(createCourses);
+}
+
+/**
+ * Drop the course table
+ *
+ * @param prisma - The Prisma client
+ */
+async function dropCourses(prisma: any): Promise<Response> {
+  return Response.json(await prisma.course.deleteMany());
 }
 
 /**
@@ -106,7 +128,7 @@ async function seedProfessors(prisma: any): Promise<Response> {
 
 /**
  * Drop the professor table
- * 
+ *
  * @param prisma - The Prisma client
  */
 async function dropProfessors(prisma: any): Promise<Response> {
