@@ -1,4 +1,4 @@
-import { getCourseByCode } from "@/lib/data/course";
+import { getCourseBySubjectCourseCode } from "@/lib/data/course";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { CoursePage } from "@/lib/definitions/course";
@@ -11,13 +11,17 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
-    title: params.id,
+    title: params.id.replace("%3A", ":"),
   };
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;
-  const coursePage: CoursePage | null = await getCourseByCode(Number(id));
+  const [subjectCode, code] = id.split("%3A");
+  const coursePage: CoursePage | null = await getCourseBySubjectCourseCode(
+    subjectCode,
+    Number(code),
+  );
 
   if (!coursePage) {
     notFound();

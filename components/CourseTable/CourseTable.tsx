@@ -28,6 +28,7 @@ import TableFilterSearch from "../Table/TableFilterSearch";
 import TableSelectPageSize from "../Table/TableSelectPage";
 import { useRouter } from "next/navigation";
 import TablePageSize from "../Table/TablePageSize";
+import { getCourseRoute } from "@/lib/utils";
 
 interface CourseTableProps {
   data: CourseTableColumn[];
@@ -110,7 +111,14 @@ export default function CourseTable({ data }: CourseTableProps) {
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className="cursor-pointer hover:bg-primary-red/20 hover:font-bold"
-                  onClick={() => router.push(`/course/${row.original.code}`)}
+                  onClick={() =>
+                    router.push(
+                      getCourseRoute(
+                        row.original.subjectCode,
+                        row.original.code,
+                      ),
+                    )
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell

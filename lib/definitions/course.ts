@@ -12,6 +12,7 @@ export type Course = Prisma.CourseGetPayload<{
 export type CoursePage = {
   code: number;
   name: string;
+  subjectCode: string;
   prereqs: string[];
   synopsisUrl: string;
   credits: number;

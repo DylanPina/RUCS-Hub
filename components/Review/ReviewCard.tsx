@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import {
   formatProfessorName,
   formatReviewDate,
+  getCourseRoute,
   getProfessorRoute,
   getTermNameByValue,
   hashEmailAddress,
@@ -55,9 +56,13 @@ export default function ReviewCard({ review }: ReviewCardProps) {
           <span className="font-semibold">Course:</span>{" "}
           <Link
             className="hover:underline"
-            href={`/course/${updatedReview.course.code}`}
+            href={getCourseRoute(
+              updatedReview.course.subjectCode,
+              updatedReview.course.code,
+            )}
           >
-            {updatedReview.course.code} - {updatedReview.course.name}
+            {updatedReview.course.subjectCode}:{updatedReview.course.code} -{" "}
+            {updatedReview.course.name}
           </Link>
         </p>
         <p className="text-sm max-sm:text-xs text-primary-white/50">

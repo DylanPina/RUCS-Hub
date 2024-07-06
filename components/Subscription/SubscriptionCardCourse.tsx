@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import NotificationButtonCourse from "../Notification/NotificationButtonCourse";
+import { getCourseRoute } from "@/lib/utils";
 
 interface Props {
   course: any;
@@ -25,7 +26,7 @@ export default function SubscriptionCardCourse({ course }: Props) {
       <h3 className="text-lg max-sm:text-base text-primary-white font-bold">
         Course:{" "}
         <Link
-          href={`/course/${course.code}`}
+          href={getCourseRoute(course.subjectCode, course.code)}
           className="font-normal hover:underline"
         >
           {course.code} - {course.name}

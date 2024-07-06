@@ -1,6 +1,7 @@
 import {
   formatProfessorName,
   formatReviewDate,
+  getCourseRoute,
   getProfessorRoute,
 } from "@/lib/utils";
 import Link from "next/link";
@@ -46,7 +47,7 @@ export default function NotificationVote({
         <h3 className="font-semibold">Course:</h3>
         <Link
           className="hover:underline"
-          href={`/course/${review.course.code}`}
+          href={getCourseRoute(review.course.subjectCode, review.course.code)}
         >
           {review.course.code} - {review.course.name}
         </Link>

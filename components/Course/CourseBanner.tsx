@@ -18,7 +18,8 @@ interface Props {
 
 export default async function CourseBanner({ coursePage }: Props) {
   const session = await getSession();
-  const { code, name, rating, difficulty, workload, reviews } = coursePage;
+  const { subjectCode, code, name, rating, difficulty, workload, reviews } =
+    coursePage;
 
   const totalDifficultyRatings = reviews.filter((review) => {
     return review.difficultyRating !== null;
@@ -42,7 +43,7 @@ export default async function CourseBanner({ coursePage }: Props) {
               </div>
             )}
             <h1 className="text-xl max-w-[95%] text-wrap max-md:text-lg text-primary-black font-black">
-              {code} - {name}
+              {subjectCode}:{code} - {name}
             </h1>
             <div className="flex flex-col space-y-1">
               <h3 className="text-md max-md:text-sm text-primary-white font-bold">

@@ -27,6 +27,8 @@ model Professor {
   sections      Section[]
   subscribers   Subscription[]
   notifications Notification[]
+
+  @@unique([firstName, lastName])
 }
 
 model Section {
@@ -55,7 +57,7 @@ model Course {
   subscribers   Subscription[]
   notifications Notification[]
 
-  @@id([code, subjectCode])
+  @@id(name: "subjectCourseCode", [code, subjectCode])
 }
 
 model Review {
@@ -64,7 +66,7 @@ model Review {
   userId                    String
   semester                  Int
   year                      Int
-  course                    Course        @relation(fields: [courseCode, subjectCode], references: [code, subjectCode], onDelete: Cascade)
+  course                    Course         @relation(fields: [courseCode, subjectCode], references: [code, subjectCode], onDelete: Cascade)
   courseCode                Int
   subjectCode               String
   title                     String
@@ -121,7 +123,7 @@ model Notification {
   professorId Int?
   course      Course?    @relation(fields: [courseCode, subjectCode], references: [code, subjectCode], onDelete: Cascade)
   courseCode  Int?
-  subjectCode String
+  subjectCode String?
   createdAt   DateTime   @default(now())
   read        Boolean    @default(false)
 }
@@ -132,7 +134,7 @@ model Subscription {
   userId      String
   course      Course?    @relation(fields: [courseCode, subjectCode], references: [code, subjectCode], onDelete: Cascade)
   courseCode  Int?
-  subjectCode String
+  subjectCode String?
   professor   Professor? @relation(fields: [professorId], references: [id], onDelete: Cascade)
   professorId Int?
   review      Review?    @relation(fields: [reviewId], references: [id], onDelete: Cascade)

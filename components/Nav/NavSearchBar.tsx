@@ -43,7 +43,7 @@ export default function NavSearchBar({ courses, professors }: Props) {
 
   function handleCourseSelect(course: CourseTableColumn) {
     setOpen(false);
-    router.push(getCourseRoute(course.code));
+    router.push(getCourseRoute(course.subjectCode, course.code));
   }
 
   function handleProfessorSelect(professor: ProfessorTableColumn) {

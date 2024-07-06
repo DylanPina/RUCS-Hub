@@ -5,13 +5,14 @@ import { revalidatePath } from "next/cache";
  * Creates a subscription to a course, professor, or review
  *
  * @param userId - ID of the user who is subscribing
- * @param code - Course code of the course the user is subscribing to
+ * @param courseCode - Course code of the course the user is subscribing to
  * @param professorId - ID of the professor the user is subscribing to
  * @param reviewId - ID of the review the user is subscribing to
  */
 export async function createSubscription(
   userId: string,
-  code?: number,
+  subjectCode?: string,
+  courseCode?: number,
   professorId?: number,
   reviewId?: number,
 ) {
@@ -19,13 +20,13 @@ export async function createSubscription(
     throw new Error("Must provide userId to create subscription");
   }
 
-  if (!code && !professorId && !reviewId) {
+  if (!courseCode && !professorId && !reviewId) {
     throw new Error(
       "Must provide a code, professorId, or reviewId to create notification",
     );
   }
 
-  if ([code, professorId].filter(Boolean).length > 1) {
+  if ([courseCode, professorId].filter(Boolean).length > 1) {
     throw new Error(
       "Cannot provide both code and professorId to create notification",
     );
@@ -34,7 +35,8 @@ export async function createSubscription(
   const subscription = await prisma.subscription.create({
     data: {
       userId: userId,
-      courseCode: code,
+      subjectCode: subjectCode,
+      courseCode: courseCode,
       professorId: professorId,
       reviewId: reviewId,
     },

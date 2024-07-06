@@ -15,9 +15,6 @@ import { CourseWebRegListing } from "@/lib/definitions/course";
 
 /** Performs seeding operations */
 export async function GET() {
-  // await dropCourses(prisma);
-  // await seedCourses(prisma);
-
   prisma.$disconnect();
   return Response.json({ message: `Seeding complete!` });
 }

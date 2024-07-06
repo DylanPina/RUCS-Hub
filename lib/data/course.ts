@@ -11,13 +11,20 @@ import { prisma } from "@/prisma/prisma";
 /**
  * Get course by courseId
  *
- * @param code - Course code of the course we are trying to fetch
+ * @param subjectCode - Subject code of the course we are trying to fetch
+ * @param courseCode - Course code of the course we are trying to fetch
  * @return - Course
  */
-export async function getCourseByCode(code: number): Promise<CoursePage> {
+export async function getCourseBySubjectCourseCode(
+  subjectCode: string,
+  courseCode: number,
+): Promise<CoursePage | null> {
   const course = await prisma.course.findUnique({
     where: {
-      code: code,
+      subjectCourseCode: {
+        subjectCode: subjectCode,
+        code: courseCode,
+      },
     },
     include: {
       reviews: {
@@ -31,7 +38,8 @@ export async function getCourseByCode(code: number): Promise<CoursePage> {
   });
 
   if (!course) {
-    console.error(`Failed to find course with code ${code}`);
+    console.error(`Failed to find course with code ${courseCode}`);
+    return null;
   }
 
   return getCoursePageRatings(course);
@@ -217,6 +225,7 @@ export function getCoursePageRatings(course: any): CoursePage {
   return {
     code: course.code,
     name: course.name,
+    subjectCode: course.subjectCode,
     prereqs: course.prereqs,
     credits: course.credits,
     synopsisUrl: course.synopsis,
@@ -277,6 +286,7 @@ function getCourseTableRatings(course: any): any {
 
   return {
     code: course.code,
+    subjectCode: course.subjectCode,
     name: course.name,
     credits: course.credits,
     rating: reviews.length ? averageRating : -1,
