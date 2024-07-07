@@ -9,7 +9,7 @@ import { Review } from "../definitions/review";
 import { prisma } from "@/prisma/prisma";
 
 /**
- * Get course by courseId
+ * Get course page by courseId
  *
  * @param subjectCode - Subject code of the course we are trying to fetch
  * @param courseCode - Course code of the course we are trying to fetch
@@ -18,7 +18,11 @@ import { prisma } from "@/prisma/prisma";
 export async function getCourseBySubjectCourseCode(
   subjectCode: string,
   courseCode: number,
-): Promise<CoursePage | null> {
+): Promise<Course | null> {
+  if (!subjectCode || !courseCode) {
+    return null;
+  }
+
   const course = await prisma.course.findUnique({
     where: {
       subjectCourseCode: {
@@ -42,7 +46,47 @@ export async function getCourseBySubjectCourseCode(
     return null;
   }
 
+  return course;
+}
+
+/**
+ * Get course page by courseId
+ *
+ * @param subjectCode - Subject code of the course we are trying to fetch
+ * @param courseCode - Course code of the course we are trying to fetch
+ * @return - Course
+ */
+export async function getCoursePageBySubjectCourseCode(
+  subjectCode: string,
+  courseCode: number,
+): Promise<CoursePage | null> {
+  const course = await getCourseBySubjectCourseCode(subjectCode, courseCode);
+
+  if (!course) {
+    console.error(`Failed to find course with code ${courseCode}`);
+    return null;
+  }
+
   return getCoursePageRatings(course);
+}
+
+/**
+ * Get courses by subject code
+ *
+ * @param subjectCode - Subject code of the courses we are trying to fetch
+ * @return - List of courses for the subject
+ */
+export async function getCoursesBySubjectCode(
+  subjectCode: string,
+): Promise<Course[]> {
+  return await prisma.course.findMany({
+    where: {
+      subjectCode: subjectCode,
+    },
+    include: {
+      reviews: true,
+    },
+  });
 }
 
 /**

@@ -1,3 +1,4 @@
+import { prisma } from "@/prisma/prisma";
 import { RUTGERS_SUBJECTS_URL } from "../constants";
 import { titleCase } from "../utils";
 
@@ -19,5 +20,13 @@ export async function getSubjects() {
       code: subject.code,
       name: titleCase(subject.description),
     };
+  });
+}
+
+export async function getSubjectByCode(code: string) {
+  return await prisma.subject.findUnique({
+    where: {
+      code: code,
+    },
   });
 }

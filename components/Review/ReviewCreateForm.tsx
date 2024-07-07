@@ -31,7 +31,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Course, Professor } from "@prisma/client";
+import { Course, Professor, Subject } from "@prisma/client";
 import {
   formatProfessorName,
   getTermNameByValue,
@@ -39,7 +39,7 @@ import {
   getYears,
   hashEmailAddress,
 } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "../shadcn/ui/input";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { Textarea } from "../shadcn/ui/textarea";
@@ -51,34 +51,56 @@ import { toast } from "react-toastify";
 import { Button } from "../shadcn/ui/button";
 import { cn } from "@/lib/shadcn/utils";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { getCoursesBySubjectCodeAction } from "@/lib/actions/course";
+import { getSubjectByCodeAction } from "@/lib/actions/subject";
 
 interface Props {
+  subject: Subject | null;
+  subjects: Subject[];
   course?: Course | null;
-  courses: Course[];
   professor?: Professor | null;
   professors: Professor[];
 }
 
 export default function ReviewCreateForm({
+  subject,
+  subjects,
   course,
-  courses,
   professor,
   professors,
 }: Props) {
   const { user } = useUser();
-  const [filteredCourses, setFilteredCourses] = useState<Course[]>(
-    courses ?? [],
-  );
-  const [filteredProfessors, setFilteredProfessors] = useState<Professor[]>(
-    professors ?? [],
-  );
+  const [selectedSubject, setSelectedSubject] = useState<Subject | null>();
+  const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const [openSubjects, setOpenSubjects] = useState(false);
   const [openCourses, setOpenCourses] = useState(false);
   const [openProfessors, setOpenProfessors] = useState(false);
   const terms = getTerms();
   const years = getYears();
 
+  useEffect(() => {
+    if (!subject) {
+      const updateSubject = async () => {
+        setSelectedSubject(await getSubjectByCodeAction("198"));
+      };
+      updateSubject();
+    }
+  }, []);
+
+  useEffect(() => {
+    const updateFilteredCourses = async () => {
+      setFilteredCourses(
+        await getCoursesBySubjectCodeAction(selectedSubject?.code ?? ""),
+      );
+    };
+    updateFilteredCourses();
+  }, [selectedSubject]);
+
   const FormSchema = z.object({
+    subject: z.string({
+      required_error: "You must select a subject",
+    }),
     course: z.string().min(1, {
       message: "You must select a course",
     }),
@@ -134,7 +156,8 @@ export default function ReviewCreateForm({
     resolver: zodResolver(FormSchema),
     mode: "onChange",
     defaultValues: {
-      course: course ? `${course.code} - ${course.name}` : "",
+      subject: subject ? formatSubject(subject) : "",
+      course: course ? formatCourse(course) : "",
       professor: professor
         ? formatProfessorName(professor.lastName, professor.firstName)
         : "",
@@ -142,12 +165,10 @@ export default function ReviewCreateForm({
   });
 
   function clearCourseSelection() {
-    setFilteredProfessors(professors ?? []);
     form.setValue("course", "");
   }
 
   function clearProfessorSelection() {
-    setFilteredCourses(courses ?? []);
     form.setValue("professor", "");
   }
 
@@ -192,13 +213,81 @@ export default function ReviewCreateForm({
     clearProfessorSelection();
   }
 
+  function formatSubject(subject: Subject): string {
+    return `${subject.code}: ${subject.name}`;
+  }
+
+  function formatCourse(course: Course): string {
+    return `${course.code} - ${course.name}`;
+  }
+
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col space-y-3 w-full max-w-screen-lg"
       >
-        <div className="flex max-sm:flex-col sm:space-x-3 max-sm:justify-center max-sm:align-center max-sm:space-y-4 mt-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
+          <FormField
+            control={form.control}
+            name="subject"
+            render={({ field }) => (
+              <FormItem className="flex flex-col w-full">
+                <FormLabel>Subject *</FormLabel>
+                <Popover open={openSubjects} onOpenChange={setOpenSubjects}>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "flex justify-between bg-primary-black w-full overflow-ellipsis",
+                          !field.value && "text-muted-foreground",
+                          "hover:text-primary-white hover:bg-primary-black truncate text-overflow-ellipsis",
+                        )}
+                      >
+                        {field.value || ""}
+                        <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="bg-primary-black text-primary-white w-full max-sm:max-w-[375px] max-h-[400px] overflow-auto">
+                    <Command className="bg-primary-black text-primary-white">
+                      <CommandInput
+                        placeholder="Search subjects..."
+                        className="h-9"
+                      />
+                      <CommandEmpty>No subject found</CommandEmpty>
+                      <CommandGroup className="bg-primary-black text-primary-white">
+                        {subjects.map((subject: Subject) => (
+                          <CommandItem
+                            value={subject.code}
+                            key={subject.code}
+                            onSelect={() => {
+                              form.setValue(`subject`, formatSubject(subject));
+                              setSelectedSubject(subject);
+                              setOpenSubjects(false);
+                            }}
+                          >
+                            {formatSubject(subject)}
+                            <CheckIcon
+                              className={cn(
+                                "ml-auto h-4 w-4",
+                                subject.name === field.value
+                                  ? "opacity-100"
+                                  : "opacity-0",
+                              )}
+                            />
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="course"
@@ -225,20 +314,17 @@ export default function ReviewCreateForm({
                   <PopoverContent className="bg-primary-black text-primary-white w-full max-sm:max-w-[375px] max-h-[400px] overflow-auto">
                     <Command className="bg-primary-black text-primary-white">
                       <CommandInput
-                        placeholder="Search framework..."
+                        placeholder="Search courses..."
                         className="h-9"
                       />
-                      <CommandEmpty>No framework found.</CommandEmpty>
+                      <CommandEmpty>No courses found</CommandEmpty>
                       <CommandGroup className="bg-primary-black text-primary-white">
                         {filteredCourses.map((course) => (
                           <CommandItem
                             value={`${course.code} - ${course.name}`}
                             key={course.name}
                             onSelect={() => {
-                              form.setValue(
-                                "course",
-                                `${course.code} - ${course.name}`,
-                              );
+                              form.setValue("course", formatCourse(course));
                               setOpenCourses(false);
                             }}
                           >
@@ -261,11 +347,13 @@ export default function ReviewCreateForm({
               </FormItem>
             )}
           />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-3">
           <FormField
             control={form.control}
             name="professor"
             render={({ field }) => (
-              <FormItem className="flex flex-col w-full">
+              <FormItem>
                 <FormLabel>Professor *</FormLabel>
                 <Popover open={openProfessors} onOpenChange={setOpenProfessors}>
                   <PopoverTrigger asChild>
@@ -287,12 +375,12 @@ export default function ReviewCreateForm({
                   <PopoverContent className="bg-primary-black text-primary-white max-w-[400px] w-full max-h-[400px] overflow-auto">
                     <Command className="bg-primary-black text-primary-white">
                       <CommandInput
-                        placeholder="Search Professors"
+                        placeholder="Search professors..."
                         className="h-9"
                       />
-                      <CommandEmpty>No framework found.</CommandEmpty>
+                      <CommandEmpty>No professors found</CommandEmpty>
                       <CommandGroup className="bg-primary-black text-primary-white">
-                        {filteredProfessors.map((professor) => (
+                        {professors.map((professor) => (
                           <CommandItem
                             value={formatProfessorName(
                               professor.lastName,
@@ -339,60 +427,54 @@ export default function ReviewCreateForm({
               </FormItem>
             )}
           />
-        </div>
-        <div className="flex space-x-3">
-          <div className="w-1/2">
-            <FormField
-              control={form.control}
-              name="year"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Year *</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="bg-primary-black text-primary-white">
-                      {years?.map((year: number) => (
-                        <SelectItem key={year} value={year.toString()}>
-                          {year.toString()}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="w-1/2">
-            <FormField
-              control={form.control}
-              name="term"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Term *</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="bg-primary-black text-primary-white">
-                      {terms?.map((term: number) => (
-                        <SelectItem key={term} value={term.toString()}>
-                          {getTermNameByValue(term)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+          <FormField
+            control={form.control}
+            name="year"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Year *</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="bg-primary-black text-primary-white">
+                    {years?.map((year: number) => (
+                      <SelectItem key={year} value={year.toString()}>
+                        {year.toString()}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="term"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Term *</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="bg-primary-black text-primary-white">
+                    {terms?.map((term: number) => (
+                      <SelectItem key={term} value={term.toString()}>
+                        {getTermNameByValue(term)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
         <div className="flex max-sm:flex-col sm:space-x-3 max-sm:justify-center max-sm:align-center max-sm:space-y-3">
           <div className="w-1/3 max-sm:w-full">
