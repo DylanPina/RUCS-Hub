@@ -72,7 +72,9 @@ async function seedCourses(prisma: any): Promise<Response> {
       return {
         subjectCode: courseListing.subjectCode,
         code: courseListing.code,
-        name: titleCase(courseListing.title).replace("Ii", "II"),
+        name: titleCase(courseListing.title)
+          .replace("Ii", "II")
+          .replace("Cs", "CS"),
         credits: courseListing.credits,
       };
     });

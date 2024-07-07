@@ -37,14 +37,14 @@ export default async function createReview(
   });
 
   const professorId = professor?.id || -1;
-  const courseCode = Number(reviewForm.course.split(" ")[0][0]);
-  const subjectCode = reviewForm.course.split(" ")[0][1];
+  const courseCode = Number(reviewForm.course.split(" ")[0]);
+  const subjectCode = reviewForm.subject.split(":")[0].trim();
 
   const review = await prisma.review.create({
     data: {
       userId,
-      courseCode,
-      subjectCode,
+      courseCode: courseCode,
+      subjectCode: subjectCode,
       professorId: professorId,
       year: Number(reviewForm.year),
       semester: Number(reviewForm.term),

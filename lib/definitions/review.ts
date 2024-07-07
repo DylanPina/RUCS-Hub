@@ -14,6 +14,7 @@ export type Review = Prisma.ReviewGetPayload<{
 
 export type ReviewForm = {
   course: string;
+  subject: string;
   professor: string;
   year: string;
   term: string;
