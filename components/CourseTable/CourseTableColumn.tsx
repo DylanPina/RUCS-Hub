@@ -5,6 +5,21 @@ import { CourseTableColumn } from "@/lib/definitions/course";
 
 export const columns: ColumnDef<CourseTableColumn>[] = [
   {
+    accessorKey: "subjectCode",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="flex justify-start text-primary-white p-0 hover:bg-transparent hover:font-black hover:text-primary-white"
+        >
+          Subject
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
+  {
     accessorKey: "code",
     header: ({ column }) => {
       return (
