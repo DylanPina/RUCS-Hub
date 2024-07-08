@@ -21,7 +21,7 @@ import {
 } from "@/components/shadcn/ui/table";
 import { CourseTableColumn } from "@/lib/definitions/course";
 import { Button } from "@/components/shadcn/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { columns } from "./CourseTableColumn";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import TableFilterSearch from "../Table/TableFilterSearch";
@@ -29,16 +29,35 @@ import TableSelectPageSize from "../Table/TableSelectPage";
 import { useRouter } from "next/navigation";
 import TablePageSize from "../Table/TablePageSize";
 import { getCourseRoute } from "@/lib/utils";
+import TableFilterSubject from "../Table/TableFilterSubject";
+import { Subject } from "@prisma/client";
 
 interface CourseTableProps {
-  data: CourseTableColumn[];
+  courseData: CourseTableColumn[];
+  subjects: Subject[];
 }
 
-export default function CourseTable({ data }: CourseTableProps) {
+export default function CourseTable({
+  courseData,
+  subjects,
+}: CourseTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState<any>([]);
+  const [subject, setSubject] = useState<Subject>();
+  const [filteredCourses, setFilteredCourses] =
+    useState<CourseTableColumn[]>(courseData);
   const router = useRouter();
+
+  useEffect(() => {
+    if (!subject) {
+      setFilteredCourses(courseData);
+    } else {
+      setFilteredCourses(
+        courseData.filter((course) => course.subjectCode === subject.code),
+      );
+    }
+  }, [subject, courseData]);
 
   const fuzzyFilter: FilterFn<any> = (
     row: any,
@@ -52,7 +71,7 @@ export default function CourseTable({ data }: CourseTableProps) {
   };
 
   const table = useReactTable({
-    data,
+    data: filteredCourses,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -74,12 +93,21 @@ export default function CourseTable({ data }: CourseTableProps) {
 
   return (
     <div className="min-w-[75%] max-lg:w-screen max-lg:px-4">
-      <div className="max-sm:w-full sm:max-w-[300px] py-4">
-        <TableFilterSearch
-          filter={globalFilter}
-          setFilter={setGlobalFilter}
-          placeHolder="Filter courses..."
-        />
+      <div className="flex justify-between">
+        <div className="max-sm:w-full sm:max-w-[300px] py-4">
+          <TableFilterSearch
+            filter={globalFilter}
+            setFilter={setGlobalFilter}
+            placeHolder="Filter courses..."
+          />
+        </div>
+        <div className="max-sm:w-full sm:max-w-[300px] py-4">
+          <TableFilterSubject
+            subjects={subjects}
+            selectedSubject={subject}
+            onSubjectChange={setSubject}
+          />
+        </div>
       </div>
       <div className="rounded overflow-hidden-md border">
         <Table className="p-10">

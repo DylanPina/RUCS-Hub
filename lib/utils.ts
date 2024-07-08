@@ -8,6 +8,7 @@ import {
 import sha256 from "crypto-js/sha256";
 import { NextRouter } from "next/router";
 import { titleCase as _titleCase } from "title-case";
+import { Course, Subject } from "@prisma/client";
 
 /**
  * Validates the supported term and year range for a course.
@@ -316,3 +317,11 @@ export const removeQueryParam = (router: NextRouter, paramKey: string) => {
     { shallow: true },
   );
 };
+
+export function formatCourseName(course: Course): string {
+  return `${course.code} - ${course.name}`;
+}
+
+export function formatSubjectName(subject: Subject): string {
+  return `${subject.code}: ${subject.name}`;
+}

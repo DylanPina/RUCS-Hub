@@ -39,7 +39,6 @@ export default async function createReview(
   const professorId = professor?.id || -1;
   const courseCode = Number(reviewForm.course.split(" ")[0]);
   const subjectCode = reviewForm.subject.split(":")[0].trim();
-  console.log(`SubjectCode: ${subjectCode} CourseCode: ${courseCode}`);
 
   const review = await prisma.review.create({
     data: {

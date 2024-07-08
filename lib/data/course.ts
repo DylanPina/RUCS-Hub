@@ -121,6 +121,9 @@ export async function getAllCourseTableListing(): Promise<CourseTableColumn[]> {
     include: {
       reviews: true,
     },
+    orderBy: {
+      code: "asc",
+    },
   });
 
   if (!courses) {

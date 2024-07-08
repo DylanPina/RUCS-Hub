@@ -33,7 +33,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Course, Professor, Subject } from "@prisma/client";
 import {
+  formatCourseName,
   formatProfessorName,
+  formatSubjectName,
   getTermNameByValue,
   getTerms,
   getYears,
@@ -152,8 +154,8 @@ export default function ReviewCreateForm({
     resolver: zodResolver(FormSchema),
     mode: "onChange",
     defaultValues: {
-      subject: subject ? formatSubject(subject) : "",
-      course: course ? formatCourse(course) : "",
+      subject: subject ? formatSubjectName(subject) : "",
+      course: course ? formatCourseName(course) : "",
       professor: professor
         ? formatProfessorName(professor.lastName, professor.firstName)
         : "",
@@ -209,14 +211,6 @@ export default function ReviewCreateForm({
     clearProfessorSelection();
   }
 
-  function formatSubject(subject: Subject): string {
-    return `${subject.code}: ${subject.name}`;
-  }
-
-  function formatCourse(course: Course): string {
-    return `${course.code} - ${course.name}`;
-  }
-
   return (
     <Form {...form}>
       <form
@@ -266,15 +260,18 @@ export default function ReviewCreateForm({
                       <CommandGroup className="bg-primary-black text-primary-white">
                         {subjects.map((subject: Subject) => (
                           <CommandItem
-                            value={formatSubject(subject)}
+                            value={formatSubjectName(subject)}
                             key={subject.code}
                             onSelect={() => {
-                              form.setValue(`subject`, formatSubject(subject));
+                              form.setValue(
+                                `subject`,
+                                formatSubjectName(subject),
+                              );
                               setSelectedSubject(subject);
                               setOpenSubjects(false);
                             }}
                           >
-                            {formatSubject(subject)}
+                            {formatSubjectName(subject)}
                             <CheckIcon
                               className={cn(
                                 "ml-auto h-4 w-4",
@@ -340,7 +337,10 @@ export default function ReviewCreateForm({
                               value={`${course.code} - ${course.name}`}
                               key={course.name}
                               onSelect={() => {
-                                form.setValue("course", formatCourse(course));
+                                form.setValue(
+                                  "course",
+                                  formatCourseName(course),
+                                );
                                 setOpenCourses(false);
                               }}
                             >
