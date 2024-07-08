@@ -20,15 +20,15 @@ export async function createSubscription(
     throw new Error("Must provide userId to create subscription");
   }
 
-  if (!courseCode && !professorId && !reviewId) {
+  if (!(courseCode && subjectCode) && !professorId && !reviewId) {
     throw new Error(
-      "Must provide a code, professorId, or reviewId to create notification",
+      "Must provide a course & subject code, professorId, or reviewId to create notification",
     );
   }
 
   if ([courseCode, professorId].filter(Boolean).length > 1) {
     throw new Error(
-      "Cannot provide both code and professorId to create notification",
+      "Cannot provide both course code and professorId to create notification",
     );
   }
 

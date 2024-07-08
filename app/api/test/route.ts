@@ -41,3 +41,8 @@
 //
 //   return new Response(JSON.stringify(courseListingsFormatted));
 // }
+//
+
+export async function GET() {
+  return new Response("Test");
+}

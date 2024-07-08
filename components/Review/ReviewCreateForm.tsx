@@ -248,7 +248,16 @@ export default function ReviewCreateForm({
                     </FormControl>
                   </PopoverTrigger>
                   <PopoverContent className="bg-primary-black text-primary-white w-full max-sm:max-w-[375px] max-h-[400px] overflow-auto">
-                    <Command className="bg-primary-black text-primary-white">
+                    <Command
+                      filter={(value, search) => {
+                        return value
+                          .toLowerCase()
+                          .includes(search.toLowerCase())
+                          ? 1
+                          : 0;
+                      }}
+                      className="bg-primary-black text-primary-white"
+                    >
                       <CommandInput
                         placeholder="Search subjects..."
                         className="h-9"
@@ -257,7 +266,7 @@ export default function ReviewCreateForm({
                       <CommandGroup className="bg-primary-black text-primary-white">
                         {subjects.map((subject: Subject) => (
                           <CommandItem
-                            value={subject.code}
+                            value={formatSubject(subject)}
                             key={subject.code}
                             onSelect={() => {
                               form.setValue(`subject`, formatSubject(subject));
@@ -309,7 +318,16 @@ export default function ReviewCreateForm({
                     </FormControl>
                   </PopoverTrigger>
                   <PopoverContent className="bg-primary-black text-primary-white w-full max-sm:max-w-[375px] max-h-[400px] overflow-auto">
-                    <Command className="bg-primary-black text-primary-white">
+                    <Command
+                      filter={(value, search) => {
+                        return value
+                          .toLowerCase()
+                          .includes(search.toLowerCase())
+                          ? 1
+                          : 0;
+                      }}
+                      className="bg-primary-black text-primary-white"
+                    >
                       <CommandInput
                         placeholder="Search courses..."
                         className="h-9"
@@ -374,7 +392,16 @@ export default function ReviewCreateForm({
                     </FormControl>
                   </PopoverTrigger>
                   <PopoverContent className="bg-primary-black text-primary-white max-w-[400px] w-full max-h-[400px] overflow-auto">
-                    <Command className="bg-primary-black text-primary-white">
+                    <Command
+                      filter={(value, search) => {
+                        return value
+                          .toLowerCase()
+                          .includes(search.toLowerCase())
+                          ? 1
+                          : 0;
+                      }}
+                      className="bg-primary-black text-primary-white"
+                    >
                       <CommandInput
                         placeholder="Search professors..."
                         className="h-9"

@@ -39,6 +39,7 @@ export default async function createReview(
   const professorId = professor?.id || -1;
   const courseCode = Number(reviewForm.course.split(" ")[0]);
   const subjectCode = reviewForm.subject.split(":")[0].trim();
+  console.log(`SubjectCode: ${subjectCode} CourseCode: ${courseCode}`);
 
   const review = await prisma.review.create({
     data: {
@@ -63,7 +64,7 @@ export default async function createReview(
     throw new Error("Failed to create review");
   }
 
-  await createSubscription(userId, undefined, undefined, review.id);
+  await createSubscription(userId, undefined, undefined, undefined, review.id);
 
   const { id: reviewId } = review;
   await notifySubscribersCourseReviewCreated(subjectCode, courseCode, reviewId);
