@@ -4,7 +4,6 @@ import { ProfessorPage } from "@/lib/definitions/professor";
 import { titleCase } from "@/lib/utils";
 import ChartProfessor from "@/components/Chart/ChartProfessor";
 import CurrentlyTeaching from "@/components/Professor/ProfessorCurrentlyTeaching";
-import { getCoursesBeingTaughtByProfessor } from "@/lib/data/course";
 import ReviewAddBannerButton from "@/components/Review/ReviewAddBannerButton";
 import {
   Tooltip,
@@ -29,10 +28,6 @@ export default async function ProfessorBanner({ professor }: Props) {
   const totalDifficultyRatings = reviews.filter(
     (review) => review.professorDifficultyRating !== null,
   ).length;
-
-  const currentlyTeaching = await getCoursesBeingTaughtByProfessor(
-    professor.id,
-  );
 
   return (
     <div className="flex flex-col lg:flex-row justify-start lg:justify-between max-lg:space-y-3">
@@ -88,7 +83,7 @@ export default async function ProfessorBanner({ professor }: Props) {
                   Difficulty: <span className="font-normal">?</span>
                 </h3>
               )}
-              <CurrentlyTeaching currentlyTeaching={currentlyTeaching} />
+              <CurrentlyTeaching />
             </div>
           </div>
           <div className="flex space-x-2">
