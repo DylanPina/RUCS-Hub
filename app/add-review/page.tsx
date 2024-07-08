@@ -16,7 +16,6 @@ export default async function Page({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const { subjectCode, professorId, courseCode } = searchParams;
-  const subject = await getSubjectByCode((subjectCode as string) || "198");
   const subjects = await getSubjects();
   const professors = await getAllProfessors();
   const professor = professorId
@@ -35,7 +34,9 @@ export default async function Page({
         Add Review
       </h1>
       <ReviewCreateForm
-        subject={subject}
+        subject={
+          subjectCode ? await getSubjectByCode(subjectCode as string) : null
+        }
         subjects={subjects}
         professor={professor}
         professors={professors}

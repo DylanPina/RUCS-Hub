@@ -45,14 +45,14 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import { Textarea } from "../shadcn/ui/textarea";
 import createReview from "@/lib/actions/review";
 import { ReviewForm } from "@/lib/definitions/review";
-import { LoaderButton } from "../shadcn/ui/loader-button";
+import { LoaderButton } from "@/components/shadcn/ui/loader-button";
 import { getIfUserReviewedCourse } from "@/lib/actions/user";
 import { toast } from "react-toastify";
 import { Button } from "../shadcn/ui/button";
 import { cn } from "@/lib/shadcn/utils";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { getCoursesBySubjectCodeAction } from "@/lib/actions/course";
-import { getSubjectByCodeAction } from "@/lib/actions/subject";
+import { LoadingSpinner } from "../shadcn/ui/loading-spinner";
 
 interface Props {
   subject: Subject | null;
@@ -70,29 +70,25 @@ export default function ReviewCreateForm({
   professors,
 }: Props) {
   const { user } = useUser();
-  const [selectedSubject, setSelectedSubject] = useState<Subject | null>();
+  const [selectedSubject, setSelectedSubject] = useState<Subject | null>(
+    subject,
+  );
   const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [openSubjects, setOpenSubjects] = useState(false);
   const [openCourses, setOpenCourses] = useState(false);
   const [openProfessors, setOpenProfessors] = useState(false);
+  const [loadingCourses, setLoadingCourses] = useState(false);
   const terms = getTerms();
   const years = getYears();
 
   useEffect(() => {
-    if (!subject) {
-      const updateSubject = async () => {
-        setSelectedSubject(await getSubjectByCodeAction("198"));
-      };
-      updateSubject();
-    }
-  }, []);
-
-  useEffect(() => {
     const updateFilteredCourses = async () => {
+      setLoadingCourses(true);
       setFilteredCourses(
         await getCoursesBySubjectCodeAction(selectedSubject?.code ?? ""),
       );
+      setLoadingCourses(false);
     };
     updateFilteredCourses();
   }, [selectedSubject]);
@@ -300,6 +296,7 @@ export default function ReviewCreateForm({
                       <Button
                         variant="outline"
                         role="combobox"
+                        disabled={!selectedSubject}
                         className={cn(
                           "flex w-full justify-between bg-primary-black",
                           !field.value && "text-muted-foreground",
@@ -319,26 +316,30 @@ export default function ReviewCreateForm({
                       />
                       <CommandEmpty>No courses found</CommandEmpty>
                       <CommandGroup className="bg-primary-black text-primary-white">
-                        {filteredCourses.map((course) => (
-                          <CommandItem
-                            value={`${course.code} - ${course.name}`}
-                            key={course.name}
-                            onSelect={() => {
-                              form.setValue("course", formatCourse(course));
-                              setOpenCourses(false);
-                            }}
-                          >
-                            {course.code} - {course.name}
-                            <CheckIcon
-                              className={cn(
-                                "ml-auto h-4 w-4",
-                                course.name === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0",
-                              )}
-                            />
-                          </CommandItem>
-                        ))}
+                        {!loadingCourses ? (
+                          filteredCourses.map((course) => (
+                            <CommandItem
+                              value={`${course.code} - ${course.name}`}
+                              key={course.name}
+                              onSelect={() => {
+                                form.setValue("course", formatCourse(course));
+                                setOpenCourses(false);
+                              }}
+                            >
+                              {course.code} - {course.name}
+                              <CheckIcon
+                                className={cn(
+                                  "ml-auto h-4 w-4",
+                                  course.name === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0",
+                                )}
+                              />
+                            </CommandItem>
+                          ))
+                        ) : (
+                          <LoadingSpinner />
+                        )}
                       </CommandGroup>
                     </Command>
                   </PopoverContent>
