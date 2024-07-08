@@ -28,21 +28,30 @@ export default function NotificationCourseBanner({ coursePage, user }: Props) {
     async function checkSubscription() {
       const isSubscribed = await isUserSubscribedToCourse(
         hashEmailAddress(user.email),
+        coursePage.subjectCode,
         coursePage.code,
       );
       setSubscribed(isSubscribed != null);
     }
     checkSubscription();
-  }, [user.email, coursePage.code]);
+  }, [user.email, coursePage.subjectCode, coursePage.code]);
 
   const subscribe = () => {
-    createCourseSubscription(hashEmailAddress(user.email), coursePage.code);
+    createCourseSubscription(
+      hashEmailAddress(user.email),
+      coursePage.subjectCode,
+      coursePage.code,
+    );
     setSubscribed(true);
     toast.success(`Notifications turned on for ${coursePage.name}`);
   };
 
   const unsubscribe = () => {
-    deleteCourseSubscription(hashEmailAddress(user.email), coursePage.code);
+    deleteCourseSubscription(
+      hashEmailAddress(user.email),
+      coursePage.subjectCode,
+      coursePage.code,
+    );
     setSubscribed(false);
     toast.success(`Notifications turned off for ${coursePage.name}`);
   };

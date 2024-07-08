@@ -28,7 +28,11 @@ export default function NotificationButtonCourse({ course }: Props) {
   useEffect(() => {
     const checkSubscription = async () => {
       const userId = hashEmailAddress(user?.email ?? "");
-      const subscribed = await isUserSubscribedToCourse(userId, course.code);
+      const subscribed = await isUserSubscribedToCourse(
+        userId,
+        course.subjectCode,
+        course.code,
+      );
       setIsSubscribed(!!subscribed);
     };
 
@@ -37,7 +41,7 @@ export default function NotificationButtonCourse({ course }: Props) {
 
   function handleTurnOffNotifications() {
     const userId = hashEmailAddress(user?.email ?? "");
-    deleteCourseSubscription(userId, course.code);
+    deleteCourseSubscription(userId, course.subjectCode, course.code);
     setIsSubscribed(false);
     router.refresh();
     toast.success(`Unsubscribed from ${course.code} - ${course.name}`);
@@ -45,7 +49,7 @@ export default function NotificationButtonCourse({ course }: Props) {
 
   function handleTurnOnNotifications() {
     const userId = hashEmailAddress(user?.email ?? "");
-    createCourseSubscription(userId, course.code);
+    createCourseSubscription(userId, course.subjectCode, course.code);
     setIsSubscribed(true);
     router.refresh();
     toast.success(`Subscribed to ${course.code} - ${course.name}`);
