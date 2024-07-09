@@ -150,6 +150,9 @@ export async function getCourseTableDataByYearTerm(
       reviews: true,
       sections: true,
     },
+    orderBy: {
+      code: "asc",
+    },
   });
 
   if (!courses) {

@@ -44,13 +44,13 @@ export default function CourseTable({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState<any>([]);
-  const [subject, setSubject] = useState<Subject>();
+  const [subject, setSubject] = useState<Subject | "Any">("Any");
   const [filteredCourses, setFilteredCourses] =
     useState<CourseTableColumn[]>(courseData);
   const router = useRouter();
 
   useEffect(() => {
-    if (!subject) {
+    if (subject === "Any") {
       setFilteredCourses(courseData);
     } else {
       setFilteredCourses(

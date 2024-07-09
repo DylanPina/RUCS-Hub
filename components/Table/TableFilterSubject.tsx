@@ -19,8 +19,8 @@ import { Subject } from "@prisma/client";
 
 interface Props {
   subjects: Subject[];
-  selectedSubject?: Subject;
-  onSubjectChange: (value: Subject) => void;
+  selectedSubject?: Subject | "Any";
+  onSubjectChange: (value: Subject | "Any") => void;
 }
 
 export default function TableFilterSubject({
@@ -42,7 +42,9 @@ export default function TableFilterSubject({
               "flex justify-between bg-primary-black w-full overflow-ellipsis hover:text-primary-white hover:bg-primary-black truncate text-overflow-ellipsis",
             )}
           >
-            {!selectedSubject ? "Any" : formatSubjectName(selectedSubject)}
+            {!selectedSubject || selectedSubject === "Any"
+              ? "Any"
+              : formatSubjectName(selectedSubject)}
             <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -56,6 +58,13 @@ export default function TableFilterSubject({
             <CommandInput placeholder="Search subjects..." className="h-9" />
             <CommandEmpty>No subject found</CommandEmpty>
             <CommandGroup className="bg-primary-black text-primary-white">
+              <CommandItem
+                value="Any"
+                key="Any"
+                onSelect={() => onSubjectChange("Any")}
+              >
+                Any
+              </CommandItem>
               {subjects.map((subject: any) => (
                 <CommandItem
                   value={formatSubjectName(subject)}

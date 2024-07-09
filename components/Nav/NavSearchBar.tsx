@@ -46,7 +46,9 @@ interface Props {
 export default function NavSearchBar({ courses, professors, subjects }: Props) {
   const [open, setOpen] = useState(false);
   const [tabValue, setTabValue] = useState<string>("professors");
-  const [selectedSubject, setSelectedSubject] = useState<Subject>(subjects[0]);
+  const [selectedSubject, setSelectedSubject] = useState<Subject | "Any">(
+    "Any",
+  );
   const [filteredCourses, setFilteredCourses] = useState<CourseTableColumn[]>(
     [],
   );
@@ -65,7 +67,7 @@ export default function NavSearchBar({ courses, professors, subjects }: Props) {
   }, []);
 
   useEffect(() => {
-    if (selectedSubject) {
+    if (selectedSubject !== "Any") {
       setFilteredCourses(
         courses.filter((course) => course.subjectCode === selectedSubject.code),
       );
@@ -136,7 +138,7 @@ export default function NavSearchBar({ courses, professors, subjects }: Props) {
                           "flex justify-between bg-primary-black w-full border-x-0 overflow-ellipsis hover:text-primary-white hover:bg-primary-black truncate text-overflow-ellipsis",
                         )}
                       >
-                        {!selectedSubject
+                        {selectedSubject === "Any"
                           ? "Any"
                           : formatSubjectName(selectedSubject)}
                         <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
@@ -159,6 +161,13 @@ export default function NavSearchBar({ courses, professors, subjects }: Props) {
                         />
                         <CommandEmpty>No subject found</CommandEmpty>
                         <CommandGroup className="bg-primary-black text-primary-white">
+                          <CommandItem
+                            value="Any"
+                            key="Any"
+                            onSelect={() => setSelectedSubject("Any")}
+                          >
+                            Any
+                          </CommandItem>
                           {subjects.map((subject: any) => (
                             <CommandItem
                               value={formatSubjectName(subject)}
