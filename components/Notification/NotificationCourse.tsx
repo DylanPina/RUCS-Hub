@@ -1,4 +1,5 @@
 import {
+  formatCourseName,
   formatProfessorName,
   formatReviewDate,
   getCourseRoute,
@@ -37,7 +38,7 @@ export default function NotificationCourse({ notification, review }: Props) {
           className="hover:underline"
           href={getCourseRoute(review.course.subjectCode, review.course.code)}
         >
-          {review.course.code} - {review.course.name}
+          {`${review.course.subjectCode}:${formatCourseName(review.course)}`}
         </Link>
       </div>
       <div className="flex space-x-2">

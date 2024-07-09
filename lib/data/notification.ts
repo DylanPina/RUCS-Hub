@@ -116,6 +116,7 @@ export async function notifySubscribersReviewVote(
       subscriber.userId,
       undefined,
       undefined,
+      undefined,
       subscriber.reviewId ?? undefined,
       voteId,
     );
@@ -240,6 +241,7 @@ export async function notifySubscribersProfessorReviewCreated(
   for (const subscriber of subscribers) {
     await createNotification(
       subscriber.userId,
+      undefined,
       undefined,
       professorId,
       reviewId,
