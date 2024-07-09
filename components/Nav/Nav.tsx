@@ -15,12 +15,15 @@ import NavNotification from "./NavNotifications";
 import { getNotifications } from "@/lib/data/notification";
 import { getSession } from "@auth0/nextjs-auth0";
 import { hashEmailAddress } from "@/lib/utils";
+import { getSubjects } from "@/lib/data/subject";
 
 export default async function Nav() {
   const session = await getSession();
 
   const courseTableData: CourseTableColumn[] =
     await getCourseTableDataByYearTerm(null, null);
+
+  const subjects = await getSubjects();
 
   const professorTableData: ProfessorTableColumn[] =
     await getProfessorTableData();
@@ -44,6 +47,7 @@ export default async function Nav() {
         </NavIcon>
         <NavSearchBar
           courses={courseTableData}
+          subjects={subjects}
           professors={professorTableData}
         />
         <div className="flex items-center space-x-4">

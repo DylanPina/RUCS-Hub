@@ -3,11 +3,11 @@ import { mockUsers } from "@/lib/mock-data/user-mock-data";
 import { mockVotes } from "@/lib/mock-data/vote-mock-data";
 import { Review, Vote } from "@prisma/client";
 import { prisma } from "@/prisma/prisma";
-import { getSubjects } from "@/lib/data/subject";
 import {
   getAllCourseListingWebReg,
   getAllCourseSectionsWebReg,
   getProfessorNamesWebReg,
+  getSubjectsWebReg,
   mergeCourseListingBySubjectCourseCode,
 } from "@/lib/data/webreg";
 import { parseProfessorName, titleCase } from "@/lib/utils";
@@ -180,7 +180,7 @@ async function seedSections(prisma: any): Promise<Response> {
  * @param prisma - The Prisma client
  */
 async function seedSubjects(prisma: any): Promise<Response> {
-  const subjects = await getSubjects();
+  const subjects = await getSubjectsWebReg();
   const createSubjects: any = await prisma.subject.createMany({
     data: subjects,
   });

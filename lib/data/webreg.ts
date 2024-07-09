@@ -11,7 +11,8 @@ import {
   validateWebRegCourseTermYear,
 } from "../utils";
 import { parsePrereqNotes } from "./course";
-import { getSubjects } from "./subject";
+import { RUTGERS_SUBJECTS_URL } from "../constants";
+import { titleCase } from "../utils";
 
 /**
  * Get all listings
@@ -21,7 +22,7 @@ import { getSubjects } from "./subject";
 export async function getAllCourseListingWebReg(): Promise<
   Map<string, CourseWebRegListing[]>
 > {
-  const subjects = await getSubjects();
+  const subjects = await getSubjectsWebReg();
   const courseListings: Promise<CourseWebRegListing[]>[] = [];
 
   subjects.forEach(({ code }: { code: string }) =>
@@ -176,6 +177,27 @@ export async function getProfessorNamesWebReg(): Promise<string[]> {
   });
 
   return Array.from(professorFullNames);
+}
+
+/**
+ * Fetches all subjects from webreg
+ *
+ * @return - List of all subjects
+ */
+export async function getSubjectsWebReg() {
+  const res = await fetch(RUTGERS_SUBJECTS_URL);
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch subjects from ${RUTGERS_SUBJECTS_URL}`);
+  }
+
+  const subjectsJson = await res.json();
+  return subjectsJson.map((subject: any) => {
+    return {
+      code: subject.code,
+      name: titleCase(subject.description),
+    };
+  });
 }
 
 /**
