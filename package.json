@@ -7,7 +7,11 @@
     "lint": "next lint",
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",
-    "start": "next start"
+    "start": "next start",
+    "seed": "ts-node prisma/seed.ts",
+    "migrate": "prisma migrate dev",
+    "migration:create": "prisma migrate dev --create-only",
+    "migrate:prod": "prisma migrate deploy"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^3.5.0",

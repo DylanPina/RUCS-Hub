@@ -4,7 +4,7 @@ const nextConfig = {
     return [
       {
         source: "/",
-        destination: "/courses",
+        destination: process.env.MAINTENANCE_MODE === "true" ? "/" : "/courses",
         permanent: true,
       },
     ];

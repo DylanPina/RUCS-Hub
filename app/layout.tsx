@@ -7,6 +7,7 @@ import { AuthProvider } from "@/components/Auth/AuthProvider";
 import { ToastContainer } from "react-toastify";
 import { Toaster } from "@/components/shadcn/ui/toaster";
 import "react-toastify/dist/ReactToastify.css";
+import MaintenancePage from "@/components/Maintenance/MaintenancePage";
 
 const font = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -25,9 +26,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={font.className}>
-        <AuthProvider>
-          <div className="flex flex-col place-items-center min-h-screen bg-zinc-900 overflow-auto">
+      <body
+        className={`${font.className} flex flex-col w-full h-full place-items-center min-h-screen bg-zinc-900 overflow-auto`}
+      >
+        {process.env.MAINTENANCE_MODE === "true" ? (
+          <MaintenancePage />
+        ) : (
+          <AuthProvider>
             <ToastContainer
               toastClassName="toast-background"
               position="top-center"
@@ -38,8 +43,8 @@ export default function RootLayout({
               {children}
             </main>
             <Footer />
-          </div>
-        </AuthProvider>
+          </AuthProvider>
+        )}
       </body>
     </html>
   );
