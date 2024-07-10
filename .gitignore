@@ -37,3 +37,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env.example.production
+
+# DB backups
+*.sql
+*.dump
