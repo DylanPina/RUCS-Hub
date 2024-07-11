@@ -68,6 +68,10 @@ async function seedCourses(prisma: any): Promise<Response> {
 
   const courseListingsFormatted = Array.from(mergedCourseListings.values())
     .flat()
+    .filter(
+      (courseListing: CourseWebRegListing) =>
+        courseListing.subjectCode !== "198",
+    )
     .map((courseListing: CourseWebRegListing) => {
       return {
         subjectCode: courseListing.subjectCode,
