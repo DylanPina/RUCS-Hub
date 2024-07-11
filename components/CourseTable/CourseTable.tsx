@@ -93,8 +93,8 @@ export default function CourseTable({
 
   return (
     <div className="min-w-[75%] max-lg:w-screen max-lg:px-4">
-      <div className="flex justify-between">
-        <div className="max-sm:w-full sm:max-w-[300px] py-4">
+      <div className="flex max-sm:flex-col justify-between">
+        <div className="max-sm:w-full sm:max-w-[300px] sm:py-4 max-sm:pt-4">
           <TableFilterSearch
             filter={globalFilter}
             setFilter={setGlobalFilter}

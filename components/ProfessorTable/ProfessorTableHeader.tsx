@@ -7,8 +7,9 @@ export default function ProfessorTableHeader() {
         RU <span className="text-primary-white">Professors</span>
       </h1>
       <h4 className="max-w-4xl text-md max-sm:text-sm font-semibold text-center text-primary-white">
-        Welcome to the unofficial hub for Rutgers University <br />
-        Find reviews for classes and anonymously upload your own
+        Welcome to the unofficial hub for Rutgers University.{" "}
+        <br className="max-sm:hidden" />
+        Find reviews for classes and anonymously upload your own.
       </h4>
     </div>
   );
