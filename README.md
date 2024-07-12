@@ -11,9 +11,9 @@
     <img src="./public/rucshub-logo.png" alt="drawing" width="125"/>
 </p>
 
-RUCS Hub is a platform designed for Rutgers computer science students to anonymously review and rate computer science courses and professors.
+RUCS Hub is a platform designed for Rutgers students to anonymously review and rate their courses and professors.
 
-This project aims to empower students by providing them with valuable insights into the courses and professors within the computer science department. RUCS Hub helps students make informed decisions about their course selections and academic paths.
+This project aims to empower students by providing them with valuable insights into the courses and professors offered at Rutgers. RUCS Hub helps students make informed decisions about their course selections and academic paths.
 
 **RUCS Hub is an independent project and is not directly affiliated with Rutgers University.**
 
@@ -30,9 +30,10 @@ This project aims to empower students by providing them with valuable insights i
 
 - **Anonymous Reviews**: Students can review and rate courses and professors anonymously.
 - **Student Authentication**: Uses student emails for authentication to ensure that only Rutgers students can post reviews.
-- **Course and Professor Ratings**: View aggregated ratings and reviews for courses and professors.
-- **Search and Filter**: Easily search for and filter courses and professors based on various criteria.
+- **Course & Professor Ratings**: View aggregated ratings and reviews for courses and professors.
+- **Search & Filter**: Easily search for and filter courses and professors based on various criteria.
 - **Upvote/Downvote Reviews**: Users can upvote or downvote reviews to highlight the most helpful ones.
+- **Subscribe to Courses & Professors**: Recieve notifications when a course or professor you are subscribed to recieves a new review.
 - **Report Reviews**: Users can report inappropriate or offensive reviews for moderation.
 
 ## Usage
