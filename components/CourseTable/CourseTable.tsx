@@ -31,7 +31,6 @@ import TablePageSize from "../Table/TablePageSize";
 import { getCourseRoute } from "@/lib/utils";
 import TableFilterSubject from "../Table/TableFilterSubject";
 import { Subject } from "@prisma/client";
-import Cookie from "js-cookie";
 
 interface CourseTableProps {
   courseData: CourseTableColumn[];
@@ -42,21 +41,22 @@ export default function CourseTable({
   courseData,
   subjects,
 }: CourseTableProps) {
-
-  const [sorting, setSorting] = useState<SortingState>(() => {
-    const saveddata = Cookie.get('persistentValue');
-    return saveddata ? JSON.parse(saveddata) : [];
+  const [sorting, setSorting] = useState<SortingState>(()=>{
+    if(typeof window === "undefined") return [];
+    const storage = localStorage.getItem("persistentStorage");
+    return storage ? JSON.parse(storage) : [];
   });
+
+  useEffect(() => {
+    localStorage.setItem("persistentStorage", JSON.stringify(sorting));
+  }, [sorting]);
+
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState<any>([]);
   const [subject, setSubject] = useState<Subject | "Any">("Any");
   const [filteredCourses, setFilteredCourses] =
     useState<CourseTableColumn[]>(courseData);
   const router = useRouter();
-
-  useEffect(() => {
-    Cookie.set('persistentValue', JSON.stringify(sorting));
-  },[sorting]);
 
   useEffect(() => {
     if (subject === "Any") {
@@ -161,6 +161,7 @@ export default function CourseTable({
                     <TableCell
                       key={cell.id}
                       align={(cell.column.columnDef.meta as any)?.align}
+                      suppressHydrationWarning
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
