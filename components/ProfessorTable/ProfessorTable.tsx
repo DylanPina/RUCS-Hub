@@ -37,18 +37,26 @@ interface ProfessorTableProps {
 }
 
 function ProfessorTable({ data }: ProfessorTableProps) {
-  const [sorting, setSorting] = useState<SortingState>(()=>{
-    if(typeof window === "undefined") return [];
-    const storage = localStorage.getItem("persistentStorageProf");
-    return storage ? JSON.parse(storage) : [];
-  });
+
+  const LOCALSTORAGENAME = "persistentStorageProf";
+
+  const initialHookReturn = (defaultReturnValue:any, property:any) => {
+    if(typeof window === "undefined") return defaultReturnValue;
+    const storage = localStorage.getItem(LOCALSTORAGENAME);
+    return (storage && storage!=='undefined') ? 
+      (property ? JSON.parse(storage)?.[property] : JSON.parse(storage)) 
+    : defaultReturnValue;
+  }
+
+  const [sorting, setSorting] = useState<SortingState>(()=>{return initialHookReturn([], "sorting")});
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [globalFilter, setGlobalFilter] = useState<any>(()=>{return initialHookReturn([], "globalFilter")});
+  const router = useRouter();
 
   useEffect(() => {
-    localStorage.setItem("persistentStorageProf", JSON.stringify(sorting));
-  }, [sorting]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [globalFilter, setGlobalFilter] = useState<any>([]);
-  const router = useRouter();
+    localStorage.setItem(LOCALSTORAGENAME, 
+      JSON.stringify({"sorting":sorting, "globalFilter":globalFilter}));
+  }, [sorting, globalFilter]);
 
   const fuzzyFilter: FilterFn<any> = (
     row: any,

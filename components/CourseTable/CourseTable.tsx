@@ -43,22 +43,28 @@ function CourseTable({
   courseData,
   subjects,
 }: CourseTableProps) {
-  const [sorting, setSorting] = useState<SortingState>(()=>{
-    if(typeof window === "undefined") return [];
-    const storage = localStorage.getItem("persistentStorage");
-    return storage ? JSON.parse(storage) : [];
-  });
+
+  const LOCALSTORAGENAME = "persistentStorage";
+
+  const initialHookReturn = (defaultReturnValue:any, property:any) => {
+    if(typeof window === "undefined") return defaultReturnValue;
+    const storage = localStorage.getItem(LOCALSTORAGENAME);
+    return (storage && storage!=='undefined') ? 
+      (property ? JSON.parse(storage)?.[property] : JSON.parse(storage)) 
+    : defaultReturnValue;
+  }
+
+  const [sorting, setSorting] = useState<SortingState>(() => {return initialHookReturn([], "sorting");});
+  const [globalFilter, setGlobalFilter] = useState<any>(() => {return initialHookReturn([], "globalFilter");});
+  const [subject, setSubject] = useState<Subject | "Any">(() => {return initialHookReturn("Any", "subject");});
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [filteredCourses, setFilteredCourses] = useState<CourseTableColumn[]>(courseData);
+  const router = useRouter();
 
   useEffect(() => {
-    localStorage.setItem("persistentStorage", JSON.stringify(sorting));
-  }, [sorting]);
-
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [globalFilter, setGlobalFilter] = useState<any>([]);
-  const [subject, setSubject] = useState<Subject | "Any">("Any");
-  const [filteredCourses, setFilteredCourses] =
-    useState<CourseTableColumn[]>(courseData);
-  const router = useRouter();
+    localStorage.setItem(LOCALSTORAGENAME, 
+      JSON.stringify({"sorting":sorting, "globalFilter":globalFilter, "subject":subject}));
+  }, [sorting, globalFilter, subject]);
 
   useEffect(() => {
     if (subject === "Any") {
@@ -214,3 +220,4 @@ function CourseTable({
 }
 
 export default dynamic (() => Promise.resolve(CourseTable),{ssr :false, loading: () => <LoadingTable />});
+// add default table as catch
