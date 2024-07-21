@@ -32,7 +32,7 @@ import { getCourseRoute } from "@/lib/utils";
 import TableFilterSubject from "../Table/TableFilterSubject";
 import { Subject } from "@prisma/client";
 import dynamic from "next/dynamic";
-import LoadingTable from "./LoadingTable";
+import LoadingTable from "../Table/LoadingTable";
 
 interface CourseTableProps {
   courseData: CourseTableColumn[];
@@ -44,7 +44,7 @@ function CourseTable({
   subjects,
 }: CourseTableProps) {
 
-  const LOCALSTORAGENAME = "persistentStorage";
+  const LOCALSTORAGENAME = "courseTableStorage";
 
   const initialHookReturn = (defaultReturnValue:any, property:any) => {
     if(typeof window === "undefined") return defaultReturnValue;
@@ -169,7 +169,6 @@ function CourseTable({
                     <TableCell
                       key={cell.id}
                       align={(cell.column.columnDef.meta as any)?.align}
-                      // suppressHydrationWarning
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -220,4 +219,3 @@ function CourseTable({
 }
 
 export default dynamic (() => Promise.resolve(CourseTable),{ssr :false, loading: () => <LoadingTable />});
-// add default table as catch

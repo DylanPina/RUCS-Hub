@@ -30,7 +30,7 @@ import { Button } from "../shadcn/ui/button";
 import { columns } from "./ProfessorTableColumn";
 import { getProfessorRoute } from "@/lib/utils";
 import dynamic from "next/dynamic";
-import LoadingTable from "./LoadingTable";
+import LoadingTable from "../Table/LoadingTable";
 
 interface ProfessorTableProps {
   data: ProfessorTableColumn[];
@@ -38,7 +38,7 @@ interface ProfessorTableProps {
 
 function ProfessorTable({ data }: ProfessorTableProps) {
 
-  const LOCALSTORAGENAME = "persistentStorageProf";
+  const LOCALSTORAGENAME = "professorTableStorage";
 
   const initialHookReturn = (defaultReturnValue:any, property:any) => {
     if(typeof window === "undefined") return defaultReturnValue;
