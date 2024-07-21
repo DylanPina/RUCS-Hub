@@ -32,6 +32,7 @@ import { getCourseRoute } from "@/lib/utils";
 import TableFilterSubject from "../Table/TableFilterSubject";
 import { Subject } from "@prisma/client";
 import dynamic from "next/dynamic";
+import LoadingTable from "./LoadingTable";
 
 interface CourseTableProps {
   courseData: CourseTableColumn[];
@@ -212,4 +213,4 @@ function CourseTable({
   );
 }
 
-export default dynamic (() => Promise.resolve(CourseTable),{ssr :false});
+export default dynamic (() => Promise.resolve(CourseTable),{ssr :false, loading: () => <LoadingTable />});

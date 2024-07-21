@@ -21,7 +21,7 @@ import {
   TableRow,
 } from "@/components/shadcn/ui/table";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ProfessorTableColumn } from "@/lib/definitions/professor";
 import TableFilterSearch from "../Table/TableFilterSearch";
 import TablePageSize from "../Table/TablePageSize";
@@ -29,13 +29,23 @@ import TableSelectPageSize from "../Table/TableSelectPage";
 import { Button } from "../shadcn/ui/button";
 import { columns } from "./ProfessorTableColumn";
 import { getProfessorRoute } from "@/lib/utils";
+import dynamic from "next/dynamic";
+import LoadingTable from "./LoadingTable";
 
 interface ProfessorTableProps {
   data: ProfessorTableColumn[];
 }
 
-export default function ProfessorTable({ data }: ProfessorTableProps) {
-  const [sorting, setSorting] = useState<SortingState>([]);
+function ProfessorTable({ data }: ProfessorTableProps) {
+  const [sorting, setSorting] = useState<SortingState>(()=>{
+    if(typeof window === "undefined") return [];
+    const storage = localStorage.getItem("persistentStorageProf");
+    return storage ? JSON.parse(storage) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("persistentStorageProf", JSON.stringify(sorting));
+  }, [sorting]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState<any>([]);
   const router = useRouter();
@@ -172,3 +182,5 @@ export default function ProfessorTable({ data }: ProfessorTableProps) {
     </div>
   );
 }
+
+export default dynamic (() => Promise.resolve(ProfessorTable),{ssr :false, loading: () => <LoadingTable />});
