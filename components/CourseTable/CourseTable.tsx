@@ -31,13 +31,14 @@ import TablePageSize from "../Table/TablePageSize";
 import { getCourseRoute } from "@/lib/utils";
 import TableFilterSubject from "../Table/TableFilterSubject";
 import { Subject } from "@prisma/client";
+import dynamic from "next/dynamic";
 
 interface CourseTableProps {
   courseData: CourseTableColumn[];
   subjects: Subject[];
 }
 
-export default function CourseTable({
+function CourseTable({
   courseData,
   subjects,
 }: CourseTableProps) {
@@ -161,7 +162,7 @@ export default function CourseTable({
                     <TableCell
                       key={cell.id}
                       align={(cell.column.columnDef.meta as any)?.align}
-                      suppressHydrationWarning
+                      // suppressHydrationWarning
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -210,3 +211,5 @@ export default function CourseTable({
     </div>
   );
 }
+
+export default dynamic (() => Promise.resolve(CourseTable),{ssr :false});
