@@ -31,23 +31,40 @@ import TablePageSize from "../Table/TablePageSize";
 import { getCourseRoute } from "@/lib/utils";
 import TableFilterSubject from "../Table/TableFilterSubject";
 import { Subject } from "@prisma/client";
+import dynamic from "next/dynamic";
+import LoadingTable from "../Table/LoadingTable";
 
 interface CourseTableProps {
   courseData: CourseTableColumn[];
   subjects: Subject[];
 }
 
-export default function CourseTable({
+function CourseTable({
   courseData,
   subjects,
 }: CourseTableProps) {
-  const [sorting, setSorting] = useState<SortingState>([]);
+
+  const LOCALSTORAGENAME = "courseTableStorage";
+
+  const initialHookReturn = (defaultReturnValue:any, property:any) => {
+    if(typeof window === "undefined") return defaultReturnValue;
+    const storage = localStorage.getItem(LOCALSTORAGENAME);
+    return (storage && storage!=='undefined') ? 
+      (property ? JSON.parse(storage)?.[property] : JSON.parse(storage)) 
+    : defaultReturnValue;
+  }
+
+  const [sorting, setSorting] = useState<SortingState>(() => {return initialHookReturn([], "sorting");});
+  const [globalFilter, setGlobalFilter] = useState<any>(() => {return initialHookReturn([], "globalFilter");});
+  const [subject, setSubject] = useState<Subject | "Any">(() => {return initialHookReturn("Any", "subject");});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [globalFilter, setGlobalFilter] = useState<any>([]);
-  const [subject, setSubject] = useState<Subject | "Any">("Any");
-  const [filteredCourses, setFilteredCourses] =
-    useState<CourseTableColumn[]>(courseData);
+  const [filteredCourses, setFilteredCourses] = useState<CourseTableColumn[]>(courseData);
   const router = useRouter();
+
+  useEffect(() => {
+    localStorage.setItem(LOCALSTORAGENAME, 
+      JSON.stringify({"sorting":sorting, "globalFilter":globalFilter, "subject":subject}));
+  }, [sorting, globalFilter, subject]);
 
   useEffect(() => {
     if (subject === "Any") {
@@ -200,3 +217,5 @@ export default function CourseTable({
     </div>
   );
 }
+
+export default dynamic (() => Promise.resolve(CourseTable),{ssr :false, loading: () => <LoadingTable />});

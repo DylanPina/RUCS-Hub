@@ -21,7 +21,7 @@ import {
   TableRow,
 } from "@/components/shadcn/ui/table";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ProfessorTableColumn } from "@/lib/definitions/professor";
 import TableFilterSearch from "../Table/TableFilterSearch";
 import TablePageSize from "../Table/TablePageSize";
@@ -29,16 +29,34 @@ import TableSelectPageSize from "../Table/TableSelectPage";
 import { Button } from "../shadcn/ui/button";
 import { columns } from "./ProfessorTableColumn";
 import { getProfessorRoute } from "@/lib/utils";
+import dynamic from "next/dynamic";
+import LoadingTable from "../Table/LoadingTable";
 
 interface ProfessorTableProps {
   data: ProfessorTableColumn[];
 }
 
-export default function ProfessorTable({ data }: ProfessorTableProps) {
-  const [sorting, setSorting] = useState<SortingState>([]);
+function ProfessorTable({ data }: ProfessorTableProps) {
+
+  const LOCALSTORAGENAME = "professorTableStorage";
+
+  const initialHookReturn = (defaultReturnValue:any, property:any) => {
+    if(typeof window === "undefined") return defaultReturnValue;
+    const storage = localStorage.getItem(LOCALSTORAGENAME);
+    return (storage && storage!=='undefined') ? 
+      (property ? JSON.parse(storage)?.[property] : JSON.parse(storage)) 
+    : defaultReturnValue;
+  }
+
+  const [sorting, setSorting] = useState<SortingState>(()=>{return initialHookReturn([], "sorting")});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [globalFilter, setGlobalFilter] = useState<any>([]);
+  const [globalFilter, setGlobalFilter] = useState<any>(()=>{return initialHookReturn([], "globalFilter")});
   const router = useRouter();
+
+  useEffect(() => {
+    localStorage.setItem(LOCALSTORAGENAME, 
+      JSON.stringify({"sorting":sorting, "globalFilter":globalFilter}));
+  }, [sorting, globalFilter]);
 
   const fuzzyFilter: FilterFn<any> = (
     row: any,
@@ -172,3 +190,5 @@ export default function ProfessorTable({ data }: ProfessorTableProps) {
     </div>
   );
 }
+
+export default dynamic (() => Promise.resolve(ProfessorTable),{ssr :false, loading: () => <LoadingTable />});
