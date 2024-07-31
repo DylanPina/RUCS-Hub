@@ -35,7 +35,7 @@ model Section {
   sectionNumber String
   course        Course    @relation(fields: [courseCode, subjectCode], references: [code, subjectCode], onDelete: Cascade)
   courseCode    Int
-  subjectCode   String
+  subjectCode   String    @default("198")
   professor     Professor @relation(fields: [professorId], references: [id], onDelete: Cascade)
   professorId   Int
   term          Int
@@ -51,7 +51,7 @@ model Course {
   synopsis      String?
   credits       Int?
   subject       Subject        @relation(fields: [subjectCode], references: [code], onDelete: Cascade)
-  subjectCode   String
+  subjectCode   String         @default("198") 
   reviews       Review[]
   sections      Section[]
   subscribers   Subscription[]
@@ -68,7 +68,7 @@ model Review {
   year                      Int
   course                    Course         @relation(fields: [courseCode, subjectCode], references: [code, subjectCode], onDelete: Cascade)
   courseCode                Int
-  subjectCode               String
+  subjectCode               String         @default("198")
   title                     String
   content                   String
   createdAt                 DateTime       @default(now())

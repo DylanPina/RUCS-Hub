@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     template: "%s | RUCS Hub",
     default: "RUCS Hub",
   },
-  description: "The Unofficial Hub for Rutgers University Computer Science",
+  description: "The Unofficial Hub for Rutgers University",
 };
 
 export default function RootLayout({

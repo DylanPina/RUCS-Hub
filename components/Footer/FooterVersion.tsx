@@ -14,6 +14,7 @@ import {
   TooltipTrigger,
 } from "@/components/shadcn/ui/tooltip";
 import { CURRENT_VERSION } from "@/lib/constants";
+import versionHistory from "@/version-history.json";
 import { Separator } from "@/components/shadcn/ui/separator";
 
 export default function FooterVersion() {
@@ -40,31 +41,22 @@ export default function FooterVersion() {
           </DialogTitle>
         </DialogHeader>
         <DialogDescription className="flex flex-col space-y-4 text-primary-white overflow-auto">
-          <div className="flex flex-col">
-            <div className="flex space-x-2">
-              <h3 className="font-bold">v{CURRENT_VERSION}</h3>
-              <span className="text-primary-white/50"> June 19, 2024</span>
-            </div>
-            <ol className="list-disc list-outside ml-3 text-xs">
-              <li>Added subscriptions for professors, courses, & reviews</li>
-              <li>Added subscriptions page for managing subscriptions</li>
-              <li>Added notifications panel to navigation bar</li>
-              <li>
-                Added notifications for subscribed professors, courses, &
-                reviews
-              </li>
-            </ol>
-          </div>
-          <Separator className="my-4" />
-          <div className="flex flex-col">
-            <div className="flex space-x-2">
-              <h3 className="font-bold">v1.0.0</h3>
-              <span className="text-primary-white/50"> May 22, 2024</span>
-            </div>
-            <ol className="list-disc list-outside ml-3 text-xs">
-              <li>Initial release</li>
-            </ol>
-          </div>
+          {versionHistory.map((version: any, index: number) => (
+            <React.Fragment key={version.version}>
+              {index !== 0 && <Separator className="my-4" />}
+              <div className="flex flex-col" key={version.version}>
+                <div className="flex space-x-2">
+                  <h3 className="font-bold">v{version.version}</h3>
+                  <span className="text-primary-white/50"> {version.date}</span>
+                </div>
+                <ol className="list-disc list-outside ml-3 text-xs">
+                  {version.changes.map((change: any) => (
+                    <li key={change}>{change}</li>
+                  ))}
+                </ol>
+              </div>
+            </React.Fragment>
+          ))}
         </DialogDescription>
       </DialogContent>
     </Dialog>

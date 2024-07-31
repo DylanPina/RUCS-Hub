@@ -1,0 +1,24 @@
+[
+  {
+    "date": "July 11th, 2024",
+    "version": "2.0.0",
+    "changes": [
+      "Added all courses for every undergraduate major at Rutgers University"
+    ]
+  },
+  {
+    "date": "June 19th, 2024",
+    "version": "1.1.0",
+    "changes": [
+      "Added subscriptions for professors, courses, & reviews",
+      "Added subscriptions page for managing subscriptions",
+      "Added notifications panel to navigation bar",
+      " Added notifications for subscribed professors, courses, & reviews"
+    ]
+  },
+  {
+    "date": "May 22nd, 2024",
+    "version": "1.0.0",
+    "changes": ["Initial release"]
+  }
+]

@@ -45,7 +45,7 @@ export function getTerms(): Term[] {
  */
 export function getYears(): number[] {
   const years: number[] = [];
-  for (let year = WEBREG_MAX_YEAR; year >= WEBREG_MIN_YEAR; year--) {
+  for (let year = MAX_YEAR; year >= MIN_YEAR; year--) {
     years.push(year);
   }
   return years;

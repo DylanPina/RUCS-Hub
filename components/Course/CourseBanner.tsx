@@ -103,7 +103,10 @@ export default async function CourseBanner({ coursePage }: Props) {
             </div>
           </div>
           <div className="flex space-x-2">
-            <AddReviewBannerButton code={code} />
+            <AddReviewBannerButton
+              subjectCode={subjectCode}
+              courseCode={code}
+            />
             <TooltipProvider>
               <Tooltip delayDuration={100}>
                 <TooltipTrigger>
