@@ -1,5 +1,13 @@
 [
   {
+    "date": "August 10th, 2024",
+    "version": "2.0.1",
+    "changes": [
+      "Added table filter options to local storage to persist filter state between browser sessions",
+      "Added not found page unsupported routes"
+    ]
+  },
+  {
     "date": "July 11th, 2024",
     "version": "2.0.0",
     "changes": [
@@ -13,7 +21,7 @@
       "Added subscriptions for professors, courses, & reviews",
       "Added subscriptions page for managing subscriptions",
       "Added notifications panel to navigation bar",
-      " Added notifications for subscribed professors, courses, & reviews"
+      "Added notifications for subscribed professors, courses, & reviews"
     ]
   },
   {
